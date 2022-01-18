@@ -7,7 +7,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
+//push test
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -69,7 +69,8 @@ public class Robot extends TimedRobot {
       default:
         // Put default auto code here
         break;
-    }
+    } //push test PUSH TEST
+
   }
 
   /** This function is called once when teleop is enabled. */
