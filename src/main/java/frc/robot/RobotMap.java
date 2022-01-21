@@ -20,7 +20,7 @@ public class RobotMap {
     
     public static final CANSparkMax intake = new CANSparkMax(6, MotorType.kBrushless);
 
-    public static final CANSparkMax shooterMotor = new CANSparkMax(0, MotorType.kBrushless);
+    public static final CANSparkMax shooterMotor = new CANSparkMax(5, MotorType.kBrushless);
 
-    public static final DoubleSolenoid intakePiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
+    //public static final DoubleSolenoid intakePiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
 }

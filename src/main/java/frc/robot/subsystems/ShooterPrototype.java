@@ -24,13 +24,13 @@ public class ShooterPrototype {
         if (MechanismsJoystick.shooterSpeedIncrease()) {
             SmartDashboard.putBoolean("speed increase", true);
             shooterSpeed += 0.05;
-        } else             SmartDashboard.putBoolean("speed increase", false);
+        } else SmartDashboard.putBoolean("speed increase", false);
 
 
         if (MechanismsJoystick.shooterSpeedDecrease()) {
             SmartDashboard.putBoolean("speed decrease", true);
             shooterSpeed -= 0.05;
-        } else             SmartDashboard.putBoolean("speed decrease", false);
+        } else SmartDashboard.putBoolean("speed decrease", false);
 
 
        

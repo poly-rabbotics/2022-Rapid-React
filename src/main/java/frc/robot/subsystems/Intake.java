@@ -53,11 +53,12 @@ public class Intake {
       intake.set(intakeSpeed);
     } else intake.set(0);
 
-    intakePneumatics();
+    //intakePneumatics();
 
     SmartDashboard.putNumber("intake speed", intakeSpeed);
   }
-
+}
+/*
 public static void intakePneumatics() {
     if(MechanismsJoystick.arm()) {
         RobotMap.intakePiston.set(Value.kForward);
@@ -70,4 +71,4 @@ public static void intakePneumatics() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
 }
-
+*/
