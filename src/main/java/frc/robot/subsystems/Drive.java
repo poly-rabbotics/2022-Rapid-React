@@ -3,22 +3,13 @@
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.revrobotics.CANPIDController;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.PWMTalonSRX;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Controls.DriveJoystick;
-import frc.robot.Controls.MechanismsJoystick;
-import frc.robot.Robot;
+
 import frc.robot.RobotMap;
 
 /** Add your docs here. */
@@ -35,7 +26,7 @@ public class Drive {
   static double leftSpeedError, rightSpeedError, leftSpeedSetpoint, rightSpeedSetpoint;
   static double move, turn, left, right; // move and turn for arcade drive, left and right for tank
   Joystick calibrateJoy;
-  static TalonFX leftBack, rightBack, leftFront, rightFront;
+  static TalonSRX leftBack, rightBack, leftFront, rightFront;
   static PIDController leftPIDController, rightPIDController;
   public static String driveMode;
   boolean isAligned;
@@ -44,7 +35,7 @@ public class Drive {
     calibrateJoy = new Joystick(2);
     timer = new Timer();
     timer.start();
-    cP_LL = 0.0425; // Constants determined through testing, don't change these
+    cP_LL = 0.0425; // PID Limelight constants for Zhol, needs changing
     cD_LL = 0.0173;
     cI_LL = 0.0014;
     leftSpeedError = 0;
@@ -62,12 +53,10 @@ public class Drive {
     leftFront = RobotMap.leftFront;
     rightBack = RobotMap.rightBack;
     rightFront = RobotMap.rightFront;
-    //leftPIDController =                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           , value);;
-    //rightPIDController = rightBack.set();
     leftFront.follow(leftBack);
     rightFront.follow(rightBack);
     fts_to_RPM = 409.3;
-    leftPIDController.setP(0.0002); //THESE PID VALUES LOOK GOOD OVERALL BUT COULD USE SOME OPTIMIZATION
+    leftPIDController.setP(0.0002); //General PID values for Zhol, we need new ones through testing
     rightPIDController.setP(0.0002);
     leftPIDController.setD(0.0);
     rightPIDController.setD(0.0000);
@@ -172,6 +161,7 @@ public class Drive {
     //controller max ft/sec = 12.21
     //1 RPM on motor is 0.002443 ft/sec
     //THIS WORKS!
+    //
     //leftPIDController.setReference((move * 12.21 * fts_to_RPM) + turn * 12.21 * fts_to_RPM, ControlType.kVelocity);
     //rightPIDController.setReference((-move * 12.21 * fts_to_RPM) - turn * 12.21 * fts_to_RPM, ControlType.kVelocity);
   }
@@ -201,90 +191,3 @@ public class Drive {
         SmartDashboard.putNumber("cI_LL", cI_LL);
     }
   }
-  /*
-  public void run(int type,double setpoint)
-  {
-    //PURELY EXPERIMENTAL, mostly ignore this
-    if(DriveJoystick.getResetEncoder())
-    {
-      RobotMap.leftFront.getEncoder().setPosition(0);
-      RobotMap.rightFront.getEncoder().setPosition(0);
-    }
-
-    switch (type){
-      case 0:
-        joystickDrive();
-      break;
-
-      case 1:
-
-        if(!autoDrive(setpoint))
-        {
-          move=0.5;
-          turn=0;
-        }
-        else
-        {
-          move=0;
-          turn=0;
-        }
-        break;
-      
-      case 2:   
-        if(!autoDrive(setpoint))
-        {
-          move=0;
-          turn=0.5;
-        }
-        else
-        {
-          move=0;
-          turn=0;
-        }
-        break;
-
-        case 3:   
-        if(!autoDrive(setpoint))
-        {
-          move=0;
-          turn=-0.5;
-        }
-        else
-        {
-          move=0;
-          turn=0;
-        }
-        break;
-        default:
-        break;
-    }
-      
-  }
-  */
-/*boolean autoDrive(double distance)
-  {
-    boolean done=false;
-
-    if(Math.abs(RobotMap.leftFront.getEncoder().getPosition())>distance&&Math.abs(RobotMap.rightFront.getEncoder().getPosition())>distance)
-    
-      done=true;
-    else done=false;
-    drive.arcadeDrive(move,turn);
-
-    if(done)
-    {
-      isAutoDrive=false;
-      RobotMap.leftFront.getEncoder().setPosition(0);
-      RobotMap.rightFront.getEncoder().setPosition(0);
-    }
-
-    return done;
-  }
-  
-  @Override
-  public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
-  }
-}
-*/

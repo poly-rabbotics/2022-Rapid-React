@@ -74,5 +74,17 @@ public class MechanismsJoystick {
           return joystick.getRawButton(5);
         }
 
+        public static boolean intakeUp(){
+          return joystick.getRawButtonPressed(4);
+        }
+
+        public static boolean intakeDown(){
+          return joystick.getRawButtonPressed(2);
+        }
+
+        public static boolean intakeRun(){
+          return joystick.getRawButton(6);
+        }
+
 
 }
