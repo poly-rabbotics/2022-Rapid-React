@@ -8,7 +8,7 @@ package frc.robot.subsystems;
 
 import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -25,10 +25,10 @@ public class Intake {
 
   public Intake() {
     intake = RobotMap.intake;
-    intakeSpeed = 0.0;
+    intakeSpeed = -0.8;
   }
   public void run() {
-    /*intakeSpeed = -0.8;
+    intakeSpeed = -0.8;
     if (MechanismsJoystick.reverse()) {
       intakeSpeed = -intakeSpeed;
     }
@@ -36,26 +36,8 @@ public class Intake {
     if (MechanismsJoystick.intake()) {
       intake.set(intakeSpeed);
     } else intake.set(0);
-    */
-
-    if (MechanismsJoystick.intakeUp()) {
-      SmartDashboard.putBoolean("intake speed increase", true);
-      intakeSpeed += 0.05;
-  } else SmartDashboard.putBoolean("intake speed increase", false);
-
-
-  if (MechanismsJoystick.intakeDown()) {
-      SmartDashboard.putBoolean("intake speed decrease", true);
-      intakeSpeed -= 0.05;
-  } else SmartDashboard.putBoolean("intake speed decrease", false);
-
-    if (MechanismsJoystick.intakeRun()) {
-      intake.set(intakeSpeed);
-    } else intake.set(0);
 
     intakePneumatics();
-
-    SmartDashboard.putNumber("intake speed", intakeSpeed);
   }
 
 public static void intakePneumatics() {
