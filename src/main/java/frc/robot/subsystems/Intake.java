@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -18,40 +19,34 @@ import frc.robot.Controls.MechanismsJoystick;
 //public class intake extends Subsystem {
 public class Intake {
     static PWMVictorSPX intakeWinch;
-    static CANSparkMax intake;
+    static CANSparkMax intakeMotor;
     static double intakeSpeed;
-    static boolean intakeDown;
-    static double intakeWinchPower = 0;
-
+    
   public Intake() {
-    intake = RobotMap.intake;
+    intakeMotor = RobotMap.intakeMotor;
     intakeSpeed = 0.0;
   }
   public void run() {
-    /*intakeSpeed = -0.8;
-    if (MechanismsJoystick.reverse()) {
-      intakeSpeed = -intakeSpeed;
-    }
-
-    if (MechanismsJoystick.intake()) {
-      intake.set(intakeSpeed);
-    } else intake.set(0);
-    */
-
-    if (MechanismsJoystick.intakeUp()) {
-      SmartDashboard.putBoolean("intake speed increase", true);
+    if (MechanismsJoystick.intakePSpeedIncrease()) {
+      SmartDashboard.putBoolean("speed increase", true);
       intakeSpeed += 0.05;
-  } else SmartDashboard.putBoolean("intake speed increase", false);
+  } else SmartDashboard.putBoolean("speed increase", false);
 
 
-  if (MechanismsJoystick.intakeDown()) {
-      SmartDashboard.putBoolean("intake speed decrease", true);
+  if (MechanismsJoystick.intakePSpeedDecrease()) {
+      SmartDashboard.putBoolean("speed decrease", true);
       intakeSpeed -= 0.05;
-  } else SmartDashboard.putBoolean("intake speed decrease", false);
+  } else SmartDashboard.putBoolean("speed decrease", false);
 
-    if (MechanismsJoystick.intakeRun()) {
-      intake.set(intakeSpeed);
-    } else intake.set(0);
+
+ 
+
+  if (MechanismsJoystick.intakePButton()) {
+      intakeMotor.set(intakeSpeed);
+  } else intakeMotor.set(0);
+
+  SmartDashboard.putNumber("intake speed setpoint", intakeSpeed);
+  SmartDashboard.putNumber("intake RPM", intakeMotor.getEncoder().getVelocity());
 
     //intakePneumatics();
 

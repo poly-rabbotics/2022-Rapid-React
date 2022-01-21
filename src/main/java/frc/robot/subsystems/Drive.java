@@ -1,22 +1,21 @@
-
+/*
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Controls.DriveJoystick;
-
 import frc.robot.RobotMap;
 
 /** Add your docs here. */
 
 //GEAR RATIO OF 10.71 TO 1 IN DRIVETRAIN GEARBOXES
-
+/*
 public class Drive { 
   Timer timer;
   double time, oldTime, cP_LL, cD_LL, cI_LL, power_LL, accumError; //Limelight PID control vars
@@ -27,7 +26,7 @@ public class Drive {
   static double leftSpeedError, rightSpeedError, leftSpeedSetpoint, rightSpeedSetpoint;
   static double move, turn, left, right; // move and turn for arcade drive, left and right for tank
   Joystick calibrateJoy;
-  static TalonSRX leftBack, rightBack, leftFront, rightFront;
+  static TalonFX leftBack, rightBack, leftFront, rightFront;
   static PIDController leftPIDController, rightPIDController;
   public static String driveMode;
   boolean isAligned;
@@ -36,7 +35,7 @@ public class Drive {
     calibrateJoy = new Joystick(2);
     timer = new Timer();
     timer.start();
-    cP_LL = 0.0425; // PID Limelight constants for Zhol, needs changing
+    cP_LL = 0.0425; // Constants determined through testing, don't change these
     cD_LL = 0.0173;
     cI_LL = 0.0014;
     leftSpeedError = 0;
@@ -54,10 +53,12 @@ public class Drive {
     leftFront = RobotMap.leftFront;
     rightBack = RobotMap.rightBack;
     rightFront = RobotMap.rightFront;
+    //leftPIDController =                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           , value);;
+    //rightPIDController = rightBack.set();
     leftFront.follow(leftBack);
     rightFront.follow(rightBack);
     fts_to_RPM = 409.3;
-    leftPIDController.setP(0.0002); //General PID values for Zhol, we need new ones through testing
+    leftPIDController.setP(0.0002); //THESE PID VALUES LOOK GOOD OVERALL BUT COULD USE SOME OPTIMIZATION
     rightPIDController.setP(0.0002);
     leftPIDController.setD(0.0);
     rightPIDController.setD(0.0000);
@@ -162,7 +163,6 @@ public class Drive {
     //controller max ft/sec = 12.21
     //1 RPM on motor is 0.002443 ft/sec
     //THIS WORKS!
-    //
     //leftPIDController.setReference((move * 12.21 * fts_to_RPM) + turn * 12.21 * fts_to_RPM, ControlType.kVelocity);
     //rightPIDController.setReference((-move * 12.21 * fts_to_RPM) - turn * 12.21 * fts_to_RPM, ControlType.kVelocity);
   }
@@ -192,3 +192,4 @@ public class Drive {
         SmartDashboard.putNumber("cI_LL", cI_LL);
     }
   }
+*/

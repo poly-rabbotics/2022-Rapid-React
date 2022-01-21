@@ -62,29 +62,31 @@ public class MechanismsJoystick {
           return joystick.getRawButton(3);
         }
 
-        public static boolean shooterSpeedIncrease(){ 
+        public static boolean shooterPSpeedIncrease(){ 
           return joystick.getRawButtonPressed(1); //A button
         }
       
-        public static boolean shooterSpeedDecrease(){ 
+        public static boolean shooterPSpeedDecrease(){ 
           return joystick.getRawButtonPressed(3); //B button
         }
       
-        public static boolean shooterButton(){
+        public static boolean shooterPButton(){
           return joystick.getRawButton(5);
         }
 
-        public static boolean intakeUp(){
-          return joystick.getRawButtonPressed(4);
-        }
-
-        public static boolean intakeDown(){
-          return joystick.getRawButtonPressed(2);
-        }
-
-        public static boolean intakeRun(){
+        public static boolean intakePButton(){
           return joystick.getRawButton(6);
         }
+
+        public static boolean intakePSpeedIncrease(){
+          return joystick.getRawButton(4);
+        }
+
+        public static boolean intakePSpeedDecrease(){
+          return joystick.getRawButton(2);
+        }
+
+
 
 
 }
