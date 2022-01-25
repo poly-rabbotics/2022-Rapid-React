@@ -10,15 +10,15 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 public class RobotMap {
     
-    public static final Joystick driveJoystick = new Joystick(0);
+    //public static final Joystick driveJoystick = new Joystick(0);
     public static final Joystick mechanismsJoystick = new Joystick(1);
     public static final Joystick configJoystick = new Joystick(2);
-    /*
-    public static final TalonFX leftBack = new TalonFX(1);
-    public static final TalonFX leftFront = new TalonFX(2);
-    public static final TalonFX rightBack = new TalonFX(3);
-    public static final TalonFX rightFront = new TalonFX(4);
-    */
+    
+    //public static final TalonSRX leftBack = new TalonSRX(1);
+    //public static final TalonSRX leftFront = new TalonSRX(2);
+    public static final TalonSRX rightBack = new TalonSRX(3);
+    public static final TalonSRX rightFront = new TalonSRX(4);
+    
     
     public static final CANSparkMax intakeMotor = new CANSparkMax(6, MotorType.kBrushless); //NEO 550
 

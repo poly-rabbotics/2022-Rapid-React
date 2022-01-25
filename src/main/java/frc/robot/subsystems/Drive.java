@@ -1,10 +1,14 @@
-/*
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
@@ -15,9 +19,9 @@ import frc.robot.RobotMap;
 /** Add your docs here. */
 
 //GEAR RATIO OF 10.71 TO 1 IN DRIVETRAIN GEARBOXES
-/*
+
 public class Drive { 
-  Timer timer;
+  //Timer timer;
   double time, oldTime, cP_LL, cD_LL, cI_LL, power_LL, accumError; //Limelight PID control vars
   double x, oldX;
   static double fts_to_RPM;
@@ -25,53 +29,54 @@ public class Drive {
   static double cP, cD, cI, leftPower, rightPower; // drive speed PID control vars
   static double leftSpeedError, rightSpeedError, leftSpeedSetpoint, rightSpeedSetpoint;
   static double move, turn, left, right; // move and turn for arcade drive, left and right for tank
-  Joystick calibrateJoy;
-  static TalonFX leftBack, rightBack, leftFront, rightFront;
-  static PIDController leftPIDController, rightPIDController;
+  //Joystick calibrateJoy;
+  static TalonSRX  rightBack, rightFront;
   public static String driveMode;
   boolean isAligned;
 
   public Drive() {
-    calibrateJoy = new Joystick(2);
-    timer = new Timer();
-    timer.start();
-    cP_LL = 0.0425; // Constants determined through testing, don't change these
-    cD_LL = 0.0173;
-    cI_LL = 0.0014;
-    leftSpeedError = 0;
-    rightSpeedError = 0;
-    leftSpeedSetpoint = 0;
-    rightSpeedSetpoint = 0;
-    move = 0;
-    turn = 0;
-    oldTime = 0;
-    accumError = 0;
-    time = timer.get();
-    x = 0;
-    driveMode = "";
-    leftBack = RobotMap.leftBack;
-    leftFront = RobotMap.leftFront;
+    //calibrateJoy = new Joystick(2);
+    //timer = new Timer();
+    //timer.start();
+    //cP_LL = 0.0425; // Constants determined through testing, don't change these
+    //cD_LL = 0.0173;
+    //cI_LL = 0.0014;
+    //leftSpeedError = 0;
+    //rightSpeedError = 0;
+    //leftSpeedSetpoint = 0;
+    //rightSpeedSetpoint = 0;
+    //move = 0;
+    //turn = 0;
+    //ldTime = 0;
+    //accumError = 0;
+    //time = timer.get();
+    //x = 0;
+    //driveMode = "";
+    
+    //leftBack = RobotMap.leftBack;
+    //leftFront = RobotMap.leftFront;
     rightBack = RobotMap.rightBack;
     rightFront = RobotMap.rightFront;
+    
     //leftPIDController =                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           , value);;
     //rightPIDController = rightBack.set();
-    leftFront.follow(leftBack);
-    rightFront.follow(rightBack);
+    //leftFront.follow(leftBack);
+    //rightFront.follow(rightBack);
+    //leftFront.setInverted(InvertType.FollowMaster);
+    //rightFront.setInverted(InvertType.OpposeMaster);
     fts_to_RPM = 409.3;
-    leftPIDController.setP(0.0002); //THESE PID VALUES LOOK GOOD OVERALL BUT COULD USE SOME OPTIMIZATION
-    rightPIDController.setP(0.0002);
-    leftPIDController.setD(0.0);
-    rightPIDController.setD(0.0000);
-    leftPIDController.setI(0.000001);
-    rightPIDController.setI(0.000001);
+    //leftBack.config_kP(1, 0.00001);
+    //rightBack.config_kP(1, 0.00001);
+
   }
   public static boolean isAutoDrive = false;
   public boolean intakeforward = true;
   //static SpeedControllerGroup leftDrive = new SpeedControllerGroup(RobotMap.leftFront, RobotMap.leftBack);
   //static SpeedControllerGroup rightDrive = new SpeedControllerGroup(RobotMap.rightFront, RobotMap.rightBack);
-  static boolean driveSelection = DriveJoystick.driveMode();
+  //static boolean driveSelection = DriveJoystick.driveMode();
   //public static DifferentialDrive drive = new DifferentialDrive(leftDrive, rightDrive);
 
+  /*
   void joystickDrive() {
     move = DriveJoystick.getMove();
     turn = DriveJoystick.getTurn();
@@ -118,6 +123,7 @@ public class Drive {
       accumError = 0;
 
   }
+  
 
   public static void move() {
     if (driveSelection) {
@@ -130,8 +136,12 @@ public class Drive {
     }
     // drive.arcadeDrive(move, turn);
   }
-
+  */
   public void run() {
+    //rightFront.set(ControlMode.PercentOutput, 0.1);
+
+    //rightBack.set(ControlMode.PercentOutput, 0.1);
+    /*
     move = DriveJoystick.getMove();
     if ((move<0.05) || (move>-0.05)) { //deadzone between -5% and 5%
       move = 0;
@@ -148,8 +158,9 @@ public class Drive {
     SmartDashboard.putNumber("RPM Difference", (Math.abs(leftRPM) - Math.abs(rightRPM)));
     SmartDashboard.putBoolean("Drive Selection", driveSelection);
     SmartDashboard.putNumber("Target V", move * 12.21 * 409.3);
+    */
   }
-
+  /*
   public static void autoRun(double startTime, double endTime, double moveSpeed, double turnSpeed) {
     //double time = Robot.timer.get();
     //if (time > startTime && time < endTime) {
@@ -158,7 +169,6 @@ public class Drive {
       move();
     //}
   }
-
   public static void testDrive(){
     //controller max ft/sec = 12.21
     //1 RPM on motor is 0.002443 ft/sec
@@ -166,9 +176,9 @@ public class Drive {
     //leftPIDController.setReference((move * 12.21 * fts_to_RPM) + turn * 12.21 * fts_to_RPM, ControlType.kVelocity);
     //rightPIDController.setReference((-move * 12.21 * fts_to_RPM) - turn * 12.21 * fts_to_RPM, ControlType.kVelocity);
   }
-
+  */
   
-  
+  /*
   public void adjustPIDS() { //use for adjusting PID values LIMELIGHT ONLY
         if (calibrateJoy.getRawAxis(5) < -0.5) {
             cP_LL = cP_LL + 0.0001;
@@ -191,5 +201,5 @@ public class Drive {
         }
         SmartDashboard.putNumber("cI_LL", cI_LL);
     }
+    */
   }
-*/

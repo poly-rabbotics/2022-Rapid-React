@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 
 public class DriveJoystick {
-  
+  /*
   public static Joystick joystick = RobotMap.driveJoystick;
   private static double lastMoveTime = 0;
 
@@ -125,5 +125,5 @@ public class DriveJoystick {
     return joystick.getRawButtonPressed(7);
   }
 
-
+  */
 }

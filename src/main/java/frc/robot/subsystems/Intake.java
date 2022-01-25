@@ -18,6 +18,7 @@ import frc.robot.Controls.MechanismsJoystick;
 /** Add your docs here. */
 //public class intake extends Subsystem {
 public class Intake {
+  
     static PWMVictorSPX intakeWinch;
     static CANSparkMax intakeMotor;
     static double intakeSpeed;
@@ -27,13 +28,13 @@ public class Intake {
     intakeSpeed = 0.0;
   }
   public void run() {
-    if (MechanismsJoystick.intakePSpeedIncrease()) {
+    if (MechanismsJoystick.intakeSpeedIncrease()) {
       SmartDashboard.putBoolean("speed increase", true);
       intakeSpeed += 0.05;
   } else SmartDashboard.putBoolean("speed increase", false);
 
 
-  if (MechanismsJoystick.intakePSpeedDecrease()) {
+  if (MechanismsJoystick.intakeSpeedDecrease()) {
       SmartDashboard.putBoolean("speed decrease", true);
       intakeSpeed -= 0.05;
   } else SmartDashboard.putBoolean("speed decrease", false);
@@ -41,7 +42,7 @@ public class Intake {
 
  
 
-  if (MechanismsJoystick.intakePButton()) {
+  if (MechanismsJoystick.intakeButton()) {
       intakeMotor.set(intakeSpeed);
   } else intakeMotor.set(0);
 
@@ -67,3 +68,4 @@ public static void intakePneumatics() {
     // setDefaultCommand(new MySpecialCommand());
 }
 */
+

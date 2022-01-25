@@ -7,8 +7,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.ShooterPrototype;
+import frc.robot.subsystems.Shooter;
 //push test
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -22,7 +23,8 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   public static Intake intake;
-  public static ShooterPrototype shooterPrototype;
+  public static Shooter shooter;
+  public static Drive drive;
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -32,8 +34,9 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    shooterPrototype = new ShooterPrototype();
+    shooter = new Shooter();
     intake = new Intake();
+    drive = new Drive();
   }
 
   /**
@@ -85,8 +88,9 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    shooterPrototype.run();
+    shooter.run();
     intake.run();
+    //drive.run();
   }
 
   /** This function is called once when the robot is disabled. */
