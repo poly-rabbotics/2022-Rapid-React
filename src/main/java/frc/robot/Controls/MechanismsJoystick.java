@@ -86,7 +86,13 @@ public class MechanismsJoystick {
           return joystick.getRawButtonPressed(2);
         }
 
+        public static boolean doubleSolenoidOne(){
+          return joystick.getRawButton(5);
+        }
 
+        public static boolean doubleSolenoidTwo(){
+          return joystick.getRawButton(6);
+        }
 
 
 }

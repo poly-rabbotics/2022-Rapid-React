@@ -4,9 +4,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Controls.MechanismsJoystick;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -25,18 +31,22 @@ public class Robot extends TimedRobot {
   public static Intake intake;
   public static Shooter shooter;
   public static Drive drive;
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
+  Compressor comp;
+  PneumaticHub hub;
+  
   @Override
   public void robotInit() {
+   
+    comp = new Compressor(1, PneumaticsModuleType.REVPH);
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    shooter = new Shooter();
-    intake = new Intake();
-    drive = new Drive();
+    //shooter = new Shooter();
+    //intake = new Intake();
+    //drive = new Drive();
+
+    comp.enableDigital();
+    
   }
 
   /**
@@ -77,7 +87,7 @@ public class Robot extends TimedRobot {
       default:
         // Put default auto code here
         break;
-    } //push test PUSH TEST
+    } 
 
   }
 
@@ -88,9 +98,26 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    shooter.run();
-    intake.run();
+    //shooter.run();
+    //intake.run();
     //drive.run();
+    
+    if(MechanismsJoystick.doubleSolenoidOne()) {
+    
+      RobotMap.testSolenoidTwo.set(Value.kReverse);
+    } else if (MechanismsJoystick.doubleSolenoidTwo()) {
+      
+      RobotMap.testSolenoidTwo.set(Value.kForward);
+    }
+
+    if(MechanismsJoystick.doubleSolenoidOne()) {
+    
+      RobotMap.testSolenoidOne.set(Value.kReverse);
+    } else if (MechanismsJoystick.doubleSolenoidTwo()) {
+      
+      RobotMap.testSolenoidOne.set(Value.kForward);
+    }
+    
   }
 
   /** This function is called once when the robot is disabled. */

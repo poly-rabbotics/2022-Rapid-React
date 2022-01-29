@@ -15,16 +15,13 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.Controls.MechanismsJoystick;
 
-/** Add your docs here. */
-//public class intake extends Subsystem {
 public class Intake {
   
-    static PWMVictorSPX intakeWinch;
     static CANSparkMax intakeMotor;
     static double intakeSpeed;
     
   public Intake() {
-    intakeMotor = RobotMap.intakeMotor;
+    //intakeMotor = RobotMap.intakeMotor;
     intakeSpeed = 0.0;
   }
   public void run() {
