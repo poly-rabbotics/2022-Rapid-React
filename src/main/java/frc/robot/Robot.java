@@ -9,14 +9,12 @@ import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Controls.MechanismsJoystick;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
-//push test
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -37,15 +35,18 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
    
-    comp = new Compressor(1, PneumaticsModuleType.REVPH);
+    //comp = new Compressor(1, PneumaticsModuleType.REVPH);
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
     //shooter = new Shooter();
-    //intake = new Intake();
-    //drive = new Drive();
+    RobotMap.initDrive();
+    RobotMap.initIntake();
 
-    comp.enableDigital();
+    intake = new Intake();
+    drive = new Drive();
+    
+    //comp.enableDigital();
     
   }
 
@@ -99,9 +100,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //shooter.run();
-    //intake.run();
-    //drive.run();
-    
+    intake.run();
+    drive.run();
+    /*
     if(MechanismsJoystick.doubleSolenoidOne()) {
     
       RobotMap.testSolenoidTwo.set(Value.kReverse);
@@ -117,7 +118,7 @@ public class Robot extends TimedRobot {
       
       RobotMap.testSolenoidOne.set(Value.kForward);
     }
-    
+    */
   }
 
   /** This function is called once when the robot is disabled. */

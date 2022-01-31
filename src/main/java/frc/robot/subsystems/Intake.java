@@ -21,7 +21,7 @@ public class Intake {
     static double intakeSpeed;
     
   public Intake() {
-    //intakeMotor = RobotMap.intakeMotor;
+    intakeMotor = RobotMap.intakeMotor;
     intakeSpeed = 0.0;
   }
   public void run() {

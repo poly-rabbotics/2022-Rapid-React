@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -59,26 +60,47 @@ public class Drive {
     
     targetVLeft = 0;
     targetVRight = 0;
-    /*
+    
     leftBack = RobotMap.leftBack;
     leftFront = RobotMap.leftFront;
     rightBack = RobotMap.rightBack;
     rightFront = RobotMap.rightFront;
-    */
+    
     leftFront.follow(leftBack);
-    //rightFront.follow(rightBack);
+    rightFront.follow(rightBack);
     leftFront.setInverted(InvertType.FollowMaster);
-    //rightFront.setInverted(InvertType.FollowMaster);
+    rightFront.setInverted(InvertType.FollowMaster);
 
     fts_to_RPM = 409.3;
-    maxFtPerSec = 15; //find this out through testing
+    maxFtPerSec = 60; //find this out through testing
 
-    //leftBack.config_kP(1, 0); //determine best P
-    //rightBack.config_kP(1, 0);
-    //leftBack.config_kI(1, 0); //determine best I
-    //rightBack.config_kI(1, 0);
-    //leftBack.config_kD(1, 0); //determine best D
-    //rightBack.config_kD(1, 0);
+    leftBack.configFactoryDefault();
+    rightBack.configFactoryDefault();
+    leftBack.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
+    rightBack.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
+    leftBack.configNominalOutputForward(0);
+    rightBack.configNominalOutputForward(0);
+    leftBack.configNominalOutputReverse(0);
+    rightBack.configNominalOutputReverse(0);
+    leftBack.configPeakOutputForward(1);
+    rightBack.configPeakOutputForward(1);
+    leftBack.configPeakOutputReverse(-1);
+    rightBack.configPeakOutputReverse(-1);
+
+    leftBack.setSensorPhase(false);
+    rightBack.setSensorPhase(false);
+
+    leftBack.config_kP(0, .1); //determine best P
+    rightBack.config_kP(0, .1);
+    leftBack.config_kI(0, 0.0005); //determine best I
+    rightBack.config_kI(0, .0005);
+    leftBack.config_kD(0, .0001); //determine best D
+    rightBack.config_kD(0, .0001);
+    leftBack.config_kF(0, 0);
+    rightBack.config_kF(0, 0);
+
+    leftBack.selectProfileSlot(0, 0);
+    rightBack.selectProfileSlot(0, 0);
   } 
   public static boolean isAutoDrive = false;
   public boolean intakeforward = true;
@@ -156,10 +178,17 @@ public class Drive {
     //bootleg differential drive. needs testing.
     targetVLeft = (move * maxFtPerSec * fts_to_RPM); //+ turn * maxFtPerSec * fts_to_RPM;
     targetVRight = (-move * maxFtPerSec * fts_to_RPM); //- turn * maxFtPerSec * fts_to_RPM;
-    leftBack.set(TalonSRXControlMode.PercentOutput, targetVLeft / 6100);
+    //leftBack.set(TalonSRXControlMode.PercentOutput, targetVLeft / 6100);
     //rightBack.set(TalonSRXControlMode.PercentOutput, targetVRight / 6100);
     SmartDashboard.putNumber("Target V left", targetVLeft);
     SmartDashboard.putNumber("Target V right", targetVRight);
+
+    leftBack.set(ControlMode.Velocity, targetVLeft);
+    rightBack.set(ControlMode.Velocity, targetVRight);
+
+
+    SmartDashboard.putNumber("left target", leftBack.getClosedLoopTarget());
+    SmartDashboard.putNumber("right target", rightBack.getClosedLoopTarget());
 
     //leftBack.set(TalonSRXControlMode.Velocity, (move * maxFtPerSec * fts_to_RPM), DemandType.AuxPID, turn);
     //rightBack.set(TalonSRXControlMode.Velocity, (-move * maxFtPerSec * fts_to_RPM), DemandType.ArbitraryFeedForward, turn);
@@ -191,6 +220,12 @@ public class Drive {
     SmartDashboard.putNumber("RPM Difference", (Math.abs(leftRPM) - Math.abs(rightRPM)));
     SmartDashboard.putBoolean("Drive Selection", driveSelection);
     SmartDashboard.putNumber("Target V", move * 12.21 * 409.3);
+
+    SmartDashboard.putNumber("Left Velocity", leftBack.getSelectedSensorVelocity());
+    SmartDashboard.putNumber("Right Velocity", rightBack.getSelectedSensorVelocity());
+
+    SmartDashboard.putNumber("Left Percent", leftBack.getMotorOutputPercent());
+    SmartDashboard.putNumber("Right Percemt", rightBack.getMotorOutputPercent());
 
     //sends a 2d model of the field to shuffleboard
     //soon we use odometry to put a simulation of our robot on the field!
