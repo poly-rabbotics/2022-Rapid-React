@@ -24,6 +24,7 @@ public class Intake {
     static double intakeWinchPower = 0;
 
   public Intake() {
+    
     intake = RobotMap.intake;
     intakeSpeed = -0.8;
   }
@@ -42,11 +43,11 @@ public class Intake {
 
 public static void intakePneumatics() {
     if(MechanismsJoystick.arm()) {
-        RobotMap.intakePiston.set(Value.kForward);
+        //RobotMap.intakePiston.set(Value.kForward);
     }
     
     else if(!MechanismsJoystick.arm()) {
-        RobotMap.intakePiston.set(Value.kReverse);
+       // RobotMap.intakePiston.set(Value.kReverse);
     }
 }
     // Set the default command for a subsystem here.
