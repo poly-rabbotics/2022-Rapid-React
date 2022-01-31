@@ -13,13 +13,34 @@ public class RobotMap {
     public static final Joystick driveJoystick = new Joystick(0);
     public static final Joystick mechanismsJoystick = new Joystick(1);
     public static final Joystick configJoystick = new Joystick(2);
+    
+    public static TalonSRX leftBack;
+    public static TalonSRX leftFront;
+    public static TalonSRX rightBack;
+    public static TalonSRX rightFront;
 
-    public static final TalonFX leftBack = new TalonFX(1);
-    public static final TalonFX leftFront = new TalonFX(2);
-    public static final TalonFX rightBack = new TalonFX(3);
-    public static final TalonFX rightFront = new TalonFX(4);
+    public static CANSparkMax intakeMotor;
+
+    public static void initDrive() {
+        leftBack = new TalonSRX(1);
+        leftFront = new TalonSRX(2); 
+        rightBack = new TalonSRX(3);
+        rightFront = new TalonSRX(4); 
+    }
+    
+    public static void initIntake() {
+        intakeMotor = new CANSparkMax(5, MotorType.kBrushless);
+    }
+    
+    
+    public static final DoubleSolenoid testSolenoidOne = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
+    public static final DoubleSolenoid testSolenoidTwo = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
+
+
 
     
-    public static final CANSparkMax intake = new CANSparkMax(5, MotorType.kBrushless);
-    public static final DoubleSolenoid intakePiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
+
+    //public static final CANSparkMax shooterMotor = new CANSparkMax(6, MotorType.kBrushless); //NEO
+
+    //public static final DoubleSolenoid intakePiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
 }

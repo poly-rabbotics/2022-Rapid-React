@@ -73,6 +73,4 @@ public class MechanismsJoystick {
         public static boolean shooterButton(){
           return joystick.getRawButton(5);
         }
-
-
 }

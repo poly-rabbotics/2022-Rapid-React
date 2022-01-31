@@ -4,11 +4,17 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Controls.MechanismsJoystick;
+import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
-//push test
+import frc.robot.subsystems.Shooter;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -20,19 +26,28 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  public static Intake Intake;
-
-  /**
-   * This function is run when the robot is first started up and should be used for any
-   * initialization code.
-   */
+  public static Intake intake;
+  public static Shooter shooter;
+  public static Drive drive;
+  Compressor comp;
+  PneumaticHub hub;
+  
   @Override
   public void robotInit() {
+   
+    //comp = new Compressor(1, PneumaticsModuleType.REVPH);
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    //shooter = new Shooter();
+    RobotMap.initDrive();
+    RobotMap.initIntake();
 
-    Intake = new Intake();
+    intake = new Intake();
+    drive = new Drive();
+    
+    //comp.enableDigital();
+    
   }
 
   /**
@@ -73,7 +88,7 @@ public class Robot extends TimedRobot {
       default:
         // Put default auto code here
         break;
-    } //push test PUSH TEST
+    } 
 
   }
 
@@ -84,8 +99,26 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    //shooter.run();
+    intake.run();
+    drive.run();
+    /*
+    if(MechanismsJoystick.doubleSolenoidOne()) {
+    
+      RobotMap.testSolenoidTwo.set(Value.kReverse);
+    } else if (MechanismsJoystick.doubleSolenoidTwo()) {
+      
+      RobotMap.testSolenoidTwo.set(Value.kForward);
+    }
 
-    Intake.run();
+    if(MechanismsJoystick.doubleSolenoidOne()) {
+    
+      RobotMap.testSolenoidOne.set(Value.kReverse);
+    } else if (MechanismsJoystick.doubleSolenoidTwo()) {
+      
+      RobotMap.testSolenoidOne.set(Value.kForward);
+    }
+    */
   }
 
   /** This function is called once when the robot is disabled. */
