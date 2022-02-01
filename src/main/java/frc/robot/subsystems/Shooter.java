@@ -29,7 +29,7 @@ public class Shooter {
        if(MechanismsJoystick.shooterActive()) {
            shooterPIDController.setReference(5000, ControlType.kVelocity);
        }
-       else shooterPIDController.setReference(0, ControlType.kVelocity)
+       else shooterPIDController.setReference(0, ControlType.kVelocity);
         SmartDashboard.putNumber("Shooter speed setpoint", shooterSpeedSetpoint);
         SmartDashboard.putNumber("Shooter RPM", shooterMotor.getEncoder().getVelocity());
     }
