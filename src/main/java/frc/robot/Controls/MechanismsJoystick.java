@@ -73,7 +73,6 @@ public class MechanismsJoystick {
         public static boolean shooterButton(){
           return joystick.getRawButton(5);
         }
-<<<<<<< HEAD
 
         public static boolean intakeButton(){
           return joystick.getRawButton(6);
@@ -103,6 +102,4 @@ public class MechanismsJoystick {
           return joystick.getRawButton(1);
         }
 
-=======
->>>>>>> ee4c625f75578eada7de31c854cc0709d99c35e0
 }

@@ -23,6 +23,9 @@ public class RobotMap {
 
     public static DoubleSolenoid drivePancake;
 
+    public static CANSparkMax conveyorMotor;
+
+
     public static void initDriveMotors() {
         leftBack = new TalonSRX(1);
         leftFront = new TalonSRX(2); 
@@ -35,6 +38,10 @@ public class RobotMap {
     
     public static void initIntake() {
         intakeMotor = new CANSparkMax(5, MotorType.kBrushless);
+    }
+
+    public static void initConveyor() {
+        conveyorMotor = new CANSparkMax(7, MotorType.kBrushless);
     }
     
     

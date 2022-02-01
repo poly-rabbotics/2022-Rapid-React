@@ -7,24 +7,16 @@ package frc.robot.subsystems;
 //import com.revrobotics.CANSparkMax;
 
 import frc.robot.RobotMap;
-import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.Controls.MechanismsJoystick;
 
 public class Conveyor {
     
-    public static CANSparkMax conveyorMotor;
-
     static boolean reversed;
-    static CANSparkMax ConveyorMotor;
+    static CANSparkMax conveyorMotor;
     
   public Conveyor() {
-    conveyorMotor = new CANSparkMax(7, MotorType.kBrushless);
+    conveyorMotor = RobotMap.conveyorMotor;
     reversed = false;
   }
   public void run() {
@@ -41,7 +33,7 @@ public class Conveyor {
   if (MechanismsJoystick.runConveyor()) {
       if(!reversed) conveyorMotor.set(1);
       if(reversed) conveyorMotor.set(-1);
-  } else ConveyorMotor.set(0);
+  } else conveyorMotor.set(0);
   }
 }
 /*

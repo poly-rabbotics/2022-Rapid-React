@@ -83,11 +83,11 @@ public class Drive {
     leftBack.setSensorPhase(false);
     rightBack.setSensorPhase(false);
 
-    leftBack.config_kP(0, .1); //determine best P
+    leftBack.config_kP(0, .1); //THESE PIDS WORK WELL FOR FREE GEARBOXES
     rightBack.config_kP(0, .1);
-    leftBack.config_kI(0, 0.0005); //determine best I
+    leftBack.config_kI(0, 0.0005); 
     rightBack.config_kI(0, .0005);
-    leftBack.config_kD(0, .0001); //determine best D
+    leftBack.config_kD(0, .0001); 
     rightBack.config_kD(0, .0001);
     leftBack.config_kF(0, 0);
     rightBack.config_kF(0, 0);
