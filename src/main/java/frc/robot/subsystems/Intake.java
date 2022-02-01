@@ -8,61 +8,48 @@ package frc.robot.subsystems;
 
 import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkMax;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.Controls.MechanismsJoystick;
 
+/** Add your docs here. */
+//public class intake extends Subsystem {
 public class Intake {
-  
-    static CANSparkMax intakeMotor;
+    static PWMVictorSPX intakeWinch;
+    static CANSparkMax intake;
     static double intakeSpeed;
-    
+    static boolean intakeDown;
+    static double intakeWinchPower = 0;
+
   public Intake() {
-    intakeMotor = RobotMap.intakeMotor;
-    intakeSpeed = 0.0;
+    
+    intake = RobotMap.intakeMotor;
+    intakeSpeed = -0.8;
   }
   public void run() {
-    if (MechanismsJoystick.intakeSpeedIncrease()) {
-      SmartDashboard.putBoolean("speed increase", true);
-      intakeSpeed += 0.05;
-  } else SmartDashboard.putBoolean("speed increase", false);
+    intakeSpeed = -0.8;
+    if (MechanismsJoystick.reverse()) {
+      intakeSpeed = -intakeSpeed;
+    }
 
-
-  if (MechanismsJoystick.intakeSpeedDecrease()) {
-      SmartDashboard.putBoolean("speed decrease", true);
-      intakeSpeed -= 0.05;
-  } else SmartDashboard.putBoolean("speed decrease", false);
-
-
- 
-
-  if (MechanismsJoystick.intakeButton()) {
-      intakeMotor.set(intakeSpeed);
-  } else intakeMotor.set(0);
-
-  SmartDashboard.putNumber("intake speed setpoint", intakeSpeed);
-  SmartDashboard.putNumber("intake RPM", intakeMotor.getEncoder().getVelocity());
+    if (MechanismsJoystick.intake()) {
+      intake.set(intakeSpeed);
+    } else intake.set(0);
 
     //intakePneumatics();
-
-    SmartDashboard.putNumber("intake speed", intakeSpeed);
   }
-}
-/*
-public static void intakePneumatics() {
-    if(MechanismsJoystick.arm()) {
-        RobotMap.intakePiston.set(Value.kForward);
-    }
+
+//public static void intakePneumatics() {
+    //if(MechanismsJoystick.arm()) {
+        //RobotMap.intakePiston.set(Value.kForward);
+    //}
     
-    else if(!MechanismsJoystick.arm()) {
-        RobotMap.intakePiston.set(Value.kReverse);
-    }
-}
+    //else if(!MechanismsJoystick.arm()) {
+       // RobotMap.intakePiston.set(Value.kReverse);
+    //}
+//}
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
 }
-*/
 
