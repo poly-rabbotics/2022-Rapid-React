@@ -15,6 +15,7 @@ static double x, y, area;
 private NetworkTableEntry ledMode;
 private NetworkTableEntry camMode;
 
+
 static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 static NetworkTableEntry tx = table.getEntry("tx");
   static  NetworkTableEntry ty = table.getEntry("ty");
@@ -48,11 +49,11 @@ public void trackingMode(){
     camMode.setDouble(0);
     ledMode.setDouble(0);
     isTracking = true;
-
-
 }
 
-
+public void switchPipeline(int pipelineNumber) {
+    NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(pipelineNumber);
+}
 
 public void calibrateLimelight(){
     //trackingMode();

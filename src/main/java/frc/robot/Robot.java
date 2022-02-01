@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import org.ejml.ops.ConvertMatrixData;
-
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -17,7 +15,6 @@ import frc.robot.Controls.MechanismsJoystick;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
-import pabeles.concurrency.ConcurrencyOps;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -62,7 +59,10 @@ public class Robot extends TimedRobot {
    * SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    SmartDashboard.putNumber("PSI", comp.getPressure());
+    SmartDashboard.putBoolean("Limit Switch", !RobotMap.magLimitSwitch.get());
+  }
 
   /**
    * This autonomous (along with the chooser code above) shows how to select between different
@@ -111,13 +111,13 @@ public class Robot extends TimedRobot {
     
       RobotMap.testSolenoidOne.set(Value.kReverse);
       RobotMap.testSolenoidTwo.set(Value.kReverse);
-      RobotMap.testSolenoidThree.set(Value.kReverse);
+      RobotMap.testSolenoidThree.set(Value.kOff);
 
     } else if (MechanismsJoystick.staticArmPancakeRelease()) {
       
       RobotMap.testSolenoidOne.set(Value.kForward);
       RobotMap.testSolenoidTwo.set(Value.kForward);
-      RobotMap.testSolenoidThree.set(Value.kForward);
+      RobotMap.testSolenoidThree.set(Value.kOff);
     }
 
     
