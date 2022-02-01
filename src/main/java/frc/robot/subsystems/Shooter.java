@@ -26,20 +26,10 @@ public class Shooter {
 
     }
     public void run() {
-        if (MechanismsJoystick.shooterSpeedIncrease()) {
-            SmartDashboard.putBoolean("speed increase", true);
-            shooterSpeedSetpoint += 500;
-        } else SmartDashboard.putBoolean("speed increase", false);
-
-        if (MechanismsJoystick.shooterSpeedDecrease()) {
-            SmartDashboard.putBoolean("speed decrease", true);
-            shooterSpeedSetpoint -= 500;
-        } else SmartDashboard.putBoolean("speed decrease", false);
-
-        if (MechanismsJoystick.shooterButton()) {
-            shooterPIDController.setReference(shooterSpeedSetpoint, ControlType.kVelocity);
-        } else shooterPIDController.setReference(0, ControlType.kVelocity);
-
+       if(MechanismsJoystick.shooterActive()) {
+           shooterPIDController.setReference(5000, ControlType.kVelocity);
+       }
+       else shooterPIDController.setReference(0, ControlType.kVelocity)
         SmartDashboard.putNumber("Shooter speed setpoint", shooterSpeedSetpoint);
         SmartDashboard.putNumber("Shooter RPM", shooterMotor.getEncoder().getVelocity());
     }
