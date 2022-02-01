@@ -94,5 +94,12 @@ public class MechanismsJoystick {
           return joystick.getRawButton(6);
         }
 
+        public static boolean conveyorReverse() {
+          return joystick.getRawButtonPressed(3);
+        }
+
+        public static boolean runConveyor() {
+          return joystick.getRawButton(1);
+        }
 
 }

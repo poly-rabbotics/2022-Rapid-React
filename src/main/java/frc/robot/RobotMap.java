@@ -31,8 +31,7 @@ public class RobotMap {
     public static void initIntake() {
         intakeMotor = new CANSparkMax(5, MotorType.kBrushless);
     }
-    
-    
+
     public static final DoubleSolenoid testSolenoidOne = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
     public static final DoubleSolenoid testSolenoidTwo = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
 
