@@ -21,16 +21,24 @@ public class RobotMap {
 
     public static CANSparkMax intakeMotor;
 
-    public static void initDrive() {
+    public static DoubleSolenoid drivePancake;
+
+    public static void initDriveMotors() {
         leftBack = new TalonSRX(1);
         leftFront = new TalonSRX(2); 
         rightBack = new TalonSRX(3);
         rightFront = new TalonSRX(4); 
     }
+    public static void initDrivePancakes() {
+        drivePancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
+    }
     
     public static void initIntake() {
         intakeMotor = new CANSparkMax(5, MotorType.kBrushless);
     }
+    
+    
+    //public static final DoubleSolenoid testSolenoidTwo = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
 
     public static final DoubleSolenoid testSolenoidOne = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
     public static final DoubleSolenoid testSolenoidTwo = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
