@@ -38,19 +38,19 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
    
-    //comp = new Compressor(1, PneumaticsModuleType.REVPH);
+    comp = new Compressor(1, PneumaticsModuleType.REVPH);
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
     //shooter = new Shooter();
-    RobotMap.initDriveMotors();
-    RobotMap.initIntake();
+    //RobotMap.initDriveMotors();
+    //RobotMap.initIntake();
     //RobotMap.initConveyor();
-    intake = new Intake();
-    drive = new Drive();
+    //intake = new Intake();
+    //drive = new Drive();
     //conveyor = new Conveyor();
     
-    //comp.enableDigital();
+    comp.enableDigital();
     
   }
 
@@ -104,25 +104,24 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //shooter.run();
-    intake.run();
-    drive.run();
-    /*
-    if(MechanismsJoystick.doubleSolenoidOne()) {
+    //intake.run();
+    //drive.run();
     
-      RobotMap.testSolenoidTwo.set(Value.kReverse);
-    } else if (MechanismsJoystick.doubleSolenoidTwo()) {
-      
-      RobotMap.testSolenoidTwo.set(Value.kForward);
-    }
-
-    if(MechanismsJoystick.doubleSolenoidOne()) {
+    if(MechanismsJoystick.dynamicArmPancakeRelease()) {
     
       RobotMap.testSolenoidOne.set(Value.kReverse);
-    } else if (MechanismsJoystick.doubleSolenoidTwo()) {
+      RobotMap.testSolenoidTwo.set(Value.kReverse);
+      RobotMap.testSolenoidThree.set(Value.kReverse);
+
+    } else if (MechanismsJoystick.staticArmPancakeRelease()) {
       
       RobotMap.testSolenoidOne.set(Value.kForward);
+      RobotMap.testSolenoidTwo.set(Value.kForward);
+      RobotMap.testSolenoidThree.set(Value.kForward);
     }
-    */
+
+    
+    
   }
 
   /** This function is called once when the robot is disabled. */

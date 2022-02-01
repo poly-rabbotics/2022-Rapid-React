@@ -18,13 +18,17 @@ public class RobotMap {
     public static TalonSRX leftFront;
     public static TalonSRX rightBack;
     public static TalonSRX rightFront;
+    public static TalonSRX staticArmWinch;
+    public static TalonSRX dynamicArmWinch;
 
     public static CANSparkMax intakeMotor;
+    public static CANSparkMax conveyorMotor;
+    public static CANSparkMax shooterMotor;
 
     public static DoubleSolenoid drivePancake;
-
-    public static CANSparkMax conveyorMotor;
-
+    public static DoubleSolenoid staticArmPancake;
+    public static DoubleSolenoid dynamicArmPancake;
+    public static DoubleSolenoid dynamicArmPivot;
 
     public static void initDriveMotors() {
         leftBack = new TalonSRX(1);
@@ -43,18 +47,21 @@ public class RobotMap {
     public static void initConveyor() {
         conveyorMotor = new CANSparkMax(7, MotorType.kBrushless);
     }
-    
-    
-    //public static final DoubleSolenoid testSolenoidTwo = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
 
+    public static void initShooter() {
+        shooterMotor = new CANSparkMax(6, MotorType.kBrushless);
+    }
+    
+    public static void initClimb() {
+        staticArmWinch = new TalonSRX(8);
+        dynamicArmWinch = new TalonSRX(9);
+        staticArmPancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);
+        dynamicArmPancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 6, 7);
+        dynamicArmPivot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 8, 9);
+    }
+    
     public static final DoubleSolenoid testSolenoidOne = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
     public static final DoubleSolenoid testSolenoidTwo = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
+    public static final DoubleSolenoid testSolenoidThree = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);
 
-
-
-    
-
-    //public static final CANSparkMax shooterMotor = new CANSparkMax(6, MotorType.kBrushless); //NEO
-
-    //public static final DoubleSolenoid intakePiston = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, 0, 1);
 }

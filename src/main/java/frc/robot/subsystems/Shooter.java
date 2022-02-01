@@ -15,7 +15,7 @@ public class Shooter {
     static double kP, kI, kD;
     public Shooter() {
         shooterSpeedSetpoint = 0;
-        //shooterMotor = RobotMap.shooterMotor;
+        shooterMotor = RobotMap.shooterMotor;
         kP = 0.0001;
         kI = 0.000001;
         kD = 0.0001;

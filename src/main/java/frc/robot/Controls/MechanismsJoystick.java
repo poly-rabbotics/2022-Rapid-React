@@ -33,12 +33,7 @@ public class MechanismsJoystick {
         public static boolean intake(){
           return joystick.getRawButton(9);
         }
-        public static boolean intakeWinchUp(){
-          return joystick.getRawAxis(1) < -0.1;
-        }
-        public static boolean intakeWinchDown(){
-          return joystick.getRawAxis(1) > 0.1;
-        }
+        
         public static boolean climbPressed(){
           return joystick.getRawButtonPressed(10);
         }
@@ -78,22 +73,6 @@ public class MechanismsJoystick {
           return joystick.getRawButton(6);
         }
 
-        public static boolean intakeSpeedIncrease(){
-          return joystick.getRawButtonPressed(4);
-        }
-
-        public static boolean intakeSpeedDecrease(){
-          return joystick.getRawButtonPressed(2);
-        }
-
-        public static boolean doubleSolenoidOne(){
-          return joystick.getRawButton(5);
-        }
-
-        public static boolean doubleSolenoidTwo(){
-          return joystick.getRawButton(6);
-        }
-
         public static boolean conveyorReverse() {
           return joystick.getRawButtonPressed(3);
         }
@@ -105,5 +84,47 @@ public class MechanismsJoystick {
         public static boolean shooterActive() {
           return joystick.getRawAxis(3) > 0.6;
         }
+
+        public static boolean staticArmPancakeRelease() {
+          if(joystick.getPOV() == 0){
+            return true;
+          }
+          else{
+            return false;
+          }
+        }
+
+        public static boolean dynamicArmPancakeRelease() {
+          if(joystick.getPOV() == 180){
+            return true;
+          }
+          else{
+            return false;
+          }
+        }
+
+        public static boolean staticArmRun() {
+          if(joystick.getPOV() == 90){
+            return true;
+          }
+          else{
+            return false;
+          }
+        }
+
+        public static boolean dynamicArmRun() {
+          if(joystick.getPOV() == 270){
+            return true;
+          }
+          else{
+            return false;
+          }
+        }
+
+        public static boolean dynamicArmPivot() {
+          return joystick.getRawAxis(2) > 0.6;
+        }
+
+        
 
 }
