@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
     //shooter = new Shooter();
-    RobotMap.initDrive();
+    RobotMap.initDriveMotors();
     RobotMap.initIntake();
 
     intake = new Intake();

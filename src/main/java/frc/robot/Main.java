@@ -6,16 +6,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.RobotBase;
 
-//your mom
-//your mom
-//your mom
-//your mom
-//your mom
-//your mom
-//your mom
-//your mom
-//your mom
-
 
 /**
  * Do NOT add any static variables to this class, or any initialization at all. Unless you know what
@@ -24,15 +14,6 @@ import edu.wpi.first.wpilibj.RobotBase;
  */
 public final class Main {
   private Main() {}
-
-//your mom
-//your mom
-//your mom
-//your mom
-//your mom
-//your mom
-//your mom
-//your mom
 
   /**
    * Main initialization function. Do not perform any initialization here.
@@ -43,13 +24,3 @@ public final class Main {
     RobotBase.startRobot(Robot::new);
   }
 }
-
-//your mom
-//your mom
-//your mom
-//your mom
-//your mom
-//your mom
-//your mom
-//your mom
-
