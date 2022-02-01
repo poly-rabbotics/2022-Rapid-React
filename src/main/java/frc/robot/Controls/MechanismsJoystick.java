@@ -101,5 +101,9 @@ public class MechanismsJoystick {
         public static boolean runConveyor() {
           return joystick.getRawButton(1);
         }
+        
+        public static boolean shooterActive() {
+          return joystick.getRawAxis(3) > 0.6;
+        }
 
 }
