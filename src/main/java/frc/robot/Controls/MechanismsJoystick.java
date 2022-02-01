@@ -73,4 +73,36 @@ public class MechanismsJoystick {
         public static boolean shooterButton(){
           return joystick.getRawButton(5);
         }
+<<<<<<< HEAD
+
+        public static boolean intakeButton(){
+          return joystick.getRawButton(6);
+        }
+
+        public static boolean intakeSpeedIncrease(){
+          return joystick.getRawButtonPressed(4);
+        }
+
+        public static boolean intakeSpeedDecrease(){
+          return joystick.getRawButtonPressed(2);
+        }
+
+        public static boolean doubleSolenoidOne(){
+          return joystick.getRawButton(5);
+        }
+
+        public static boolean doubleSolenoidTwo(){
+          return joystick.getRawButton(6);
+        }
+
+        public static boolean conveyorReverse() {
+          return joystick.getRawButtonPressed(3);
+        }
+
+        public static boolean runConveyor() {
+          return joystick.getRawButton(1);
+        }
+
+=======
+>>>>>>> ee4c625f75578eada7de31c854cc0709d99c35e0
 }
