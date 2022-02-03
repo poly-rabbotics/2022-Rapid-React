@@ -125,6 +125,15 @@ public class MechanismsJoystick {
           return joystick.getRawAxis(2) > 0.6;
         }
 
-        
+        public static boolean targetHub() {
+          return joystick.getRawButton(11);
+        }
+
+        public static boolean blue() {
+          return joystick.getRawButton(12);
+        }   
+        public static boolean red() {
+          return !joystick.getRawButton(12);
+        }           
 
 }

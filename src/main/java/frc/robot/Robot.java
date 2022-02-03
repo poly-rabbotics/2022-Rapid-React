@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Controls.MechanismsJoystick;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -24,11 +25,14 @@ import frc.robot.subsystems.Shooter;
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
+  public static int limelightProfile;
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   public static Intake intake;
   public static Shooter shooter;
   public static Drive drive;
+  public static Limelight limelight;
+
   Compressor comp;
   PneumaticHub hub;
   
@@ -41,11 +45,12 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto choices", m_chooser);
     //shooter = new Shooter();
     //RobotMap.initDriveMotors();
-    //RobotMap.initIntake();
+    RobotMap.initIntake();
     //RobotMap.initConveyor();
     //intake = new Intake();
     //drive = new Drive();
     //conveyor = new Conveyor();
+    limelight = new Limelight();
     
     comp.enableDigital();
     
@@ -62,6 +67,17 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     SmartDashboard.putNumber("PSI", comp.getPressure());
     SmartDashboard.putBoolean("Limit Switch", !RobotMap.magLimitSwitch.get());
+
+    if(MechanismsJoystick.targetHub()) 
+      limelightProfile = 2;
+    else
+    {
+      if(MechanismsJoystick.red()) limelightProfile = 1;
+      else if(MechanismsJoystick.blue()) limelightProfile = 0;
+    }
+
+    limelight.switchPipeline(limelightProfile);
+    SmartDashboard.putNumber("Limelight Profile", limelightProfile);
   }
 
   /**
@@ -106,6 +122,8 @@ public class Robot extends TimedRobot {
     //shooter.run();
     //intake.run();
     //drive.run();
+
+ 
     
     if(MechanismsJoystick.dynamicArmPancakeRelease()) {
     

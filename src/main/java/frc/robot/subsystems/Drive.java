@@ -169,7 +169,7 @@ public class Drive {
   
   public static void move() {
     //bootleg differential drive. needs testing.
-    targetVLeft = (move * maxFtPerSec * fts_to_RPM + (turn * maxFtPerSec * fts_to_RPM); //+ turn * maxFtPerSec * fts_to_RPM;
+    targetVLeft = (move * maxFtPerSec * fts_to_RPM + (turn * maxFtPerSec * fts_to_RPM)); //+ turn * maxFtPerSec * fts_to_RPM;
     targetVRight = (-move * maxFtPerSec * fts_to_RPM - (turn * maxFtPerSec * fts_to_RPM)); //- turn * maxFtPerSec * fts_to_RPM;
     //leftBack.set(TalonSRXControlMode.PercentOutput, targetVLeft / 6100);
     //rightBack.set(TalonSRXControlMode.PercentOutput, targetVRight / 6100);
