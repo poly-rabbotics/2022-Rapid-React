@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Controls.MechanismsJoystick;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -14,6 +15,7 @@ static double x, y, area;
 
 private NetworkTableEntry ledMode;
 private NetworkTableEntry camMode;
+public static int limelightProfile;
 
 
 static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
@@ -23,7 +25,9 @@ static NetworkTableEntry tx = table.getEntry("tx");
   static  NetworkTableEntry tv = table.getEntry("tv");
 
 
- 
+ //HOW TO CONNECT TO LIMELIGHT INTERFACE:
+ //IN BROWSER, while connected to robot,
+ //TRY limelight.local:5801
 
 public Limelight(){   
     
@@ -93,8 +97,18 @@ public void calibrateLimelight(){
     
     
         
+}
+public void setTrackingMode() {
+    if(MechanismsJoystick.targetHub()) 
+    limelightProfile = 2;
+    else{
+        if(MechanismsJoystick.red()) limelightProfile = 1;
+        else if(MechanismsJoystick.blue()) limelightProfile = 0;
     }
-    
+
+    switchPipeline(limelightProfile);
+    SmartDashboard.putNumber("Limelight Profile", limelightProfile);
    
+}
 
 }

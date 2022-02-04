@@ -25,7 +25,7 @@ import frc.robot.subsystems.Shooter;
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
-  public static int limelightProfile;
+  
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   public static Intake intake;
@@ -48,7 +48,9 @@ public class Robot extends TimedRobot {
     RobotMap.initIntake();
     //RobotMap.initConveyor();
     //intake = new Intake();
-    //drive = new Drive();
+    RobotMap.initDriveMotors();
+    drive = new Drive();
+    
     //conveyor = new Conveyor();
     limelight = new Limelight();
     
@@ -67,17 +69,8 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     SmartDashboard.putNumber("PSI", comp.getPressure());
     SmartDashboard.putBoolean("Limit Switch", !RobotMap.magLimitSwitch.get());
-
-    if(MechanismsJoystick.targetHub()) 
-      limelightProfile = 2;
-    else
-    {
-      if(MechanismsJoystick.red()) limelightProfile = 1;
-      else if(MechanismsJoystick.blue()) limelightProfile = 0;
-    }
-
-    limelight.switchPipeline(limelightProfile);
-    SmartDashboard.putNumber("Limelight Profile", limelightProfile);
+    limelight.setTrackingMode();
+    
   }
 
   /**
@@ -121,21 +114,21 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     //shooter.run();
     //intake.run();
-    //drive.run();
+    drive.run();
 
  
     
     if(MechanismsJoystick.dynamicArmPancakeRelease()) {
     
-      RobotMap.testSolenoidOne.set(Value.kReverse);
-      RobotMap.testSolenoidTwo.set(Value.kReverse);
-      RobotMap.testSolenoidThree.set(Value.kOff);
+      RobotMap.testSolenoidOne.set(Value.kOff);
+      RobotMap.testSolenoidTwo.set(Value.kOff);
+      RobotMap.testSolenoidThree.set(Value.kReverse);
 
     } else if (MechanismsJoystick.staticArmPancakeRelease()) {
       
-      RobotMap.testSolenoidOne.set(Value.kForward);
-      RobotMap.testSolenoidTwo.set(Value.kForward);
-      RobotMap.testSolenoidThree.set(Value.kOff);
+      RobotMap.testSolenoidOne.set(Value.kOff);
+      RobotMap.testSolenoidTwo.set(Value.kOff);
+      RobotMap.testSolenoidThree.set(Value.kForward);
     }
 
     

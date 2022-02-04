@@ -10,14 +10,18 @@ import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Controls.DriveJoystick;
+import frc.robot.Controls.MechanismsJoystick;
 import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 public class Drive { 
-  //Timer timer;
-  double time, oldTime, cP_LL, cD_LL, cI_LL, power_LL, accumError; //Limelight PID control vars
+  Timer timer;
+  double time, oldTime, cP_LL, cD_LL, cI_LL; //Limelight PID control vars
+  static double power_LL;
+  double accumError;
   double x, oldX;
   static double fts_to_RPM;
   static double leftRPM, rightRPM, leftEncoderCounts, rightEncoderCounts;
@@ -32,12 +36,13 @@ public class Drive {
   static double targetVLeft;
   static double targetVRight;
   private Field2d field = new Field2d();
+  private Limelight limelight;
 
 
   public Drive() {
     calibrateJoy = new Joystick(2);
-    //timer = new Timer();
-    //timer.start();
+    timer = new Timer();
+    timer.start();
     cP_LL = 0.0425; //old LL PIDs
     cD_LL = 0.0173;
     cI_LL = 0.0014;
@@ -94,6 +99,8 @@ public class Drive {
 
     leftBack.selectProfileSlot(0, 0);
     rightBack.selectProfileSlot(0, 0);
+
+    limelight = new Limelight();
   } 
   public static boolean isAutoDrive = false;
   public boolean intakeforward = true;
@@ -127,10 +134,6 @@ public class Drive {
     move();
     
 
-    //leftBack.setReference((move * 12.21 * fts_to_RPM) + turn * 12.21 * fts_to_RPM, ControlMode.Velocity);
-    //rightBack.setReference((-move * 12.21 * fts_to_RPM) - turn * 12.21 * fts_to_RPM, ControlMode.Velocity);
-
-    /* LIMELIGHT AUTO AIM CODE, REINTRODUCE AFTER DRIVE PID IS GOOD
     if (DriveJoystick.getCameraOrient()) // direction switch
       intakeforward = !intakeforward;
 
@@ -139,11 +142,13 @@ public class Drive {
       left = -left;
       right = -right;
     }
+
+    // LIMELIGHT AUTO AIM CODE, REINTRODUCE AFTER DRIVE PID IS GOOD
     accumError = Math.abs(x);
     oldTime = time;
     time = timer.get();
     oldX = x;
-    //x = Limelight.getX() - 3;
+    x = Limelight.getX() - 3;
     double deltaVelocity = (x - oldX) / (time - oldTime);
     power_LL = cP_LL * x + (cD_LL * deltaVelocity) + cI_LL * accumError; // The PID-based power calculation for LL
                                                                          // auto-aim
@@ -154,34 +159,34 @@ public class Drive {
     SmartDashboard.putNumber("cP_LL", cP_LL);
     SmartDashboard.putNumber("x", x);
     
-    
 
-    if (DriveJoystick.aim())
-     // drive.arcadeDrive(0, power_LL);
-     {}
-    else
-      move();
-    if (DriveJoystick.aim())
-      accumError = 0;
-    */
+    
   }
   
   
   public static void move() {
     //bootleg differential drive. needs testing.
-    targetVLeft = (move * maxFtPerSec * fts_to_RPM + (turn * maxFtPerSec * fts_to_RPM)); //+ turn * maxFtPerSec * fts_to_RPM;
-    targetVRight = (-move * maxFtPerSec * fts_to_RPM - (turn * maxFtPerSec * fts_to_RPM)); //- turn * maxFtPerSec * fts_to_RPM;
+     //- turn * maxFtPerSec * fts_to_RPM;
     //leftBack.set(TalonSRXControlMode.PercentOutput, targetVLeft / 6100);
     //rightBack.set(TalonSRXControlMode.PercentOutput, targetVRight / 6100);
+    
+    if (DriveJoystick.aim()) {
+      targetVLeft = (move * maxFtPerSec * fts_to_RPM + (power_LL * maxFtPerSec * fts_to_RPM));
+      targetVRight = (-move * maxFtPerSec * fts_to_RPM - (power_LL * maxFtPerSec * fts_to_RPM));
+    } else {
+      targetVLeft = (move * maxFtPerSec * fts_to_RPM + (turn * maxFtPerSec * fts_to_RPM));
+      targetVRight = (-move * maxFtPerSec * fts_to_RPM - (turn * maxFtPerSec * fts_to_RPM));
+    }
+
     SmartDashboard.putNumber("Target V left", targetVLeft);
     SmartDashboard.putNumber("Target V right", targetVRight);
 
     leftBack.set(ControlMode.Velocity, targetVLeft);
     rightBack.set(ControlMode.Velocity, targetVRight);
 
-
     SmartDashboard.putNumber("left target", leftBack.getClosedLoopTarget());
     SmartDashboard.putNumber("right target", rightBack.getClosedLoopTarget());
+
 
     //leftBack.set(TalonSRXControlMode.Velocity, (move * maxFtPerSec * fts_to_RPM), DemandType.AuxPID, turn);
     //rightBack.set(TalonSRXControlMode.Velocity, (-move * maxFtPerSec * fts_to_RPM), DemandType.ArbitraryFeedForward, turn);
