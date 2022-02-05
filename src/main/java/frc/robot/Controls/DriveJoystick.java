@@ -64,11 +64,11 @@ public class DriveJoystick {
     return joystick.getRawButton(3);
   }
 
-  public static boolean getXButton(){
-    return joystick.getRawButton(3);
+  public static boolean getToggleGears(){
+    return joystick.getRawButtonPressed(3);
   }
-  public static boolean getYButton(){
-    return joystick.getRawButton(4);
+  public static boolean getToggleDriveMode(){
+    return joystick.getRawButtonPressed(4);
   }
   public static boolean aim(){ //activates limelight auto-aim
     return joystick.getRawButton(1); 

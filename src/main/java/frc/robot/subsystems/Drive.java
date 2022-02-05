@@ -11,9 +11,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Controls.DriveJoystick;
-import frc.robot.Controls.MechanismsJoystick;
 import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
@@ -37,6 +37,7 @@ public class Drive {
   static double targetVRight;
   private Field2d field = new Field2d();
   private Limelight limelight;
+  static boolean PIDDriveActive, highTorqueModeActive;
 
 
   public Drive() {
@@ -58,6 +59,9 @@ public class Drive {
     
     targetVLeft = 0;
     targetVRight = 0;
+
+    PIDDriveActive = false;
+    highTorqueModeActive = false;
     
     leftBack = RobotMap.leftBack;
     leftFront = RobotMap.leftFront;
@@ -114,20 +118,27 @@ public class Drive {
 	}
   
   void joystickDrive() {
+    driveModeSet();
+
+    // DRIVE GEAR SHIFTING PANCAKES //
+    if (highTorqueModeActive) {
+      RobotMap.drivePancake.set(Value.kForward);
+    } else RobotMap.drivePancake.set(Value.kReverse);
+
     move = DriveJoystick.getMove(); 
     turn = DriveJoystick.getTurn(); 
     left = -DriveJoystick.getMove();
-  
     right = -DriveJoystick.axisFive();
+
     if (DriveJoystick.driveMode())
       driveSelection = !driveSelection;
-    // driveSelection = DriveJoystick.driveMode();
+    
     
     move = Math.signum(move) * Math.pow(move, 2);
     turn = Math.pow(turn, 3);
 
     
-    if ((move<0.05) && (move>-0.05)) { //deadzone between -5% and 5%
+    if ((move<0.05) && (move>-0.05)) { //JOYSTICK DEADZONE
       move = 0;
     }
 
@@ -170,19 +181,24 @@ public class Drive {
     //leftBack.set(TalonSRXControlMode.PercentOutput, targetVLeft / 6100);
     //rightBack.set(TalonSRXControlMode.PercentOutput, targetVRight / 6100);
     
-    if (DriveJoystick.aim()) {
-      targetVLeft = (move * maxFtPerSec * fts_to_RPM + (power_LL * maxFtPerSec * fts_to_RPM));
-      targetVRight = (-move * maxFtPerSec * fts_to_RPM - (power_LL * maxFtPerSec * fts_to_RPM));
+    if (PIDDriveActive) {
+      if (DriveJoystick.aim()) {
+        targetVLeft = (move * maxFtPerSec * fts_to_RPM + (power_LL * maxFtPerSec * fts_to_RPM));
+        targetVRight = (-move * maxFtPerSec * fts_to_RPM - (power_LL * maxFtPerSec * fts_to_RPM));
+      } else {
+        targetVLeft = (move * maxFtPerSec * fts_to_RPM + (turn * maxFtPerSec * fts_to_RPM));
+        targetVRight = (-move * maxFtPerSec * fts_to_RPM - (turn * maxFtPerSec * fts_to_RPM));
+      }
+      leftBack.set(ControlMode.Velocity, targetVLeft);
+      rightBack.set(ControlMode.Velocity, targetVRight);
     } else {
-      targetVLeft = (move * maxFtPerSec * fts_to_RPM + (turn * maxFtPerSec * fts_to_RPM));
-      targetVRight = (-move * maxFtPerSec * fts_to_RPM - (turn * maxFtPerSec * fts_to_RPM));
+      leftBack.set(ControlMode.PercentOutput, move + turn);
+      rightFront.set(ControlMode.PercentOutput, move - turn);
     }
+    
 
     SmartDashboard.putNumber("Target V left", targetVLeft);
     SmartDashboard.putNumber("Target V right", targetVRight);
-
-    leftBack.set(ControlMode.Velocity, targetVLeft);
-    rightBack.set(ControlMode.Velocity, targetVRight);
 
     SmartDashboard.putNumber("left target", leftBack.getClosedLoopTarget());
     SmartDashboard.putNumber("right target", rightBack.getClosedLoopTarget());
@@ -204,6 +220,15 @@ public class Drive {
     */
   }
   
+  public void driveModeSet() {
+    if (DriveJoystick.getToggleDriveMode()) {
+      PIDDriveActive = !PIDDriveActive;
+    }
+    if (DriveJoystick.getToggleGears()) {
+      highTorqueModeActive = !highTorqueModeActive;
+    }
+  }
+
   public void run() {
     joystickDrive();
     
@@ -223,7 +248,11 @@ public class Drive {
     SmartDashboard.putNumber("Right Velocity", rightBack.getSelectedSensorVelocity());
 
     SmartDashboard.putNumber("Left Percent", leftBack.getMotorOutputPercent());
-    SmartDashboard.putNumber("Right Percemt", rightBack.getMotorOutputPercent());
+    SmartDashboard.putNumber("Right Percent", rightBack.getMotorOutputPercent());
+
+    SmartDashboard.putBoolean("High Torque Mode Active?", highTorqueModeActive);
+    SmartDashboard.putBoolean("PID Drive Mode Active", PIDDriveActive);
+
 
     //sends a 2d model of the field to shuffleboard
     //soon we use odometry to put a simulation of our robot on the field!
