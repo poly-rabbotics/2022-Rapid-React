@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,6 +33,7 @@ public class Robot extends TimedRobot {
   public static Shooter shooter;
   public static Drive drive;
   public static Limelight limelight;
+  public static Timer timer;
 
   Compressor comp;
   PneumaticHub hub;
@@ -51,6 +53,8 @@ public class Robot extends TimedRobot {
     //intake = new Intake();
     RobotMap.initDriveMotors();
     drive = new Drive();
+    timer = new Timer();
+    timer.start();
     
     //conveyor = new Conveyor();
     //limelight = new Limelight();
@@ -69,6 +73,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     //SmartDashboard.putNumber("PSI", comp.getPressure());
+    SmartDashboard.putNumber("Timer", timer.get());
     SmartDashboard.putBoolean("Limit Switch", !RobotMap.magLimitSwitch.get());
     //limelight.run();
     
@@ -87,6 +92,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     m_autoSelected = m_chooser.getSelected();
+    timer.reset();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
   }

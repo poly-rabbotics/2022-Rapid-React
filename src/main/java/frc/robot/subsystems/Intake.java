@@ -8,6 +8,7 @@ package frc.robot.subsystems;
 
 import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
+import frc.robot.Robot;
 
 import com.revrobotics.CANSparkMax;
 
@@ -38,6 +39,13 @@ public class Intake {
     } else intake.set(0);
 
     //intakePneumatics();
+  }
+
+  public static void autoRun(double startTime, double endTime, double intakeSpeed) {
+    double time = Robot.timer.get();
+    if (time > startTime && time < endTime) {
+      intake.set(intakeSpeed);
+    }
   }
 
 //public static void intakePneumatics() {

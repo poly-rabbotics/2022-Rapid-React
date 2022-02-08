@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.robot.Robot;
 import frc.robot.Controls.MechanismsJoystick;
 
 public class Shooter {
@@ -34,4 +35,10 @@ public class Shooter {
         SmartDashboard.putNumber("Shooter RPM", shooterMotor.getEncoder().getVelocity());
     }
     
+    public static void autoRun(double startTime, double endTime, double shooterSpeed) {
+        double time = Robot.timer.get();
+        if (time > startTime && time < endTime) {
+          shooterPIDController.setReference(shooterSpeed, ControlType.kVelocity);
+        }
+    }
 }

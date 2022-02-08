@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 import frc.robot.RobotMap;
 import com.revrobotics.CANSparkMax;
 import frc.robot.Controls.MechanismsJoystick;
+import frc.robot.Robot;
 
 public class Conveyor {
     
@@ -34,6 +35,13 @@ public class Conveyor {
       if(!reversed) conveyorMotor.set(1);
       if(reversed) conveyorMotor.set(-1);
   } else conveyorMotor.set(0);
+  }
+
+  public static void autoRun(double startTime, double endTime, double conveyorSpeed) {
+    double time = Robot.timer.get();
+    if (time > startTime && time < endTime) {
+      conveyorMotor.set(conveyorSpeed);
+    }
   }
 }
 /*
