@@ -9,6 +9,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Servo;
 public class RobotMap {
     
     public static final Joystick driveJoystick = new Joystick(0);
@@ -30,6 +31,7 @@ public class RobotMap {
     public static DoubleSolenoid staticArmPancake;
     public static DoubleSolenoid dynamicArmPancake;
     public static DoubleSolenoid dynamicArmPivot;
+    public static DoubleSolenoid intakeSolenoid;
 
     public static void initDriveMotors() {
         leftBack = new TalonSRX(1);
@@ -43,10 +45,12 @@ public class RobotMap {
     
     public static void initIntake() {
         intakeMotor = new CANSparkMax(5, MotorType.kBrushless);
+        //intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);   
     }
 
     public static void initConveyor() {
         conveyorMotor = new CANSparkMax(7, MotorType.kBrushless);
+
     }
 
     public static void initShooter() {
@@ -61,10 +65,11 @@ public class RobotMap {
         dynamicArmPivot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 8, 9);
     }
     
-    public static final DoubleSolenoid testSolenoidOne = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
-    public static final DoubleSolenoid testSolenoidTwo = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
-    public static final DoubleSolenoid testSolenoidThree = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);
+    //public static final DoubleSolenoid testSolenoidOne = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
+    //public static final DoubleSolenoid testSolenoidTwo = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
+    //public static final DoubleSolenoid testSolenoidThree = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);
 
     public static final DigitalInput magLimitSwitch = new DigitalInput(0);
+    public static final Servo limelightServo = new Servo(0);
 
 }

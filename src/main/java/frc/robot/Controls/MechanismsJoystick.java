@@ -56,14 +56,6 @@ public class MechanismsJoystick {
         public static boolean autoSwitchThree(){
           return joystick.getRawButton(3);
         }
-
-        public static boolean shooterSpeedIncrease(){ 
-          return joystick.getRawButtonPressed(1); //A button
-        }
-      
-        public static boolean shooterSpeedDecrease(){ 
-          return joystick.getRawButtonPressed(3); //B button
-        }
       
         public static boolean shooterButton(){
           return joystick.getRawButton(5);

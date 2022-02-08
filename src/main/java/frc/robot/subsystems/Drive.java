@@ -24,7 +24,7 @@ public class Drive {
   double accumError;
   double x, oldX;
   static double fts_to_RPM;
-  static double leftRPM, rightRPM, leftEncoderCounts, rightEncoderCounts;
+  static double leftRPM, rightRPM, leftEncoderCounts, rightEncoderCounts, initialLeftCounts, initialRightCounts;
   static double cP, cD, cI, leftPower, rightPower; // drive speed PID control vars
   static double leftSpeedError, rightSpeedError, leftSpeedSetpoint, rightSpeedSetpoint;
   static double move, turn, left, right; // move and turn for arcade drive, left and right for tank
@@ -56,7 +56,10 @@ public class Drive {
     //time = timer.get();
     x = 0;
     driveMode = "";
-    
+
+    leftEncoderCounts = 0;
+    rightEncoderCounts = 0;
+
     targetVLeft = 0;
     targetVRight = 0;
 
@@ -67,44 +70,28 @@ public class Drive {
     leftFront = RobotMap.leftFront;
     rightBack = RobotMap.rightBack;
     rightFront = RobotMap.rightFront;
+
+    leftBack.configFactoryDefault();
+    rightBack.configFactoryDefault();
+
     
     leftFront.follow(leftBack);
     rightFront.follow(rightBack);
     leftFront.setInverted(InvertType.FollowMaster);
     rightFront.setInverted(InvertType.FollowMaster);
-
-    fts_to_RPM = 409.3;
-    maxFtPerSec = 60; //find this out through testing
-
-    leftBack.configFactoryDefault();
-    rightBack.configFactoryDefault();
     leftBack.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
     rightBack.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
-    leftBack.configNominalOutputForward(0);
-    rightBack.configNominalOutputForward(0);
-    leftBack.configNominalOutputReverse(0);
-    rightBack.configNominalOutputReverse(0);
-    leftBack.configPeakOutputForward(1);
-    rightBack.configPeakOutputForward(1);
-    leftBack.configPeakOutputReverse(-1);
-    rightBack.configPeakOutputReverse(-1);
 
-    leftBack.setSensorPhase(false);
-    rightBack.setSensorPhase(false);
 
-    leftBack.config_kP(0, .1); //THESE PIDS WORK WELL FOR FREE GEARBOXES
-    rightBack.config_kP(0, .1);
-    leftBack.config_kI(0, 0.0005); 
-    rightBack.config_kI(0, .0005);
-    leftBack.config_kD(0, .0001); 
-    rightBack.config_kD(0, .0001);
-    leftBack.config_kF(0, 0);
-    rightBack.config_kF(0, 0);
-
-    leftBack.selectProfileSlot(0, 0);
-    rightBack.selectProfileSlot(0, 0);
-
+    fts_to_RPM = 409.3;
+    maxFtPerSec = 60; //find this out through testing NOT ACTUALLY MAX FEET PER SECOND 
+    
     limelight = new Limelight();
+    leftBack.getSensorCollection().setAnalogPosition(0, 30);
+    rightBack.getSensorCollection().setAnalogPosition(0, 30);
+    leftBack.setSelectedSensorPosition(0);
+    rightBack.setSelectedSensorPosition(0);
+    //ENCODER COUNTS PER FOOT: 31160
   } 
   public static boolean isAutoDrive = false;
   public boolean intakeforward = true;
@@ -121,9 +108,11 @@ public class Drive {
     driveModeSet();
 
     // DRIVE GEAR SHIFTING PANCAKES //
+    /*
     if (highTorqueModeActive) {
       RobotMap.drivePancake.set(Value.kForward);
     } else RobotMap.drivePancake.set(Value.kReverse);
+    */
 
     move = DriveJoystick.getMove(); 
     turn = DriveJoystick.getTurn(); 
@@ -134,12 +123,15 @@ public class Drive {
       driveSelection = !driveSelection;
     
     
-    move = Math.signum(move) * Math.pow(move, 2);
-    turn = Math.pow(turn, 3);
+    move = Math.signum(move) * Math.pow(move, 2); //DRIVE CURVES
+    turn = Math.pow(turn, 1);
 
     
     if ((move<0.05) && (move>-0.05)) { //JOYSTICK DEADZONE
       move = 0;
+    }
+    if ((turn<0.08) && (turn>-0.08)) { //JOYSTICK DEADZONE
+      turn = 0;
     }
 
     move();
@@ -181,27 +173,40 @@ public class Drive {
     //leftBack.set(TalonSRXControlMode.PercentOutput, targetVLeft / 6100);
     //rightBack.set(TalonSRXControlMode.PercentOutput, targetVRight / 6100);
     
+    if (DriveJoystick.aim()) {
+      targetVLeft = (move * maxFtPerSec * fts_to_RPM + (power_LL * maxFtPerSec * fts_to_RPM));
+      targetVRight = (-move * maxFtPerSec * fts_to_RPM - (power_LL * maxFtPerSec * fts_to_RPM));
+    } else {
+      targetVLeft = (move * maxFtPerSec * fts_to_RPM + (turn * maxFtPerSec * fts_to_RPM));
+      targetVRight = (-move * maxFtPerSec * fts_to_RPM - (turn * maxFtPerSec * fts_to_RPM));
+    }
+    
+    
     if (PIDDriveActive) {
-      if (DriveJoystick.aim()) {
-        targetVLeft = (move * maxFtPerSec * fts_to_RPM + (power_LL * maxFtPerSec * fts_to_RPM));
-        targetVRight = (-move * maxFtPerSec * fts_to_RPM - (power_LL * maxFtPerSec * fts_to_RPM));
-      } else {
-        targetVLeft = (move * maxFtPerSec * fts_to_RPM + (turn * maxFtPerSec * fts_to_RPM));
-        targetVRight = (-move * maxFtPerSec * fts_to_RPM - (turn * maxFtPerSec * fts_to_RPM));
-      }
       leftBack.set(ControlMode.Velocity, targetVLeft);
       rightBack.set(ControlMode.Velocity, targetVRight);
     } else {
-      leftBack.set(ControlMode.PercentOutput, move + turn);
-      rightFront.set(ControlMode.PercentOutput, move - turn);
+      leftBack.set(ControlMode.PercentOutput, move - turn);
+      rightBack.set(ControlMode.PercentOutput, -move - turn);
     }
     
+    
+    /*
+    leftBack.set(ControlMode.PercentOutput, move + turn);
+    rightBack.set(ControlMode.PercentOutput, -move - turn);
+    
+    leftBack.set(ControlMode.Velocity, targetVLeft);
+    rightBack.set(ControlMode.Velocity, targetVRight);
+    */
 
     SmartDashboard.putNumber("Target V left", targetVLeft);
     SmartDashboard.putNumber("Target V right", targetVRight);
 
-    SmartDashboard.putNumber("left target", leftBack.getClosedLoopTarget());
-    SmartDashboard.putNumber("right target", rightBack.getClosedLoopTarget());
+    SmartDashboard.putNumber("Move Joystick", move);
+    SmartDashboard.putNumber("Turn Joystick", turn);
+
+    //SmartDashboard.putNumber("left target", leftBack.getClosedLoopTarget());
+    //SmartDashboard.putNumber("right target", rightBack.getClosedLoopTarget());
 
 
     //leftBack.set(TalonSRXControlMode.Velocity, (move * maxFtPerSec * fts_to_RPM), DemandType.AuxPID, turn);
@@ -223,10 +228,53 @@ public class Drive {
   public void driveModeSet() {
     if (DriveJoystick.getToggleDriveMode()) {
       PIDDriveActive = !PIDDriveActive;
+      if (PIDDriveActive) {
+        initPIDDrive();
+      } else if (!PIDDriveActive) {
+        initPercentOutputDrive();
+      }
     }
     if (DriveJoystick.getToggleGears()) {
       highTorqueModeActive = !highTorqueModeActive;
     }
+
+  }
+
+  public void initPIDDrive() {
+    //ALL THE INITIALIZATION FOR SETTING UP PID CONTROL MODE
+    leftBack.configFactoryDefault();
+    leftBack.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
+    leftBack.configNominalOutputForward(0);
+    leftBack.configNominalOutputReverse(0);
+    leftBack.configPeakOutputForward(1);
+    leftBack.configPeakOutputReverse(-1);
+    leftBack.setSensorPhase(false);
+    leftBack.config_kP(0, .1);
+    leftBack.config_kI(0, 0.0005); 
+    leftBack.config_kD(0, .0001); 
+    leftBack.config_kF(0, 0);
+    leftBack.selectProfileSlot(0, 0);
+
+    
+    rightBack.configFactoryDefault();
+    rightBack.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
+    rightBack.configNominalOutputForward(0);
+    rightBack.configNominalOutputReverse(0);
+    rightBack.configPeakOutputForward(1);
+    rightBack.configPeakOutputReverse(-1);
+    rightBack.setSensorPhase(false);
+     //THESE PIDS WORK WELL FOR FREE GEARBOXES
+    rightBack.config_kP(0, .1);
+    rightBack.config_kI(0, .0005);
+    rightBack.config_kD(0, .0001);
+    rightBack.config_kF(0, 0);
+    rightBack.selectProfileSlot(0, 0);
+    
+  }
+
+  public void initPercentOutputDrive() {
+    leftBack.configFactoryDefault();
+    rightBack.configFactoryDefault();
   }
 
   public void run() {
@@ -234,8 +282,14 @@ public class Drive {
     
     //leftRPM = RobotMap.leftBack.getEncoder().getVelocity();
     //rightRPM = RobotMap.rightBack.getEncoder().getVelocity();
-    //leftEncoderCounts = RobotMap.leftBack.getEncoder().getPosition();
-    //rightEncoderCounts = RobotMap.rightBack.getEncoder().getPosition();
+    leftEncoderCounts = leftBack.getSelectedSensorPosition();
+    rightEncoderCounts = -rightBack.getSelectedSensorPosition();
+    SmartDashboard.putNumber("left Encoder Feet", leftEncoderCounts / 31160);
+    SmartDashboard.putNumber("right Encoder Feet", rightEncoderCounts / 31160);
+    SmartDashboard.putNumber("left Encoder Counts", leftEncoderCounts);
+    SmartDashboard.putNumber("right Encoder Counts", rightEncoderCounts);
+    SmartDashboard.putNumber("left Encoder Degrees", leftEncoderCounts / 681);
+    SmartDashboard.putNumber("right Encoder Degrees", rightEncoderCounts / 681);
     //joystickDrive();
     SmartDashboard.putNumber("joy pos", DriveJoystick.getMove());
     //adjustPIDS();

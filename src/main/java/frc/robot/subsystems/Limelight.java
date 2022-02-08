@@ -1,11 +1,12 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.RobotMap;
 import frc.robot.Controls.MechanismsJoystick;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
-//upload test
+import edu.wpi.first.wpilibj.Servo;
 
 public class Limelight {
 //The "eyes" of the robot
@@ -20,9 +21,11 @@ public static int limelightProfile;
 
 static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 static NetworkTableEntry tx = table.getEntry("tx");
-  static  NetworkTableEntry ty = table.getEntry("ty");
-  static  NetworkTableEntry ta = table.getEntry("ta");
-  static  NetworkTableEntry tv = table.getEntry("tv");
+static  NetworkTableEntry ty = table.getEntry("ty");
+static  NetworkTableEntry ta = table.getEntry("ta");
+static  NetworkTableEntry tv = table.getEntry("tv");
+
+static Servo servo;
 
 
  //HOW TO CONNECT TO LIMELIGHT INTERFACE:
@@ -30,8 +33,7 @@ static NetworkTableEntry tx = table.getEntry("tx");
  //TRY limelight.local:5801
 
 public Limelight(){   
-    
-    
+    servo = RobotMap.limelightServo;
     isTracking = false;
 }
 public static double getX() {
@@ -108,7 +110,19 @@ public void setTrackingMode() {
 
     switchPipeline(limelightProfile);
     SmartDashboard.putNumber("Limelight Profile", limelightProfile);
-   
+}
+
+public void setServoPos() {
+    if (limelightProfile == 2) {
+        servo.setAngle(0);
+    } else {
+        servo.setAngle(180);
+    }
+}
+
+public void run() {
+    setTrackingMode();
+    setServoPos();
 }
 
 }

@@ -39,10 +39,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
    
-    comp = new Compressor(1, PneumaticsModuleType.REVPH);
+    //comp = new Compressor(1, PneumaticsModuleType.REVPH);
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    //RobotMap.initShooter();
     //shooter = new Shooter();
     //RobotMap.initDriveMotors();
     RobotMap.initIntake();
@@ -52,9 +53,9 @@ public class Robot extends TimedRobot {
     drive = new Drive();
     
     //conveyor = new Conveyor();
-    limelight = new Limelight();
+    //limelight = new Limelight();
     
-    comp.enableDigital();
+    //comp.enableDigital();
     
   }
 
@@ -67,9 +68,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putNumber("PSI", comp.getPressure());
+    //SmartDashboard.putNumber("PSI", comp.getPressure());
     SmartDashboard.putBoolean("Limit Switch", !RobotMap.magLimitSwitch.get());
-    limelight.setTrackingMode();
+    //limelight.run();
     
   }
 
@@ -116,7 +117,7 @@ public class Robot extends TimedRobot {
     //intake.run();
     drive.run();
 
- 
+    /*
     
     if(MechanismsJoystick.dynamicArmPancakeRelease()) {
     
@@ -130,6 +131,7 @@ public class Robot extends TimedRobot {
       RobotMap.testSolenoidTwo.set(Value.kOff);
       RobotMap.testSolenoidThree.set(Value.kForward);
     }
+    */
 
     
     

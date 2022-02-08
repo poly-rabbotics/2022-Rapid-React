@@ -1,10 +1,3 @@
-/*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
-/* Open Source Software - may be modified and shared by FRC teams. The code   */
-/* must be accompanied by the FIRST BSD license file in the root directory of */
-/* the project.                                                               */
-/*----------------------------------------------------------------------------*/
-
 package frc.robot.Controls;
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -65,13 +58,13 @@ public class DriveJoystick {
   }
 
   public static boolean getToggleGears(){
-    return joystick.getRawButtonPressed(3);
+    return joystick.getRawButtonPressed(3); //X button
   }
   public static boolean getToggleDriveMode(){
-    return joystick.getRawButtonPressed(4);
+    return joystick.getRawButtonPressed(8); //start button
   }
   public static boolean aim(){ //activates limelight auto-aim
-    return joystick.getRawButton(1); 
+    return joystick.getRawButton(1); //A button
   }
 
   // SLOW MODE (unused, maybe useful later)
