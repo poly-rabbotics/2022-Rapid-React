@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -13,6 +15,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Controls.MechanismsJoystick;
+import frc.robot.subsystems.AHRSGyro;
+import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
@@ -31,16 +35,18 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   public static Intake intake;
   public static Shooter shooter;
+  public static Climb climb;
   public static Drive drive;
   public static Limelight limelight;
   public static Timer timer;
+  public static AHRSGyro gyro;
+
 
   Compressor comp;
   PneumaticHub hub;
   
   @Override
   public void robotInit() {
-   
     //comp = new Compressor(1, PneumaticsModuleType.REVPH);
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
@@ -50,10 +56,14 @@ public class Robot extends TimedRobot {
     //RobotMap.initDriveMotors();
     RobotMap.initIntake();
     //RobotMap.initConveyor();
-    //intake = new Intake();
+    intake = new Intake();
     RobotMap.initDriveMotors();
+    RobotMap.initClimb();
+    climb = new Climb();
     drive = new Drive();
     timer = new Timer();
+    gyro = new AHRSGyro();
+    gyro.reset();
     timer.start();
     
     //conveyor = new Conveyor();
@@ -75,8 +85,8 @@ public class Robot extends TimedRobot {
     //SmartDashboard.putNumber("PSI", comp.getPressure());
     SmartDashboard.putNumber("Timer", timer.get());
     SmartDashboard.putBoolean("Limit Switch", !RobotMap.magLimitSwitch.get());
+    SmartDashboard.putNumber("Gyro Degrees", gyro.getDegrees());
     //limelight.run();
-    
   }
 
   /**
@@ -100,6 +110,8 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
+    drive.moveByInches(12);
+    drive.turnByDegrees(30);
     switch (m_autoSelected) {
       case kCustomAuto:
         // Put custom auto code here
@@ -120,7 +132,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //shooter.run();
-    //intake.run();
+    intake.run();
+    climb.run();
     drive.run();
 
     /*

@@ -27,7 +27,7 @@ public class MechanismsJoystick {
         }
 
         public static boolean reverse(){
-          return joystick.getRawButton(11);
+          return joystick.getRawButtonPressed(11);
         }
 
         public static boolean intake(){
@@ -115,6 +115,9 @@ public class MechanismsJoystick {
 
         public static boolean dynamicArmPivot() {
           return joystick.getRawAxis(2) > 0.6;
+        }
+        public static double testJoystick() {
+          return joystick.getRawAxis(5);
         }
 
         public static boolean targetHub() {

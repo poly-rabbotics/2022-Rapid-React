@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Controls.DriveJoystick;
 import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import com.kauailabs.navx.frc.AHRS;
 
 public class Drive { 
   Timer timer;
@@ -92,6 +93,7 @@ public class Drive {
     leftBack.setSelectedSensorPosition(0);
     rightBack.setSelectedSensorPosition(0);
     //ENCODER COUNTS PER FOOT: 31160
+    //Counts per inch: 2597 
   } 
   public static boolean isAutoDrive = false;
   public boolean intakeforward = true;
@@ -308,11 +310,42 @@ public class Drive {
     SmartDashboard.putBoolean("PID Drive Mode Active", PIDDriveActive);
 
 
+
     //sends a 2d model of the field to shuffleboard
     //soon we use odometry to put a simulation of our robot on the field!
     SmartDashboard.putData(getField());
-    
   }
+
+  public void moveByInches(double inches) {
+    initPIDDrive();
+    leftBack.set(ControlMode.Position, inches * 2597);
+    rightBack.set(ControlMode.Position, inches * -2597);
+  }
+  
+  public void turnByDegrees(double degrees) {
+    final double initialPosition = leftBack.getSelectedSensorPosition();
+    double positionSetpoint = initialPosition + 681 * degrees;
+    leftBack.set(ControlMode.Position, degrees * 681);
+    rightBack.set(ControlMode.Position, degrees * 681);
+    /*
+    if ((AHRSGyro.getDegrees() < (degrees - 1)) && (AHRSGyro.getDegrees() > (degrees + 1))) { //if turn was incorrect:
+      double turnError = degrees - AHRSGyro.getDegrees();
+      leftBack.set(ControlMode.Position, turnError * 681);
+      rightBack.set(ControlMode.Position, turnError * 681);
+    } 
+    if ((AHRSGyro.getDegrees() < (degrees - 1)) && (AHRSGyro.getDegrees() > (degrees + 1))) { //if turn was incorrect:
+      double turnError = degrees - AHRSGyro.getDegrees();
+      leftBack.set(ControlMode.Position, turnError * 681);
+      rightBack.set(ControlMode.Position, turnError * 681);
+    }
+    */
+
+    }
+
+
+
+}
+
   /*
   public static void autoRun(double startTime, double endTime, double moveSpeed, double turnSpeed) {
     //double time = Robot.timer.get();
@@ -354,4 +387,4 @@ public class Drive {
         SmartDashboard.putNumber("cI_LL", cI_LL);
     }*/
     
-  }
+  

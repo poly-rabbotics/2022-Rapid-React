@@ -20,7 +20,8 @@ public class Climb {
         dynamicArmWinch = RobotMap.dynamicArmWinch;
     }
 
-    public static void run() {
+    public void run() {
+        /*
         if (MechanismsJoystick.staticArmPancakeRelease()) {
             staticArmPancake.set(Value.kReverse);
         }
@@ -28,19 +29,23 @@ public class Climb {
             dynamicArmPancake.set(Value.kReverse);
         }
 
+
         if (MechanismsJoystick.dynamicArmPivot()) {
             if (dynamicArmPivot.get() == Value.kForward) {
                 dynamicArmPivot.set(Value.kReverse);
             } else dynamicArmPivot.set(Value.kForward);
         }
-
+        
         if (MechanismsJoystick.staticArmRun()) {
-            staticArmWinch.set(ControlMode.PercentOutput, 1);
+            staticArmWinch.set(ControlMode.PercentOutput, 0.1);
         } else staticArmWinch.set(ControlMode.PercentOutput, 0);
 
         if (MechanismsJoystick.dynamicArmRun()) {
-            dynamicArmWinch.set(ControlMode.PercentOutput, 1);
+            dynamicArmWinch.set(ControlMode.PercentOutput, 0.1);
         } else dynamicArmWinch.set(ControlMode.PercentOutput, 0);
+        */
+
+        dynamicArmWinch.set(ControlMode.PercentOutput, MechanismsJoystick.testJoystick());
     }
 
 

@@ -58,11 +58,11 @@ public class RobotMap {
     }
     
     public static void initClimb() {
-        staticArmWinch = new TalonSRX(8);
-        dynamicArmWinch = new TalonSRX(9);
-        staticArmPancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);
-        dynamicArmPancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 6, 7);
-        dynamicArmPivot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 8, 9);
+        staticArmWinch = new TalonSRX(5);
+        dynamicArmWinch = new TalonSRX(6);
+        //staticArmPancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);
+        //dynamicArmPancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 6, 7);
+        //dynamicArmPivot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 8, 9);
     }
     
     //public static final DoubleSolenoid testSolenoidOne = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);

@@ -26,10 +26,10 @@ public class Intake {
   public Intake() {
     
     intake = RobotMap.intakeMotor;
-    intakeSpeed = -0.8;
+    intakeSpeed = 0.8;
   }
   public void run() {
-    intakeSpeed = -0.8;
+    intakeSpeed = 0.8;
     if (MechanismsJoystick.reverse()) {
       intakeSpeed = -intakeSpeed;
     }
