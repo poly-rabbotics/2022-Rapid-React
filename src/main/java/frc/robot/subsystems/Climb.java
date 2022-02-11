@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.RobotMap;
 import frc.robot.Controls.MechanismsJoystick;
+import frc.robot.Robot;
 
 public class Climb {
     static DoubleSolenoid staticArmPancake, dynamicArmPancake, dynamicArmPivot;
@@ -48,6 +49,39 @@ public class Climb {
         dynamicArmWinch.set(ControlMode.PercentOutput, MechanismsJoystick.testJoystick());
     }
 
+    
+    public static void autoDAWinch(double startTime, double endTime, double endPosition) {
+        double time = Robot.timer.get();
+        if (time > startTime && time < endTime) {
+          dynamicArmWinch.set(ControlMode.Position, endPosition);
+        }
+      }
 
+      public static void autoSAWinch(double startTime, double endTime, double endPosition) {
+        double time = Robot.timer.get();
+        if (time > startTime && time < endTime) {
+          dynamicArmWinch.set(ControlMode.Position, endPosition);
+        }
+      }
 
+      public static void autoDAPancake(double startTime, double endTime) {
+        double time = Robot.timer.get();
+        if (time > startTime && time < endTime) {
+            dynamicArmPancake.set(Value.kReverse);
+        }
+      }
+
+      public static void autoSAPancake(double startTime, double endTime) {
+        double time = Robot.timer.get();
+        if (time > startTime && time < endTime) {
+            staticArmPancake.set(Value.kReverse);
+        }
+      }
+
+      public static void autoDAPivot(double startTime, double endTime) {
+        double time = Robot.timer.get();
+        if (time > startTime && time < endTime) {
+            dynamicArmPivot.set(Value.kReverse);
+        }
+      }
 }
