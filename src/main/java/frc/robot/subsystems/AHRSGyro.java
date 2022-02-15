@@ -6,15 +6,15 @@ public class AHRSGyro {
 
     public AHRSGyro() {
         gyro = new AHRS();
-        gyro.reset();
-        gyro.calibrate();
+        
     }
 
     public double getDegrees() {
         return gyro.getAngle();
     }
 
-    public void reset() {
+    public static void reset() {
+        gyro.zeroYaw();
         gyro.reset();
     }
 

@@ -114,7 +114,7 @@ public class MechanismsJoystick {
         }
 
         public static boolean dynamicArmPivot() {
-          return joystick.getRawAxis(2) > 0.6;
+          return joystick.getRawButtonPressed(10);
         }
         public static double testJoystick() {
           return joystick.getRawAxis(5);

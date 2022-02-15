@@ -29,14 +29,15 @@ public class Climb {
         if (MechanismsJoystick.dynamicArmPancakeRelease()) {
             dynamicArmPancake.set(Value.kReverse);
         }
-
+        */
 
         if (MechanismsJoystick.dynamicArmPivot()) {
             if (dynamicArmPivot.get() == Value.kForward) {
                 dynamicArmPivot.set(Value.kReverse);
             } else dynamicArmPivot.set(Value.kForward);
         }
-        
+
+        /*
         if (MechanismsJoystick.staticArmRun()) {
             staticArmWinch.set(ControlMode.PercentOutput, 0.1);
         } else staticArmWinch.set(ControlMode.PercentOutput, 0);
@@ -46,7 +47,7 @@ public class Climb {
         } else dynamicArmWinch.set(ControlMode.PercentOutput, 0);
         */
 
-        dynamicArmWinch.set(ControlMode.PercentOutput, MechanismsJoystick.testJoystick());
+        //dynamicArmWinch.set(ControlMode.PercentOutput, MechanismsJoystick.testJoystick());
     }
 
     

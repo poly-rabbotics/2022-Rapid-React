@@ -40,17 +40,18 @@ public class Robot extends TimedRobot {
   public static Limelight limelight;
   public static Timer timer;
   public static AHRSGyro gyro;
-
+  public static double leftEncoderCounts, rightEncoderCounts;
 
   Compressor comp;
   PneumaticHub hub;
   
   @Override
   public void robotInit() {
-    //comp = new Compressor(1, PneumaticsModuleType.REVPH);
+    comp = new Compressor(1, PneumaticsModuleType.REVPH);
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    
     //RobotMap.initShooter();
     //shooter = new Shooter();
     //RobotMap.initDriveMotors();
@@ -58,6 +59,7 @@ public class Robot extends TimedRobot {
     //RobotMap.initConveyor();
     intake = new Intake();
     RobotMap.initDriveMotors();
+    RobotMap.initDrivePancakes();
     RobotMap.initClimb();
     climb = new Climb();
     drive = new Drive();
@@ -69,7 +71,7 @@ public class Robot extends TimedRobot {
     //conveyor = new Conveyor();
     //limelight = new Limelight();
     
-    //comp.enableDigital();
+    comp.enableDigital();
     
   }
 
@@ -82,10 +84,22 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    //SmartDashboard.putNumber("PSI", comp.getPressure());
+    SmartDashboard.putNumber("PSI", comp.getPressure());
     SmartDashboard.putNumber("Timer", timer.get());
     SmartDashboard.putBoolean("Limit Switch", !RobotMap.magLimitSwitch.get());
     SmartDashboard.putNumber("Gyro Degrees", gyro.getDegrees());
+    
+    leftEncoderCounts = Drive.leftBack.getSelectedSensorPosition();
+    rightEncoderCounts = -1 * Drive.rightBack.getSelectedSensorPosition();
+    SmartDashboard.putNumber("left Encoder Feet", leftEncoderCounts / 31160);
+    SmartDashboard.putNumber("right Encoder Feet", rightEncoderCounts / 31160);
+    SmartDashboard.putNumber("left Encoder Counts", leftEncoderCounts);
+    SmartDashboard.putNumber("right Encoder Counts", rightEncoderCounts);
+    SmartDashboard.putNumber("left Encoder Degrees", leftEncoderCounts / 681);
+    SmartDashboard.putNumber("right Encoder Degrees", rightEncoderCounts / 681);
+    SmartDashboard.putBoolean("prox 1", !RobotMap.proxSensor1.get());
+    SmartDashboard.putBoolean("prox 2", !RobotMap.proxSensor2.get());
+
     //limelight.run();
   }
 
@@ -101,8 +115,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    gyro.reset();
     m_autoSelected = m_chooser.getSelected();
     timer.reset();
+    drive.initPIDDrive();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
   }
@@ -110,8 +126,12 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    drive.moveByInches(12);
-    drive.turnByDegrees(30);
+    
+    drive.turnByDegrees(0, 5, 360);
+    //drive.moveByInches(0, 10, -48);
+  
+
+    //drive.turnByDegrees(30);
     switch (m_autoSelected) {
       case kCustomAuto:
         // Put custom auto code here
@@ -126,7 +146,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+    gyro.reset();
+  }
 
   /** This function is called periodically during operator control. */
   @Override
