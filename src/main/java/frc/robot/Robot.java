@@ -21,6 +21,7 @@ import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.LEDLights;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -37,6 +38,7 @@ public class Robot extends TimedRobot {
   public static Shooter shooter;
   public static Climb climb;
   public static Drive drive;
+  public static LEDLights LEDLights;
   public static Limelight limelight;
   public static Timer timer;
   public static AHRSGyro gyro;
@@ -63,6 +65,7 @@ public class Robot extends TimedRobot {
     RobotMap.initClimb();
     climb = new Climb();
     drive = new Drive();
+    LEDLights = new LEDLights();
     timer = new Timer();
     gyro = new AHRSGyro();
     gyro.reset();
@@ -100,6 +103,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("prox 1", !RobotMap.proxSensor1.get());
     SmartDashboard.putBoolean("prox 2", !RobotMap.proxSensor2.get());
 
+    if(isDisabled()) LEDLights.blink(255, 0, 0);
+    else LEDLights.singleColor(0, 255, 0);
     //limelight.run();
   }
 
@@ -142,6 +147,7 @@ public class Robot extends TimedRobot {
         break;
     } 
 
+    LEDLights.rainbow();
   }
 
   /** This function is called once when teleop is enabled. */
@@ -157,6 +163,7 @@ public class Robot extends TimedRobot {
     intake.run();
     climb.run();
     drive.run();
+    LEDLights.singleColor(252, 232, 0);
 
     /*
     
@@ -184,7 +191,7 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically when disabled. */
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() { }
 
   /** This function is called once when test mode is enabled. */
   @Override

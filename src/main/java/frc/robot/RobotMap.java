@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.AddressableLED;
 public class RobotMap {
     
     public static final Joystick driveJoystick = new Joystick(0);
@@ -32,6 +33,7 @@ public class RobotMap {
     public static DoubleSolenoid dynamicArmPancake;
     public static DoubleSolenoid dynamicArmPivot;
     public static DoubleSolenoid intakeSolenoid;
+    public static final AddressableLED led = new AddressableLED(9);
 
     public static void initDriveMotors() {
         leftBack = new TalonSRX(1);

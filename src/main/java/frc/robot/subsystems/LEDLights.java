@@ -6,34 +6,34 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.subsystems;
-
 import frc.robot.RobotMap;
+import java.sql.Array;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 
 /**
- * Add your docs here.
- * 
  * 
  * LEDs:
  * Green (Moving Upward):     Ready to shoot
- * Yellow (Static):           Nothing is wrong ig
- * Red (Flashing):            Bot is Offline
+ * Green (static):            Idling
+ * Yellow (Static):           Teleop Activated
+ * Rainbow (Epic Gaymer):     Bot is Offline
  * Blue (Moving Upaward):     Robot is ready to climb
  * Purple (Moving Forward):   Bot is ready to transfer to next bar.
+ * Rainbow (Epic Gaymer):     Autonomous Activated
  * 
  * 
  */
-/*
+
 public class LEDLights {
 
     AddressableLEDBuffer m_ledBuffer;
     AddressableLED m_led;
     int m_rainbowFirstPixelHue = 0;
     int setbrightestone = 0;
-    int counter=0;
-    boolean blinkeven=false;
-    public static int pattern=2;
+    int counter = 0;
+    boolean blinkeven = false;
+    public static int pattern = 2;
 
     public LEDLights() {
         
@@ -49,21 +49,19 @@ public class LEDLights {
         m_led.start();
       }
 
-      public void run()
-      {
+      public void run(int pattern, int[] values) {
          switch(pattern){
             case 1:
-                up(0,255,0);
+                up(values[0]);
+
             case 2:
-                singleColor(255,255,0);
+                singleColor(values[0], values[1], values[2]);
+
             case 3:
-                blink(255,0,0);
+                blink(values[0], values[1], values[2]);
+                
             case 4:
-                up(0,0,255);
-            case 5:
-                blink(150,0,255);
-            case 6:
-                blink(0,255,0);
+                rainbow();
 
             default:
                 singleColor(0,0,0);
@@ -71,8 +69,7 @@ public class LEDLights {
  
       }
 
-      void singleColor(int r,int g, int b)
-      {
+      public void singleColor(int r,int g, int b) {
         for (int i = 0; i < 56; i++) {
             // Sets the specified LED to the RGB values for red
             m_ledBuffer.setRGB(i, r, g, b);
@@ -82,7 +79,7 @@ public class LEDLights {
         
       }
 
-      private void rainbow() {
+      public void rainbow() {
         // For every pixel
         for (var i = 0; i < m_ledBuffer.getLength(); i++) {
           // Calculate the hue - hue is easier for rainbows because the color
@@ -98,20 +95,20 @@ public class LEDLights {
         m_led.setData(m_ledBuffer);
       }
 
-      private void up(int speed){
+      public void up(int speed){
           counter++;
-          if(counter%speed==0)
-          {
-          for (int i=0;i<56;i++){
+          if (counter%speed==0) {
+
+          for (int i = 0; i < 56; i++){
             m_ledBuffer.setRGB(i, 0, 0, 0);
         
-            }
+          }
 
           // (int i=setbrightestone;i<setbrightestone+4;i+=4){
           m_ledBuffer.setRGB(setbrightestone, 25, 25, 0);
-          m_ledBuffer.setRGB(setbrightestone+1, 75, 75, 0);
-          m_ledBuffer.setRGB(setbrightestone+2, 150, 150, 0);
-          m_ledBuffer.setRGB(setbrightestone+3, 255, 255, 0);
+          m_ledBuffer.setRGB(setbrightestone + 1, 75, 75, 0);
+          m_ledBuffer.setRGB(setbrightestone + 2, 150, 150, 0);
+          m_ledBuffer.setRGB(setbrightestone + 3, 255, 255, 0);
 
           m_ledBuffer.setRGB(55-setbrightestone, 25, 25, 0);
           m_ledBuffer.setRGB(55-setbrightestone-1, 75, 75, 0);
@@ -126,27 +123,27 @@ public class LEDLights {
           
       }
 
-      private void down(){
+      public void down(){
         
-        for (int i=0;i<56;i++){
+        for (int i = 0; i < 56; i++){
           m_ledBuffer.setRGB(i, 0, 0, 0);
       
           }
 
         // (int i=setbrightestone;i<setbrightestone+4;i+=4){
-        m_ledBuffer.setRGB(28+setbrightestone, 25, 25, 0);
-        m_ledBuffer.setRGB(28+setbrightestone+1, 75, 75, 0);
-        m_ledBuffer.setRGB(28+setbrightestone+2, 150, 150, 0);
-        m_ledBuffer.setRGB(28+setbrightestone+3, 255, 255, 0);
+        m_ledBuffer.setRGB(28 + setbrightestone, 25, 25, 0);
+        m_ledBuffer.setRGB(28 + setbrightestone + 1, 75, 75, 0);
+        m_ledBuffer.setRGB(28 + setbrightestone+2, 150, 150, 0);
+        m_ledBuffer.setRGB(28 + setbrightestone+3, 255, 255, 0);
 
-        m_ledBuffer.setRGB(27-setbrightestone, 25, 25, 0);
-        m_ledBuffer.setRGB(27-setbrightestone-1, 75, 75, 0);
-        m_ledBuffer.setRGB(27-setbrightestone-2, 150, 150, 0);
-        m_ledBuffer.setRGB(27-setbrightestone-3, 255, 255, 0);
+        m_ledBuffer.setRGB(27 - setbrightestone, 25, 25, 0);
+        m_ledBuffer.setRGB(27 - setbrightestone-1, 75, 75, 0);
+        m_ledBuffer.setRGB(27 - setbrightestone-2, 150, 150, 0);
+        m_ledBuffer.setRGB(27 - setbrightestone-3, 255, 255, 0);
        // }
-       setbrightestone+=1;
-       if(setbrightestone>24)
-          setbrightestone=0;
+       setbrightestone += 1;
+       if (setbrightestone > 24)
+          setbrightestone = 0;
        
         
         m_led.setData(m_ledBuffer);
@@ -157,29 +154,27 @@ public class LEDLights {
         
 
         int startingLED;
-        if(blinkeven)
-        {
+        if (blinkeven)  {
             startingLED=1;
         }
         else startingLED = 0;
 
-        for (int i=0;i<56;i++){
+        for (int i = 0; i < 56; i++){
             m_ledBuffer.setRGB(i, 0, 0, 0);
         
             }
 
-         for (int i=startingLED;i<56;i+=2){
+         for (int i = startingLED; i < 56; i+=2){
             m_ledBuffer.setRGB(i, 255, 0, 0);
-            
+             
             }
             counter++;
-            if(counter%10==0)
+            if (counter % 10 == 0)
             {
-                blinkeven=!blinkeven;
+                blinkeven = !blinkeven;
                 m_led.setData(m_ledBuffer);
             }
         
     }
 
 }
-*/
