@@ -10,6 +10,7 @@ import frc.robot.RobotMap;
 import java.sql.Array;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  * 
@@ -34,14 +35,17 @@ public class LEDLights {
     int counter = 0;
     boolean blinkeven = false;
     public static int pattern = 2;
+    Timer timer = new Timer();
+    boolean greenIsFirst = true;
 
     public LEDLights() {
-        
+
+        timer.start();
         m_led = RobotMap.led;
     
         
         // Length is expensive to set, so only set it once, then just update data
-        m_ledBuffer = new AddressableLEDBuffer(56);
+        m_ledBuffer = new AddressableLEDBuffer(100);
         m_led.setLength(m_ledBuffer.getLength());
     
         // Set the data
@@ -53,6 +57,7 @@ public class LEDLights {
          switch(pattern){
             case 1:
                 up(values[0]);
+                break;
 
             case 2:
                 singleColor(values[0], values[1], values[2]);
@@ -147,6 +152,32 @@ public class LEDLights {
        
         
         m_led.setData(m_ledBuffer);
+    }
+
+    public void GreenGold(){
+      int[] colorOne; 
+      int[] colorTwo;
+
+      if(timer.get() > 0.2) {
+        greenIsFirst = !greenIsFirst;
+        timer.reset();
+      }
+      if(greenIsFirst) {
+        colorOne = new int[] {0, 150, 0};
+        colorTwo = new int[] {150, 70, 0};
+      } else {
+        colorOne = new int[] {150, 70, 0};
+        colorTwo = new int[] {0, 150, 0};
+      }
+
+      for(int i = 0; i < 100; i++) {
+          if(i % 2 == 0) m_ledBuffer.setRGB(i, colorOne[0], colorOne[1], colorOne[2]);
+         else {
+          m_ledBuffer.setRGB(i, colorTwo[0], colorTwo[1], colorTwo[2]);
+        }
+      }
+
+      m_led.setData(m_ledBuffer);
     }
 
     public void blink(int r, int g, int b)

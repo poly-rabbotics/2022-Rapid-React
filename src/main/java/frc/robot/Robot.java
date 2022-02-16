@@ -103,8 +103,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("prox 1", !RobotMap.proxSensor1.get());
     SmartDashboard.putBoolean("prox 2", !RobotMap.proxSensor2.get());
 
-    if(isDisabled()) LEDLights.blink(255, 0, 0);
-    else LEDLights.singleColor(0, 255, 0);
+    //if(isDisabled()) 
+    LEDLights.GreenGold();
+    //LEDLights.singleColor(0, 255, 0);
     //limelight.run();
   }
 
@@ -132,7 +133,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     
-    drive.turnByDegrees(0, 5, 360);
+    drive.turnByDegrees(0, 5, 90);
     //drive.moveByInches(0, 10, -48);
   
 
