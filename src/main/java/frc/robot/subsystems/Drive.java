@@ -140,11 +140,12 @@ public class Drive {
     driveModeSet();
 
     // DRIVE GEAR SHIFTING PANCAKES //
-
+/*
     if (highTorqueModeActive) {
       RobotMap.drivePancake.set(Value.kForward);
     } else
       RobotMap.drivePancake.set(Value.kReverse);
+      */
     SmartDashboard.putBoolean("High Torque Mode?", highTorqueModeActive);
 
     move = DriveJoystick.getMove();

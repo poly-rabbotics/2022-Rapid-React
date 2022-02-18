@@ -42,7 +42,7 @@ public class RobotMap {
         rightFront = new TalonSRX(4); 
     }
     public static void initDrivePancakes() {
-        drivePancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
+        //drivePancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
     }
     
     public static void initIntake() {
@@ -62,7 +62,7 @@ public class RobotMap {
     public static void initClimb() {
         staticArmWinch = new TalonSRX(5);
         //dynamicArmWinch = new TalonSRX(6);
-        dynamicArmPivot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);
+        //dynamicArmPivot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);
         //dynamicArmPancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 6, 7);
         //staticArmPancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 8, 9);
     }

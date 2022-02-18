@@ -6,6 +6,7 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.Robot;
+import frc.robot.subsystems.LEDLights;
 import frc.robot.Controls.MechanismsJoystick;
 
 public class Shooter {
@@ -14,7 +15,11 @@ public class Shooter {
     static CANSparkMax shooterMotor;
     static SparkMaxPIDController shooterPIDController;
     static double kP, kI, kD;
+    public static LEDLights LEDLights;
+    
     public Shooter() {
+
+        LEDLights = new LEDLights();
         shooterSpeedSetpoint = 0;
         shooterMotor = RobotMap.shooterMotor;
         kP = 0.0001;
@@ -29,6 +34,7 @@ public class Shooter {
     public void run() {
        if(MechanismsJoystick.shooterActive()) {
            shooterPIDController.setReference(5000, ControlType.kVelocity);
+           LEDLights.up(5, 1, "green");
        }
        else shooterPIDController.setReference(0, ControlType.kVelocity);
         SmartDashboard.putNumber("Shooter speed setpoint", shooterSpeedSetpoint);

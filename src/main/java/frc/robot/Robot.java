@@ -49,7 +49,7 @@ public class Robot extends TimedRobot {
   
   @Override
   public void robotInit() {
-    comp = new Compressor(1, PneumaticsModuleType.REVPH);
+    //comp = new Compressor(1, PneumaticsModuleType.REVPH);
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
@@ -72,9 +72,9 @@ public class Robot extends TimedRobot {
     timer.start();
     
     //conveyor = new Conveyor();
-    //limelight = new Limelight();
+    limelight = new Limelight();
     
-    comp.enableDigital();
+    //comp.enableDigital();
     
   }
 
@@ -87,7 +87,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    SmartDashboard.putNumber("PSI", comp.getPressure());
+    //SmartDashboard.putNumber("PSI", comp.getPressure());
     SmartDashboard.putNumber("Timer", timer.get());
     SmartDashboard.putBoolean("Limit Switch", !RobotMap.magLimitSwitch.get());
     SmartDashboard.putNumber("Gyro Degrees", gyro.getDegrees());
@@ -104,9 +104,10 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("prox 2", !RobotMap.proxSensor2.get());
 
     //if(isDisabled()) 
-    LEDLights.GreenGold();
+    //LEDLights.GreenGold();
+    LEDLights.up(5, 2, "blue");
     //LEDLights.singleColor(0, 255, 0);
-    //limelight.run();
+    limelight.run();
   }
 
   /**
