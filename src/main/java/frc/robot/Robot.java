@@ -67,12 +67,11 @@ public class Robot extends TimedRobot {
     drive = new Drive();
     LEDLights = new LEDLights();
     timer = new Timer();
-    gyro = new AHRSGyro();
-    gyro.reset();
+    AHRSGyro.reset();
     timer.start();
-    
+    gyro = new AHRSGyro();
     //conveyor = new Conveyor();
-    //limelight = new Limelight();
+    limelight = new Limelight();
     
     //comp.enableDigital();
     
@@ -107,7 +106,7 @@ public class Robot extends TimedRobot {
     //LEDLights.GreenGold();
     LEDLights.up(5, 2, "blue");
     //LEDLights.singleColor(0, 255, 0);
-    //limelight.run();
+    limelight.run();
   }
 
   /**
@@ -122,7 +121,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    gyro.reset();
+    AHRSGyro.reset();
     m_autoSelected = m_chooser.getSelected();
     timer.reset();
     drive.initPIDDrive();
@@ -156,7 +155,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    gyro.reset();
+    AHRSGyro.reset();
   }
 
   /** This function is called periodically during operator control. */

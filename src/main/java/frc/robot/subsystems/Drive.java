@@ -27,7 +27,8 @@ public class Drive {
   double time, oldTime, cP_LL, cD_LL, cI_LL; // Limelight PID control vars
   static double power_LL;
   double accumError;
-  double x, oldX;
+  static double x;
+  double oldX;
   static double fts_to_RPM;
   public static double leftRPM, rightRPM, leftEncoderCounts, rightEncoderCounts, initialLeftCounts, initialRightCounts;
   static double cP, cD, cI, leftPower, rightPower; // drive speed PID control vars
@@ -56,9 +57,9 @@ public class Drive {
     calibrateJoy = new Joystick(2);
     timer = new Timer();
     timer.start();
-    cP_LL = 0.0425; // old LL PIDs
-    cD_LL = 0.0173;
-    cI_LL = 0.0014;
+    cP_LL = 0.015; // old LL PIDs
+    cD_LL = 0.0025;
+    cI_LL = 0.0012;
     // leftSpeedSetpoint = 0;
     // rightSpeedSetpoint = 0;
     move = 0;
@@ -157,7 +158,7 @@ public class Drive {
       driveSelection = !driveSelection;
 
     move = Math.signum(move) * Math.pow(move, 2); // DRIVE CURVES
-    turn = Math.pow(turn, 1);
+    turn = Math.signum(turn) * Math.pow(turn, 2);
 
     if ((move < 0.05) && (move > -0.05)) { // JOYSTICK DEADZONE
       move = 0;
@@ -166,11 +167,11 @@ public class Drive {
       turn = 0;
     }
 
-    if (!intakeforward) {
+    if (intakeforward) {
       move = -1 * move;
       left = -left;
       right = -right;
-    } else if (intakeforward) {
+    } else if (!intakeforward) {
       move = 1 * move;
     }
 
@@ -179,7 +180,7 @@ public class Drive {
     if (DriveJoystick.getCameraOrient()) // direction switch
       intakeforward = !intakeforward;
 
-    // LIMELIGHT AUTO AIM CODE, REINTRODUCE AFTER DRIVE PID IS GOOD
+    // LIMELIGHT AUTO AIM CODE, WORKS WELL!
     accumError = Math.abs(x);
     oldTime = time;
     time = timer.get();
@@ -215,8 +216,17 @@ public class Drive {
       leftBack.set(ControlMode.Velocity, targetVLeft);
       rightBack.set(ControlMode.Velocity, targetVRight);
     } else {
-      leftBack.set(ControlMode.PercentOutput, move - turn);
-      rightBack.set(ControlMode.PercentOutput, -move - turn);
+      if (DriveJoystick.aim()) {
+        /*
+        leftBack.set(ControlMode.PercentOutput, move - x * 0.01667);
+        rightBack.set(ControlMode.PercentOutput, -move - x * 0.01667);
+        */
+        leftBack.set(ControlMode.PercentOutput, move - power_LL);
+        rightBack.set(ControlMode.PercentOutput, -move - power_LL);
+      } else {
+        leftBack.set(ControlMode.PercentOutput, move - turn);
+        rightBack.set(ControlMode.PercentOutput, -move - turn);
+      }
     }
 
     /*
@@ -306,6 +316,7 @@ public class Drive {
   }
 
   public void run() {
+    adjustPIDS();
     joystickDrive();
     driveModeSet();
     // leftRPM = RobotMap.leftBack.getEncoder().getVelocity();
@@ -397,7 +408,7 @@ public class Drive {
 
   }
 
-}
+
 
 /*
  * public static void autoRun(double startTime, double endTime, double
@@ -419,27 +430,29 @@ public class Drive {
  * }
  */
 
-/*
- * public void adjustPIDS() {
- * if (calibrateJoy.getRawAxis(5) < -0.5) {
- * cP_LL = cP_LL + 0.0001;
- * } else if (calibrateJoy.getRawAxis(5) > 0.5) {
- * cP_LL = cP_LL - 0.0001;
- * }
- * SmartDashboard.putNumber("cD_LL", cD_LL);
- * if (calibrateJoy.getRawAxis(1) < -0.5) {
- * cD_LL = cD_LL + 0.0001;
- * } else if (calibrateJoy.getRawAxis(1) > 0.5) {
- * cD_LL = cD_LL - 0.0001;
- * }
- * SmartDashboard.putNumber("cP_LL", cP_LL);
- * 
- * if (calibrateJoy.getRawAxis(3) > 0.5) {
- * cI_LL = cI_LL + 0.0001;
- * }
- * if (calibrateJoy.getRawAxis(2) > 0.5) {
- * cI_LL = cI_LL - 0.0001;
- * }
- * SmartDashboard.putNumber("cI_LL", cI_LL);
- * }
- */
+
+public void adjustPIDS() {
+if (calibrateJoy.getRawAxis(5) < -0.5) {
+cP_LL = cP_LL + 0.0001;
+} else if (calibrateJoy.getRawAxis(5) > 0.5) {
+cP_LL = cP_LL - 0.0001;
+}
+SmartDashboard.putNumber("cD_LL", cD_LL);
+if (calibrateJoy.getRawAxis(1) < -0.5) {
+cD_LL = cD_LL + 0.0001;
+} else if (calibrateJoy.getRawAxis(1) > 0.5) {
+cD_LL = cD_LL - 0.0001;
+}
+SmartDashboard.putNumber("cP_LL", cP_LL);
+
+if (calibrateJoy.getRawAxis(3) > 0.5) {
+cI_LL = cI_LL + 0.0001;
+}
+if (calibrateJoy.getRawAxis(2) > 0.5) {
+cI_LL = cI_LL - 0.0001;
+}
+SmartDashboard.putNumber("cI_LL", cI_LL);
+}
+
+}
+ 
