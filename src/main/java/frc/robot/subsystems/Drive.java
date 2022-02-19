@@ -103,8 +103,8 @@ public class Drive {
     rightBack.getSensorCollection().setAnalogPosition(0, 30);
     leftBack.setSelectedSensorPosition(0);
     rightBack.setSelectedSensorPosition(0);
-    // ENCODER COUNTS PER FOOT: 31160
-    // Counts per inch: 2597
+    // ENCODER COUNTS PER FOOT: 13445
+    // Counts per inch: 1120
 
     rotateInitialized = false;
     /*
@@ -312,8 +312,8 @@ public class Drive {
     // rightRPM = RobotMap.rightBack.getEncoder().getVelocity();
     leftEncoderCounts = leftBack.getSelectedSensorPosition();
     rightEncoderCounts = -rightBack.getSelectedSensorPosition();
-    SmartDashboard.putNumber("left Encoder Feet", leftEncoderCounts / 31160);
-    SmartDashboard.putNumber("right Encoder Feet", rightEncoderCounts / 31160);
+    SmartDashboard.putNumber("left Encoder Feet", leftEncoderCounts / 13445);
+    SmartDashboard.putNumber("right Encoder Feet", rightEncoderCounts / 13445);
     SmartDashboard.putNumber("left Encoder Counts", leftEncoderCounts);
     SmartDashboard.putNumber("right Encoder Counts", rightEncoderCounts);
     SmartDashboard.putNumber("left Encoder Degrees", leftEncoderCounts / 681);
@@ -340,11 +340,17 @@ public class Drive {
     SmartDashboard.putData(getField());
   }
 
+  public void resetEncoders() {
+    //leftBack.getSensorCollection().setAnalogPosition(0, 30);
+    //rightBack.getSensorCollection().setAnalogPosition(0, 30);
+    leftBack.setSelectedSensorPosition(0);
+    rightBack.setSelectedSensorPosition(0);
+  }
   public void moveByInches(double startTime, double endTime, double inches) {
     double time = Robot.timer.get();
     if (time < endTime && time > startTime) {
-      leftBack.set(ControlMode.Position, inches * 2597);
-      rightBack.set(ControlMode.Position, inches * -2597);
+      leftBack.set(ControlMode.Position, inches * 1120);
+      rightBack.set(ControlMode.Position, inches * -1120);
     }
   }
 

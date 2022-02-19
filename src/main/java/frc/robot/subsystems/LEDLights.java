@@ -111,11 +111,12 @@ public class LEDLights {
           }
 
           if(color == "blue") {
-
+            /*
             for(int i = 0; i < distance; i++) {
               int thing = i - 1;
               m_ledBuffer.setRGB(setbrightestone + thing, interval*i, interval*i, 255);
             }
+            */
 
             /*
             m_ledBuffer.setRGB(setbrightestone, 0, 0, 255);

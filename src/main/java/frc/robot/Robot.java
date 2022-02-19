@@ -72,7 +72,7 @@ public class Robot extends TimedRobot {
     timer.start();
     
     //conveyor = new Conveyor();
-    limelight = new Limelight();
+    //limelight = new Limelight();
     
     //comp.enableDigital();
     
@@ -94,8 +94,8 @@ public class Robot extends TimedRobot {
     
     leftEncoderCounts = Drive.leftBack.getSelectedSensorPosition();
     rightEncoderCounts = -1 * Drive.rightBack.getSelectedSensorPosition();
-    SmartDashboard.putNumber("left Encoder Feet", leftEncoderCounts / 31160);
-    SmartDashboard.putNumber("right Encoder Feet", rightEncoderCounts / 31160);
+    SmartDashboard.putNumber("left Encoder Feet", leftEncoderCounts / 13445);
+    SmartDashboard.putNumber("right Encoder Feet", rightEncoderCounts / 13445);
     SmartDashboard.putNumber("left Encoder Counts", leftEncoderCounts);
     SmartDashboard.putNumber("right Encoder Counts", rightEncoderCounts);
     SmartDashboard.putNumber("left Encoder Degrees", leftEncoderCounts / 681);
@@ -107,7 +107,7 @@ public class Robot extends TimedRobot {
     //LEDLights.GreenGold();
     LEDLights.up(5, 2, "blue");
     //LEDLights.singleColor(0, 255, 0);
-    limelight.run();
+    //limelight.run();
   }
 
   /**
@@ -126,6 +126,7 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     timer.reset();
     drive.initPIDDrive();
+    drive.resetEncoders();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
   }
@@ -134,8 +135,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     
-    drive.turnByDegrees(0, 5, 90);
-    //drive.moveByInches(0, 10, -48);
+    //drive.turnByDegrees(0, 5, 90);
+    drive.moveByInches(0, 5, 12);
   
 
     //drive.turnByDegrees(30);

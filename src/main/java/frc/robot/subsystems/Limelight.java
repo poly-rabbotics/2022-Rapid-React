@@ -114,9 +114,9 @@ public void setTrackingMode() {
 
 public void setServoPos() {
     if (limelightProfile == 2) {
-        servo.setAngle(0);
+        servo.setAngle(135);
     } else {
-        servo.setAngle(120);
+        servo.setAngle(0);
     }
 }
 
