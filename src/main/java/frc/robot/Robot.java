@@ -111,9 +111,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("prox 1", !RobotMap.proxSensor1.get());
     SmartDashboard.putBoolean("prox 2", !RobotMap.proxSensor2.get());
 
-    //if(isDisabled()) 
-    //LEDLights.GreenGold();
-    LEDLights.up(5, 2, "blue");
+    if(isDisabled()) LEDLights.rainbow();
     //LEDLights.singleColor(0, 255, 0);
     limelight.run();
   }
@@ -158,7 +156,7 @@ public class Robot extends TimedRobot {
         break;
     } 
 
-    LEDLights.rainbow();
+    LEDLights.up(2);
   }
 
   /** This function is called once when teleop is enabled. */
@@ -175,7 +173,8 @@ public class Robot extends TimedRobot {
     intake.run();
     climb.run();
     drive.run();
-    LEDLights.singleColor(252, 232, 0);
+    LEDLights.GreenGold();
+    //if(MechanismsJoystick.arm()) LEDLights.nice();
 
     /*
     

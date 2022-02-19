@@ -33,7 +33,7 @@ public class Shooter {
     public void run() {
        if(MechanismsJoystick.shooterActive()) {
            shooterPIDController.setReference(5000, ControlType.kVelocity);
-           LEDLights.up(5, 1, "green");
+           LEDLights.up(2);
        }
        else shooterPIDController.setReference(0, ControlType.kVelocity);
         SmartDashboard.putNumber("Shooter speed setpoint", shooterSpeedSetpoint);
