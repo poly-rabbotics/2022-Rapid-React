@@ -51,12 +51,12 @@ public class RobotMap {
     }
 
     public static void initConveyor() {
-        conveyorMotor = new CANSparkMax(7, MotorType.kBrushless);
+        conveyorMotor = new CANSparkMax(6, MotorType.kBrushless);
 
     }
 
     public static void initShooter() {
-        shooterMotor = new CANSparkMax(6, MotorType.kBrushless);
+        shooterMotor = new CANSparkMax(7, MotorType.kBrushless);
     }
     
     public static void initClimb() {

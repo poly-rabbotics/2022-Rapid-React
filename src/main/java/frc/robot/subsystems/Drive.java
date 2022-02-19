@@ -204,10 +204,11 @@ public class Drive {
     // leftBack.set(TalonSRXControlMode.PercentOutput, targetVLeft / 6100);
     // rightBack.set(TalonSRXControlMode.PercentOutput, targetVRight / 6100);
 
-    if (DriveJoystick.aim()) {
-      targetVLeft = (move * maxFtPerSec * fts_to_RPM - (power_LL * maxFtPerSec * fts_to_RPM));
+    //SETS TARGET VELOCITIES FOR PID MODE
+    if (DriveJoystick.aim()) { //IF LIMELIGHT AUTO AIM BUTTON PRESSED, TURN COMMANDED BY LL DATA
+      targetVLeft = (move * maxFtPerSec * fts_to_RPM - (power_LL * maxFtPerSec * fts_to_RPM)); 
       targetVRight = (-move * maxFtPerSec * fts_to_RPM - (power_LL * maxFtPerSec * fts_to_RPM));
-    } else {
+    } else { //IF LLAA NOT PRESSED, JOYSTICK TURN CONTROL
       targetVLeft = (move * maxFtPerSec * fts_to_RPM - (turn * maxFtPerSec * fts_to_RPM));
       targetVRight = (-move * maxFtPerSec * fts_to_RPM - (turn * maxFtPerSec * fts_to_RPM));
     }
@@ -243,28 +244,9 @@ public class Drive {
     SmartDashboard.putNumber("Move Joystick", move);
     SmartDashboard.putNumber("Turn Joystick", turn);
 
-    // SmartDashboard.putNumber("left target", leftBack.getClosedLoopTarget());
-    // SmartDashboard.putNumber("right target", rightBack.getClosedLoopTarget());
-
-    // leftBack.set(TalonSRXControlMode.Velocity, (move * maxFtPerSec * fts_to_RPM),
-    // DemandType.AuxPID, turn);
-    // rightBack.set(TalonSRXControlMode.Velocity, (-move * maxFtPerSec *
-    // fts_to_RPM), DemandType.ArbitraryFeedForward, turn);
-
-    /*
-     * if (driveSelection) {
-     * 
-     * // drive.arcadeDrive(move, turn);
-     * driveMode = "Arcade Drive";
-     * } else {
-     * // drive.tankDrive(left, right);
-     * driveMode = "Tank Drive";
-     * }
-     * // drive.arcadeDrive(move, turn);
-     */
   }
 
-  public void driveModeSet() {
+  public void driveModeSet() { //SETS DRIVE MODE: PID OR PERCENTOUTPUT, TORQUE OR SPEED
     if (DriveJoystick.getToggleDriveMode()) {
       PIDDriveActive = !PIDDriveActive;
       if (PIDDriveActive) {
@@ -301,7 +283,7 @@ public class Drive {
     rightBack.configPeakOutputForward(1);
     rightBack.configPeakOutputReverse(-1);
     rightBack.setSensorPhase(false);
-    // THESE PIDS WORK WELL FOR FREE GEARBOXES
+    // THESE PIDS WORK WELL
     rightBack.config_kP(0, .1);
     rightBack.config_kI(0, .0005);
     rightBack.config_kD(0, .0001);
@@ -310,17 +292,15 @@ public class Drive {
 
   }
 
-  public void initPercentOutputDrive() {
+  public void initPercentOutputDrive() { //Sets motors to be ready for percent output drive
     leftBack.configFactoryDefault();
     rightBack.configFactoryDefault();
   }
 
   public void run() {
-    adjustPIDS();
+    //adjustPIDS();
     joystickDrive();
     driveModeSet();
-    // leftRPM = RobotMap.leftBack.getEncoder().getVelocity();
-    // rightRPM = RobotMap.rightBack.getEncoder().getVelocity();
     leftEncoderCounts = leftBack.getSelectedSensorPosition();
     rightEncoderCounts = -rightBack.getSelectedSensorPosition();
     SmartDashboard.putNumber("left Encoder Feet", leftEncoderCounts / 13445);
@@ -329,9 +309,7 @@ public class Drive {
     SmartDashboard.putNumber("right Encoder Counts", rightEncoderCounts);
     SmartDashboard.putNumber("left Encoder Degrees", leftEncoderCounts / 681);
     SmartDashboard.putNumber("right Encoder Degrees", rightEncoderCounts / 681);
-    // joystickDrive();
     SmartDashboard.putNumber("joy pos", DriveJoystick.getMove());
-    // adjustPIDS();
     SmartDashboard.putBoolean("Intake Front?", intakeforward);
     SmartDashboard.putNumber("RPM Difference", (Math.abs(leftRPM) - Math.abs(rightRPM)));
     SmartDashboard.putBoolean("Drive Selection", driveSelection);
@@ -346,18 +324,16 @@ public class Drive {
     SmartDashboard.putBoolean("High Torque Mode Active?", highTorqueModeActive);
     SmartDashboard.putBoolean("PID Drive Mode Active", PIDDriveActive);
 
-    // sends a 2d model of the field to shuffleboard
-    // soon we use odometry to put a simulation of our robot on the field!
     SmartDashboard.putData(getField());
   }
 
-  public void resetEncoders() {
+  public void resetEncoders() { //SETS THE ENCODER COUNTS TO ZERO BOTH SIDES
     //leftBack.getSensorCollection().setAnalogPosition(0, 30);
     //rightBack.getSensorCollection().setAnalogPosition(0, 30);
     leftBack.setSelectedSensorPosition(0);
     rightBack.setSelectedSensorPosition(0);
   }
-  public void moveByInches(double startTime, double endTime, double inches) {
+  public void moveByInches(double startTime, double endTime, double inches) { //AUTONOMOUS DRIVE METHOD
     double time = Robot.timer.get();
     if (time < endTime && time > startTime) {
       leftBack.set(ControlMode.Position, inches * 1120);
@@ -365,7 +341,7 @@ public class Drive {
     }
   }
 
-  public boolean turnByDegrees(double startTime, double endTime, double finalAngle) {
+  public boolean turnByDegrees(double startTime, double endTime, double finalAngle) { //AUTONOMOUS TURN METHOD
     double time = Robot.timer.get();
     double initialPosition = leftBack.getSelectedSensorPosition();
     

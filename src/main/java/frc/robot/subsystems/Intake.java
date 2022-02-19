@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 //import com.revrobotics.CANSparkMax;
 
 import frc.robot.RobotMap;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
 import frc.robot.Robot;
 
@@ -48,16 +49,27 @@ public class Intake {
     }
   }
 
+  public static void deployIntake(double startTime, double endTime, boolean isDeployed) {
+    double time = Robot.timer.get();
+    if (time > startTime && time < endTime) {
+      if (isDeployed) {
+        RobotMap.intakeSolenoid.set(Value.kForward);
+      } else {
+        RobotMap.intakeSolenoid.set(Value.kReverse);
+      }
+      
+    }
+  }
+
 //public static void intakePneumatics() {
-    //if(MechanismsJoystick.arm()) {
-        //RobotMap.intakePiston.set(Value.kForward);
+    //if(MechanismsJoystick.toggleIntakePiston()) {
+        //RobotMap.intakeSolenoid.set(Value.kForward);
     //}
     
-    //else if(!MechanismsJoystick.arm()) {
-       // RobotMap.intakePiston.set(Value.kReverse);
+    //else if(!MechanismsJoystick.toggleIntakePiston()) {
+       // RobotMap.intakeSolenoid.set(Value.kReverse);
     //}
 //}
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
+
 }
 

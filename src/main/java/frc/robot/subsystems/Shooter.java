@@ -6,7 +6,6 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.Robot;
-import frc.robot.subsystems.LEDLights;
 import frc.robot.Controls.MechanismsJoystick;
 
 public class Shooter {

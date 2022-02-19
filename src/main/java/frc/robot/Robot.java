@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Controls.MechanismsJoystick;
 import frc.robot.subsystems.AHRSGyro;
 import frc.robot.subsystems.Climb;
+import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
@@ -36,6 +37,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   public static Intake intake;
   public static Shooter shooter;
+  public static Conveyor conveyor;
   public static Climb climb;
   public static Drive drive;
   public static LEDLights LEDLights;
@@ -58,19 +60,26 @@ public class Robot extends TimedRobot {
     //shooter = new Shooter();
     //RobotMap.initDriveMotors();
     RobotMap.initIntake();
-    //RobotMap.initConveyor();
     intake = new Intake();
+
     RobotMap.initDriveMotors();
     RobotMap.initDrivePancakes();
+    drive = new Drive();
+
     RobotMap.initClimb();
     climb = new Climb();
-    drive = new Drive();
+    
     LEDLights = new LEDLights();
+
     timer = new Timer();
-    AHRSGyro.reset();
     timer.start();
+
+    AHRSGyro.reset();
     gyro = new AHRSGyro();
-    //conveyor = new Conveyor();
+
+    RobotMap.initConveyor();
+    conveyor = new Conveyor();
+
     limelight = new Limelight();
     
     //comp.enableDigital();
@@ -162,6 +171,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //shooter.run();
+    conveyor.run();
     intake.run();
     climb.run();
     drive.run();

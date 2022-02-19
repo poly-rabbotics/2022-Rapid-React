@@ -22,19 +22,13 @@ public class Conveyor {
   }
   public void run() {
     if (MechanismsJoystick.conveyorReverse()) {
-      if(reversed) reversed = false;
-      else if(!reversed) reversed = true;   
+      reversed = !reversed;   
     }
 
-    if(MechanismsJoystick.conveyor())
-
-
- 
-
-  if (MechanismsJoystick.runConveyor()) {
+    if (MechanismsJoystick.runConveyor()) {
       if(!reversed) conveyorMotor.set(1);
       if(reversed) conveyorMotor.set(-1);
-  } else conveyorMotor.set(0);
+    } else conveyorMotor.set(0);
   }
 
   public static void autoRun(double startTime, double endTime, double conveyorSpeed) {
@@ -44,18 +38,4 @@ public class Conveyor {
     }
   }
 }
-/*
-public static void ConveyorPneumatics() {
-    if(MechanismsJoystick.arm()) {
-        RobotMap.ConveyorPiston.set(Value.kForward);
-    }
-    
-    else if(!MechanismsJoystick.arm()) {
-        RobotMap.ConveyorPiston.set(Value.kReverse);
-    }
-}
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
-}
-*/
 
