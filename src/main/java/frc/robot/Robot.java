@@ -63,11 +63,11 @@ public class Robot extends TimedRobot {
     intake = new Intake();
 
     RobotMap.initDriveMotors();
-    RobotMap.initDrivePancakes();
+    //RobotMap.initDrivePancakes();
     drive = new Drive();
 
-    RobotMap.initClimb();
-    climb = new Climb();
+    //RobotMap.initClimb();
+    //climb = new Climb();
     
     LEDLights = new LEDLights();
 
@@ -77,8 +77,8 @@ public class Robot extends TimedRobot {
     AHRSGyro.reset();
     gyro = new AHRSGyro();
 
-    RobotMap.initConveyor();
-    conveyor = new Conveyor();
+    //RobotMap.initConveyor();
+    //conveyor = new Conveyor();
 
     limelight = new Limelight();
     
@@ -131,7 +131,7 @@ public class Robot extends TimedRobot {
     AHRSGyro.reset();
     m_autoSelected = m_chooser.getSelected();
     timer.reset();
-    drive.initPIDDrive();
+    drive.initAutoDrive();
     drive.resetEncoders();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
@@ -141,8 +141,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     
-    //drive.turnByDegrees(0, 5, 90);
-    drive.moveByInches(0, 5, 12);
+    drive.turnByDegrees(0, 5, 90);
+    //drive.moveByInches(0, 5, -36);
   
 
     //drive.turnByDegrees(30);
@@ -169,9 +169,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     //shooter.run();
-    conveyor.run();
+    //conveyor.run();
     intake.run();
-    climb.run();
+    //climb.run();
     drive.run();
     LEDLights.GreenGold();
     //if(MechanismsJoystick.arm()) LEDLights.nice();

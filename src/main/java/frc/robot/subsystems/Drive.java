@@ -51,9 +51,10 @@ public class Drive {
   double positionSetpoint;
   double turnError;
   double targetAngle;
-  double gyroAngle;
+  double gyroAngle, encoderCountsPer360;
 
   public Drive() {
+    encoderCountsPer360 = 108200;
     calibrateJoy = new Joystick(2);
     timer = new Timer();
     timer.start();
@@ -114,7 +115,7 @@ public class Drive {
      */
     gyroToRadians = Rotation2d.fromDegrees(gyro.getDegrees());
     odometry = new DifferentialDriveOdometry(gyroToRadians, new Pose2d(0, 0, new Rotation2d()));
-
+    
   }
 
   public static boolean isAutoDrive = false;
@@ -158,7 +159,7 @@ public class Drive {
       driveSelection = !driveSelection;
 
     move = Math.signum(move) * Math.pow(move, 2); // DRIVE CURVES
-    turn = Math.signum(turn) * Math.pow(turn, 2);
+    turn = Math.pow(turn, 1);
 
     if ((move < 0.05) && (move > -0.05)) { // JOYSTICK DEADZONE
       move = 0;
@@ -260,7 +261,36 @@ public class Drive {
     }
 
   }
+  public void initAutoDrive() {
+    // ALL THE INITIALIZATION FOR SETTING UP PID CONTROL MODE
+    leftBack.configFactoryDefault();
+    leftBack.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
+    leftBack.configNominalOutputForward(0);
+    leftBack.configNominalOutputReverse(0);
+    leftBack.configPeakOutputForward(0.5);
+    leftBack.configPeakOutputReverse(-0.5);
+    leftBack.setSensorPhase(false);
+    leftBack.config_kP(0, .15);
+    leftBack.config_kI(0, 0.0);
+    leftBack.config_kD(0, .000);
+    leftBack.config_kF(0, 0);
+    leftBack.selectProfileSlot(0, 0);
 
+    rightBack.configFactoryDefault();
+    rightBack.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
+    rightBack.configNominalOutputForward(0);
+    rightBack.configNominalOutputReverse(0);
+    rightBack.configPeakOutputForward(0.5);
+    rightBack.configPeakOutputReverse(-0.5);
+    rightBack.setSensorPhase(false);
+    // THESE PIDS WORK WELL
+    rightBack.config_kP(0, .15);
+    rightBack.config_kI(0, 0.0);
+    rightBack.config_kD(0, .000);
+    rightBack.config_kF(0, 0);
+    rightBack.selectProfileSlot(0, 0);
+
+  }
   public void initPIDDrive() {
     // ALL THE INITIALIZATION FOR SETTING UP PID CONTROL MODE
     leftBack.configFactoryDefault();
@@ -307,8 +337,8 @@ public class Drive {
     SmartDashboard.putNumber("right Encoder Feet", rightEncoderCounts / 13445);
     SmartDashboard.putNumber("left Encoder Counts", leftEncoderCounts);
     SmartDashboard.putNumber("right Encoder Counts", rightEncoderCounts);
-    SmartDashboard.putNumber("left Encoder Degrees", leftEncoderCounts / 681);
-    SmartDashboard.putNumber("right Encoder Degrees", rightEncoderCounts / 681);
+    SmartDashboard.putNumber("left Encoder Degrees", leftEncoderCounts / 108200 / 360);
+    SmartDashboard.putNumber("right Encoder Degrees", rightEncoderCounts / 108200 / 360);
     SmartDashboard.putNumber("joy pos", DriveJoystick.getMove());
     SmartDashboard.putBoolean("Intake Front?", intakeforward);
     SmartDashboard.putNumber("RPM Difference", (Math.abs(leftRPM) - Math.abs(rightRPM)));
@@ -350,7 +380,7 @@ public class Drive {
     if (!rotateInitialized) {
       rotateInitialized = true;
       targetAngle = finalAngle;
-      positionSetpoint = initialPosition + 681 * finalAngle;
+      positionSetpoint = initialPosition + encoderCountsPer360/360 * finalAngle;
       leftBack.getSensorCollection().setAnalogPosition(0, 30);
       rightBack.getSensorCollection().setAnalogPosition(0, 30);
       leftBack.setSelectedSensorPosition(0);
@@ -374,8 +404,8 @@ public class Drive {
         return false;
       }
     } else { // Encoder target not yet reached
-      leftBack.set(ControlMode.Position, targetAngle * 681);
-      rightBack.set(ControlMode.Position, targetAngle * 681);
+      leftBack.set(ControlMode.Position, targetAngle * encoderCountsPer360/360);
+      rightBack.set(ControlMode.Position, targetAngle * encoderCountsPer360/360);
       return false;
     }
 

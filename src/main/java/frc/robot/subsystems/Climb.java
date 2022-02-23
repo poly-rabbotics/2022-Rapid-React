@@ -15,6 +15,7 @@ public class Climb {
     static TalonSRX staticArmWinch, dynamicArmWinch;
     boolean runAutoClimbHigh, runAutoClimbTraversal;
     static Timer climbTimer;
+    double DAHalfwayPosition;
 
     public Climb() {
         staticArmPancake = RobotMap.staticArmPancake;
@@ -25,6 +26,7 @@ public class Climb {
         runAutoClimbHigh = false;
         runAutoClimbTraversal = false;
         climbTimer = new Timer();
+        DAHalfwayPosition = 5000; //F I N D   O U T   T H I S   N U M B E R
     }
 
     public void run() {
@@ -55,9 +57,30 @@ public class Climb {
         */
 
         //dynamicArmWinch.set(ControlMode.PercentOutput, MechanismsJoystick.testJoystick());
-        if (runAutoClimbHigh) {
+        if (runAutoClimbHigh) { //AT THIS POINT, STATIC ARM WILL ALREADY BE HOOKED ON TO MIDDLE BAR
           climbTimer.start();
-          
+          autoDAPivot(0, 2, "back"); //pivots DA back
+          autoDAPancake(2, 5); //releases DA to extend
+          autoSAWinch(0, 7, 0); //pulls robot up to middle bar
+          //end position 0 because that would retract it after it extended to begin with, pulling up robot
+          autoDAPivot(7, 11, "up"); //pivots DA to upright position, applying pressure to high bar
+          autoDAWinch(8, 13, DAHalfwayPosition); //pulls up robot slightly to get off of mid bar, delays bc swinging
+          autoDAWinch(18, 25, 0); //pulls up robot to high bar completely
+          //again end position of zero to return to original position
+        }
+        
+        else if (runAutoClimbTraversal) { //AT THIS POINT, STATIC ARM WILL ALREADY BE HOOKED ON TO MIDDLE BAR
+          climbTimer.start();
+          autoDAPivot(0, 2, "back"); //pivots DA back
+          autoDAPancake(2, 5); //releases DA to extend
+          autoSAWinch(0, 7, 0); //pulls robot up to middle bar
+          //end position 0 because that would retract it after it extended to begin with, pulling up robot
+          autoDAPivot(7, 12, "up"); //pivots DA to upright position, applying pressure to high bar
+          autoDAWinch(8, 13, DAHalfwayPosition); //pulls up robot slightly to get off mid bar, delays bc swinging
+          autoDAWinch(18, 25, 0);
+          //again end position of zero to return to original position
+          //REACHES HIGH BAR HERE
+
         }
     }
 
@@ -90,10 +113,16 @@ public class Climb {
         }
       }
 
-      public static void autoDAPivot(double startTime, double endTime) {
+      public static void autoDAPivot(double startTime, double endTime, String position) {
         double time = climbTimer.get();
         if (time > startTime && time < endTime) {
-            dynamicArmPivot.set(Value.kReverse);
+            if (position == "up") {
+              dynamicArmPivot.set(Value.kReverse);
+            }
+            else if (position == "back") {
+              dynamicArmPivot.set(Value.kForward);
+            }
+            
         }
       }
 

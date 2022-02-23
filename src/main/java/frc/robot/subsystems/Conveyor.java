@@ -26,8 +26,8 @@ public class Conveyor {
     }
 
     if (MechanismsJoystick.runConveyor()) {
-      if(!reversed) conveyorMotor.set(1);
-      if(reversed) conveyorMotor.set(-1);
+      if(!reversed) conveyorMotor.set(0.7);
+      if(reversed) conveyorMotor.set(-0.7);
     } else conveyorMotor.set(0);
   }
 
