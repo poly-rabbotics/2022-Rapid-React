@@ -35,7 +35,7 @@ public class Conveyor {
     double time = Robot.timer.get();
     if (time > startTime && time < endTime) {
       conveyorMotor.set(conveyorSpeed);
-    }
+    } else conveyorMotor.set(0);
   }
 }
 

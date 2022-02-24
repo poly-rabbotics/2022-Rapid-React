@@ -51,7 +51,8 @@ public class Drive {
   double positionSetpoint;
   double turnError;
   double targetAngle;
-  double gyroAngle, encoderCountsPer360;
+  double gyroAngle;
+  public static double encoderCountsPer360;
 
   public Drive() {
     encoderCountsPer360 = 108200;

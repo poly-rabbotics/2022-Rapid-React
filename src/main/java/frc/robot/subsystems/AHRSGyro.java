@@ -14,7 +14,8 @@ public class AHRSGyro {
     }
 
     public static void reset() {
-        gyro.zeroYaw();
+        //gyro.zeroYaw();
+        //gyro.reset();
     }
  
 }

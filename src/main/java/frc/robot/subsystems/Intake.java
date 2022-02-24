@@ -46,7 +46,7 @@ public class Intake {
     double time = Robot.timer.get();
     if (time > startTime && time < endTime) {
       intake.set(intakeSpeed);
-    }
+    } else intake.set(0);
   }
 
   public static void deployIntake(double startTime, double endTime, boolean isDeployed) {

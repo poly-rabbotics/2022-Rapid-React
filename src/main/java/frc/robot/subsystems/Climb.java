@@ -6,13 +6,15 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.Controls.MechanismsJoystick;
 import frc.robot.Robot;
 
 public class Climb {
     static DoubleSolenoid staticArmPancake, dynamicArmPancake, dynamicArmPivot;
-    static TalonSRX staticArmWinch, dynamicArmWinch;
+    public static TalonSRX staticArmWinch;
+    public static TalonSRX dynamicArmWinch;
     boolean runAutoClimbHigh, runAutoClimbTraversal;
     static Timer climbTimer;
     double DAHalfwayPosition;
@@ -27,9 +29,16 @@ public class Climb {
         runAutoClimbTraversal = false;
         climbTimer = new Timer();
         DAHalfwayPosition = 5000; //F I N D   O U T   T H I S   N U M B E R
+        dynamicArmWinch.configFactoryDefault();
+        staticArmWinch.configFactoryDefault();
+        dynamicArmWinch.setSelectedSensorPosition(0);
+        staticArmWinch.setSelectedSensorPosition(0);
+        //DYNAMIC ARM WINCH 
+
     }
 
     public void run() {
+
         /* PANCAKE PIN RELEASE, SENDS UP ARMS
         if (MechanismsJoystick.staticArmPancakeRelease()) {
             staticArmPancake.set(Value.kReverse);
@@ -46,15 +55,19 @@ public class Climb {
             } else dynamicArmPivot.set(Value.kForward);
         }
 
-        /* RUNS STATIC AND DYNAMIC ARM MOTORS
+        // RUNS STATIC AND DYNAMIC ARM MOTORS
         if (MechanismsJoystick.staticArmRun()) {
-            staticArmWinch.set(ControlMode.PercentOutput, 0.1);
+            staticArmWinch.set(ControlMode.PercentOutput, 0.5); }
+        else if (MechanismsJoystick.staticArmPancakeRelease()) {
+              staticArmWinch.set(ControlMode.PercentOutput, -0.5);
         } else staticArmWinch.set(ControlMode.PercentOutput, 0);
 
         if (MechanismsJoystick.dynamicArmRun()) {
-            dynamicArmWinch.set(ControlMode.PercentOutput, 0.1);
+            dynamicArmWinch.set(ControlMode.PercentOutput, 0.5); }
+        else if (MechanismsJoystick.dynamicArmPancakeRelease()) {
+              dynamicArmWinch.set(ControlMode.PercentOutput, -0.5);
         } else dynamicArmWinch.set(ControlMode.PercentOutput, 0);
-        */
+        
 
         //dynamicArmWinch.set(ControlMode.PercentOutput, MechanismsJoystick.testJoystick());
         if (runAutoClimbHigh) { //AT THIS POINT, STATIC ARM WILL ALREADY BE HOOKED ON TO MIDDLE BAR

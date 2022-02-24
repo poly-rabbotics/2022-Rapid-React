@@ -32,7 +32,7 @@ public class Shooter {
     }
     public void run() {
        if(MechanismsJoystick.shooterActive()) {
-           shooterPIDController.setReference(5000, ControlType.kVelocity);
+           shooterPIDController.setReference(-7000, ControlType.kVelocity);
            LEDLights.up(2);
        }
        else shooterPIDController.setReference(0, ControlType.kVelocity);
@@ -44,6 +44,6 @@ public class Shooter {
         double time = Robot.timer.get();
         if (time > startTime && time < endTime) {
           shooterPIDController.setReference(shooterSpeed, ControlType.kVelocity);
-        }
+        } else shooterPIDController.setReference(0, ControlType.kVelocity);
     }
 }

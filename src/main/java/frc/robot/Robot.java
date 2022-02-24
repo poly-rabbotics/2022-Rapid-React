@@ -56,18 +56,18 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
     
-    //RobotMap.initShooter();
-    //shooter = new Shooter();
+    RobotMap.initShooter();
+    shooter = new Shooter();
     //RobotMap.initDriveMotors();
     RobotMap.initIntake();
     intake = new Intake();
 
-    RobotMap.initDriveMotors();
+    //RobotMap.initDriveMotors();
     //RobotMap.initDrivePancakes();
-    drive = new Drive();
+    //drive = new Drive();
 
-    //RobotMap.initClimb();
-    //climb = new Climb();
+    RobotMap.initClimb();
+    climb = new Climb();
     
     LEDLights = new LEDLights();
 
@@ -77,8 +77,8 @@ public class Robot extends TimedRobot {
     AHRSGyro.reset();
     gyro = new AHRSGyro();
 
-    //RobotMap.initConveyor();
-    //conveyor = new Conveyor();
+    RobotMap.initConveyor();
+    conveyor = new Conveyor();
 
     limelight = new Limelight();
     
@@ -100,20 +100,24 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("Limit Switch", !RobotMap.magLimitSwitch.get());
     SmartDashboard.putNumber("Gyro Degrees", gyro.getDegrees());
     
-    leftEncoderCounts = Drive.leftBack.getSelectedSensorPosition();
-    rightEncoderCounts = -1 * Drive.rightBack.getSelectedSensorPosition();
+    //leftEncoderCounts = Drive.leftBack.getSelectedSensorPosition();
+    //rightEncoderCounts = -1 * Drive.rightBack.getSelectedSensorPosition();
     SmartDashboard.putNumber("left Encoder Feet", leftEncoderCounts / 13445);
     SmartDashboard.putNumber("right Encoder Feet", rightEncoderCounts / 13445);
     SmartDashboard.putNumber("left Encoder Counts", leftEncoderCounts);
     SmartDashboard.putNumber("right Encoder Counts", rightEncoderCounts);
-    SmartDashboard.putNumber("left Encoder Degrees", leftEncoderCounts / 681);
-    SmartDashboard.putNumber("right Encoder Degrees", rightEncoderCounts / 681);
+    SmartDashboard.putNumber("left Encoder Degrees", leftEncoderCounts / Drive.encoderCountsPer360/360);
+    SmartDashboard.putNumber("right Encoder Degrees", rightEncoderCounts / Drive.encoderCountsPer360/360);
     SmartDashboard.putBoolean("prox 1", !RobotMap.proxSensor1.get());
     SmartDashboard.putBoolean("prox 2", !RobotMap.proxSensor2.get());
 
     if(isDisabled()) LEDLights.rainbow();
     //LEDLights.singleColor(0, 255, 0);
     limelight.run();
+
+    //CLIMB DATA
+    SmartDashboard.putNumber("DA encoder counts", Climb.dynamicArmWinch.getSelectedSensorPosition());
+    SmartDashboard.putNumber("SA encoder counts", Climb.staticArmWinch.getSelectedSensorPosition());
   }
 
   /**
@@ -168,11 +172,11 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    //shooter.run();
-    //conveyor.run();
+    shooter.run();
+    conveyor.run();
     intake.run();
-    //climb.run();
-    drive.run();
+    climb.run();
+    //drive.run();
     LEDLights.GreenGold();
     //if(MechanismsJoystick.arm()) LEDLights.nice();
 
