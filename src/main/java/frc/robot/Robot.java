@@ -174,8 +174,8 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     shooter.run();
     conveyor.run();
-    intake.run();
-    climb.run();
+    //intake.run();
+    //climb.run();
     //drive.run();
     LEDLights.GreenGold();
     //if(MechanismsJoystick.arm()) LEDLights.nice();
