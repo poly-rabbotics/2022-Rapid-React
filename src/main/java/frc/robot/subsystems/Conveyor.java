@@ -8,6 +8,9 @@ package frc.robot.subsystems;
 
 import frc.robot.RobotMap;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+
+import edu.wpi.first.math.controller.PIDController;
 import frc.robot.Controls.MechanismsJoystick;
 import frc.robot.Robot;
 
@@ -19,23 +22,29 @@ public class Conveyor {
   public Conveyor() {
     conveyorMotor = RobotMap.conveyorMotor;
     reversed = false;
+    conveyorMotor.setIdleMode(IdleMode.kBrake);
   }
   public void run() {
-    if (MechanismsJoystick.conveyorReverse()) {
-      reversed = !reversed;   
-    }
+    reversed = MechanismsJoystick.reverse();
 
-    if (MechanismsJoystick.runConveyor()) {
-      if(!reversed) conveyorMotor.set(0.7);
-      if(reversed) conveyorMotor.set(-0.7);
-    } else conveyorMotor.set(0);
+    if (Shooter.upToSpeed) {
+      conveyorMotor.set(0.7);
+    } else {
+      if (MechanismsJoystick.conveyor()) {
+        if(!reversed) conveyorMotor.set(0.7);
+        if(reversed) conveyorMotor.set(-0.7);
+      } else conveyorMotor.set(0);
+    }
+    
+
+    
   }
 
-  public static void autoRun(double startTime, double endTime, double conveyorSpeed) {
+  public void autoRun(double startTime, double endTime, double conveyorSpeed) {
     double time = Robot.timer.get();
     if (time > startTime && time < endTime) {
       conveyorMotor.set(conveyorSpeed);
-    } else conveyorMotor.set(0);
+    }
   }
 }
 

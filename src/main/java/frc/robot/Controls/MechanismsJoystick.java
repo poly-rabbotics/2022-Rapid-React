@@ -6,11 +6,6 @@ import frc.robot.RobotMap;
 public class MechanismsJoystick {
     private static Joystick joystick = RobotMap.mechanismsJoystick;
 
-
-    public static boolean startGalacticSearch(){
-    return  joystick.getRawButton(4); //needs to be given an actual number
-      }
-
      public static boolean farShot(){
         return  joystick.getRawButton(7); //needs to be given an actual number
           }
@@ -114,7 +109,7 @@ public class MechanismsJoystick {
         }
 
         public static boolean dynamicArmPivot() {
-          return joystick.getRawButtonPressed(10);
+          return joystick.getRawButtonPressed(1);
         }
         public static double testJoystick() {
           return joystick.getRawAxis(5);
@@ -129,6 +124,12 @@ public class MechanismsJoystick {
         }   
         public static boolean red() {
           return !joystick.getRawButton(12);
-        }           
+        }      
+        public static double axis1() {
+          return joystick.getRawAxis(1);
+        }     
+        public static double axis5() {
+          return joystick.getRawAxis(5);
+        }  
 
 }

@@ -7,12 +7,15 @@ package frc.robot.subsystems;
 //import com.revrobotics.CANSparkMax;
 
 import frc.robot.RobotMap;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.motorcontrol.PWMVictorSPX;
 import frc.robot.Robot;
 
+import com.ctre.phoenix.led.CANdle.VBatOutputMode;
 import com.revrobotics.CANSparkMax;
 
+import frc.robot.Controls.DriveJoystick;
 import frc.robot.Controls.MechanismsJoystick;
 
 /** Add your docs here. */
@@ -23,33 +26,34 @@ public class Intake {
     static double intakeSpeed;
     static boolean intakeDown;
     static double intakeWinchPower = 0;
+    static DoubleSolenoid intakeSolenoid;
 
   public Intake() {
-    
+    intakeSolenoid = RobotMap.intakeSolenoid;
     intake = RobotMap.intakeMotor;
-    intakeSpeed = 0.8;
+    intakeSpeed = 0.6;
   }
   public void run() {
-    intakeSpeed = 0.8;
+    
     if (MechanismsJoystick.reverse()) {
       intakeSpeed = -intakeSpeed;
     }
 
-    if (MechanismsJoystick.intake()) {
+    if (DriveJoystick.runIntake()) {
       intake.set(intakeSpeed);
     } else intake.set(0);
 
-    //intakePneumatics();
+    intakePneumatics();
   }
 
-  public static void autoRun(double startTime, double endTime, double intakeSpeed) {
+  public void autoRun(double startTime, double endTime, double intakeSpeed) {
     double time = Robot.timer.get();
     if (time > startTime && time < endTime) {
       intake.set(intakeSpeed);
-    } else intake.set(0);
+    }
   }
 
-  public static void deployIntake(double startTime, double endTime, boolean isDeployed) {
+  public void deployIntake(double startTime, double endTime, boolean isDeployed) {
     double time = Robot.timer.get();
     if (time > startTime && time < endTime) {
       if (isDeployed) {
@@ -61,15 +65,17 @@ public class Intake {
     }
   }
 
-//public static void intakePneumatics() {
-    //if(MechanismsJoystick.toggleIntakePiston()) {
-        //RobotMap.intakeSolenoid.set(Value.kForward);
-    //}
+public static void intakePneumatics() {
+    if(DriveJoystick.toggleIntakePiston()) {
+        if (RobotMap.intakeSolenoid.get() == Value.kForward) {
+          RobotMap.intakeSolenoid.set(Value.kReverse);
+        }
+        else RobotMap.intakeSolenoid.set(Value.kForward);
+        
+
+    }
     
-    //else if(!MechanismsJoystick.toggleIntakePiston()) {
-       // RobotMap.intakeSolenoid.set(Value.kReverse);
-    //}
-//}
+}
 
 }
 

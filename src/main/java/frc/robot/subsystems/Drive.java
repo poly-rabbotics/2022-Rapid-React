@@ -143,12 +143,12 @@ public class Drive {
     driveModeSet();
 
     // DRIVE GEAR SHIFTING PANCAKES //
-/*
+
     if (highTorqueModeActive) {
       RobotMap.drivePancake.set(Value.kForward);
     } else
       RobotMap.drivePancake.set(Value.kReverse);
-      */
+       
     SmartDashboard.putBoolean("High Torque Mode?", highTorqueModeActive);
 
     move = DriveJoystick.getMove();
@@ -160,12 +160,12 @@ public class Drive {
       driveSelection = !driveSelection;
 
     move = Math.signum(move) * Math.pow(move, 2); // DRIVE CURVES
-    turn = Math.pow(turn, 1);
+    turn = Math.pow(turn, 1) * 0.75;
 
     if ((move < 0.05) && (move > -0.05)) { // JOYSTICK DEADZONE
       move = 0;
     }
-    if ((turn < 0.08) && (turn > -0.08)) { // JOYSTICK DEADZONE
+    if ((turn < 0.05) && (turn > -0.05)) { // JOYSTICK DEADZONE
       turn = 0;
     }
 
@@ -177,6 +177,16 @@ public class Drive {
       move = 1 * move;
     }
 
+    if (DriveJoystick.getPreciseFront()) { //SLOW MODE
+      move = 0.1;
+    } else if (DriveJoystick.getPreciseBack()) {
+      move = -0.1;
+    }
+    if (DriveJoystick.getPreciseRight()) {
+      turn = 0.1;
+    } else if (DriveJoystick.getPreciseLeft()) {
+      turn = -0.1;
+    }
     move();
 
     if (DriveJoystick.getCameraOrient()) // direction switch
@@ -187,7 +197,7 @@ public class Drive {
     oldTime = time;
     time = timer.get();
     oldX = x;
-    x = Limelight.getX() - 3;
+    x = Limelight.getX();
     double deltaVelocity = (x - oldX) / (time - oldTime);
     power_LL = cP_LL * x + (cD_LL * deltaVelocity) + cI_LL * accumError; // The PID-based power calculation for LL
                                                                          // auto-aim
@@ -232,6 +242,8 @@ public class Drive {
       }
     }
 
+    
+
     /*
      * leftBack.set(ControlMode.PercentOutput, move + turn);
      * rightBack.set(ControlMode.PercentOutput, -move - turn);
@@ -249,13 +261,11 @@ public class Drive {
   }
 
   public void driveModeSet() { //SETS DRIVE MODE: PID OR PERCENTOUTPUT, TORQUE OR SPEED
-    if (DriveJoystick.getToggleDriveMode()) {
-      PIDDriveActive = !PIDDriveActive;
-      if (PIDDriveActive) {
-        initPIDDrive();
-      } else if (!PIDDriveActive) {
-        initPercentOutputDrive();
-      }
+    PIDDriveActive = DriveJoystick.enablePIDMode();
+    if (PIDDriveActive) {
+      initPIDDrive();
+    } else if (!PIDDriveActive) {
+      initPercentOutputDrive();
     }
     if (DriveJoystick.getToggleGears()) {
       highTorqueModeActive = !highTorqueModeActive;

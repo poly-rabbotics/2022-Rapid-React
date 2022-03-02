@@ -42,12 +42,12 @@ public class RobotMap {
         rightFront = new TalonSRX(4); 
     }
     public static void initDrivePancakes() {
-        //drivePancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
+        drivePancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
     }
     
     public static void initIntake() {
         intakeMotor = new CANSparkMax(5, MotorType.kBrushless);
-        //intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);   
+        intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);   
     }
 
     public static void initConveyor() {
@@ -62,9 +62,9 @@ public class RobotMap {
     public static void initClimb() {
         staticArmWinch = new TalonSRX(5);
         dynamicArmWinch = new TalonSRX(6);
-        //dynamicArmPivot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);
-        //dynamicArmPancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 6, 7);
-        //staticArmPancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 8, 9);
+        dynamicArmPivot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
+        dynamicArmPancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 6, 7);
+        staticArmPancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 8, 9);
     }
     
     //public static final DoubleSolenoid testSolenoidOne = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);

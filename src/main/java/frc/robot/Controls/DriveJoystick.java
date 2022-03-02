@@ -118,5 +118,16 @@ public class DriveJoystick {
     return joystick.getRawButtonPressed(7);
   }
 
+  public static boolean enablePIDMode() {
+    return joystick.getRawAxis(3) > 0.6;
+  }
+
+  public static boolean runIntake() {
+    return joystick.getRawButton(6);
+  }
+
+  public static boolean toggleIntakePiston() {
+    return joystick.getRawButtonPressed(5);
+  }
   
 }

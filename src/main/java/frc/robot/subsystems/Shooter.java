@@ -15,39 +15,54 @@ public class Shooter {
     static SparkMaxPIDController shooterPIDController;
     static double kP, kI, kD;
     public static LEDLights LEDLights;
+    public static boolean upToSpeed;
     
     public Shooter() {
 
         LEDLights = new LEDLights();
         shooterSpeedSetpoint = 0;
         shooterMotor = RobotMap.shooterMotor;
-        kP = 0.0001;
+        kP = 0.00013;
         kI = 0.000001;
         kD = 0.0001;
         shooterPIDController =  shooterMotor.getPIDController();
         shooterPIDController.setP(kP);
         shooterPIDController.setI(kI);
         shooterPIDController.setD(kD);
-
+        upToSpeed = false;
     }
     public void run() {
-       if(MechanismsJoystick.shooterActive()) {
-           shooterSpeedSetpoint=-7000;
-           shooterPIDController.setReference(-7000, ControlType.kVelocity);
+        
+       if (MechanismsJoystick.closeShot()) {
+           shooterSpeedSetpoint=-4600;
+           shooterPIDController.setReference(shooterSpeedSetpoint, ControlType.kVelocity);
            LEDLights.up(2);
               }
        else {
            shooterSpeedSetpoint=0;
            shooterPIDController.setReference(0, ControlType.kVelocity);
-       }
+       } 
+
+       upToSpeed = shooterMotor.getEncoder().getVelocity() < -4300;
+       SmartDashboard.putBoolean("shooter up to speed?", upToSpeed);
+       /*
+       if(MechanismsJoystick.shooterActive()) {
+        shooterSpeedSetpoint=-5000;
+        shooterMotor.set(-0.85);
+        LEDLights.up(2);
+           }
+    else {
+        shooterSpeedSetpoint=0;
+        shooterMotor.set(0);
+    } */
         SmartDashboard.putNumber("Shooter speed setpoint", shooterSpeedSetpoint);
         SmartDashboard.putNumber("Shooter RPM", shooterMotor.getEncoder().getVelocity());
     }
     
-    public static void autoRun(double startTime, double endTime, double shooterSpeed) {
+    public void autoRun(double startTime, double endTime, double shooterSpeed) {
         double time = Robot.timer.get();
         if (time > startTime && time < endTime) {
           shooterPIDController.setReference(shooterSpeed, ControlType.kVelocity);
-        } else shooterPIDController.setReference(0, ControlType.kVelocity);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -33,20 +34,23 @@ public class Climb {
         staticArmWinch.configFactoryDefault();
         dynamicArmWinch.setSelectedSensorPosition(0);
         staticArmWinch.setSelectedSensorPosition(0);
+        dynamicArmWinch.setNeutralMode(NeutralMode.Brake);
+        staticArmWinch.setNeutralMode(NeutralMode.Brake);
+
         //DYNAMIC ARM WINCH 
 
     }
 
     public void run() {
 
-        /* PANCAKE PIN RELEASE, SENDS UP ARMS
+         //PANCAKE PIN RELEASE, SENDS UP ARMS
         if (MechanismsJoystick.staticArmPancakeRelease()) {
-            staticArmPancake.set(Value.kReverse);
-        }
-        if (MechanismsJoystick.dynamicArmPancakeRelease()) {
             dynamicArmPancake.set(Value.kReverse);
         }
-        */
+        if (MechanismsJoystick.dynamicArmPancakeRelease()) {
+            dynamicArmPancake.set(Value.kForward);
+        }
+        
 
         // RUNS DYNAMIC ARM PIVOT CYLINDER
         if (MechanismsJoystick.dynamicArmPivot()) {
@@ -56,6 +60,7 @@ public class Climb {
         }
 
         // RUNS STATIC AND DYNAMIC ARM MOTORS
+        /*
         if (MechanismsJoystick.staticArmRun()) {
             staticArmWinch.set(ControlMode.PercentOutput, 0.5); }
         else if (MechanismsJoystick.staticArmPancakeRelease()) {
@@ -67,7 +72,9 @@ public class Climb {
         else if (MechanismsJoystick.dynamicArmPancakeRelease()) {
               dynamicArmWinch.set(ControlMode.PercentOutput, -0.5);
         } else dynamicArmWinch.set(ControlMode.PercentOutput, 0);
-        
+        */
+        dynamicArmWinch.set(ControlMode.PercentOutput, MechanismsJoystick.axis1());
+        staticArmWinch.set(ControlMode.PercentOutput, MechanismsJoystick.axis5());
 
         //dynamicArmWinch.set(ControlMode.PercentOutput, MechanismsJoystick.testJoystick());
         if (runAutoClimbHigh) { //AT THIS POINT, STATIC ARM WILL ALREADY BE HOOKED ON TO MIDDLE BAR
