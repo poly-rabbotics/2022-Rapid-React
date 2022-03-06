@@ -11,11 +11,12 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AnalogInput;
 public class RobotMap {
     
     public static final Joystick driveJoystick = new Joystick(0);
     public static final Joystick mechanismsJoystick = new Joystick(1);
-    public static final Joystick configJoystick = new Joystick(2);
+    public static final Joystick climbJoystick = new Joystick(2);
     
     public static TalonSRX leftBack;
     public static TalonSRX leftFront;
@@ -71,11 +72,17 @@ public class RobotMap {
     //public static final DoubleSolenoid testSolenoidTwo = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
     //public static final DoubleSolenoid testSolenoidThree = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);
 
-    public static final DigitalInput magLimitSwitch = new DigitalInput(2);
-    public static final DigitalInput proxSensor1 = new DigitalInput(0);
-    public static final DigitalInput proxSensor2 = new DigitalInput(1);
+    public static final DigitalInput limitSwitchDA = new DigitalInput(1);
+    public static final DigitalInput limitSwitchSA = new DigitalInput(0);
+    
+
+    public static final DigitalInput proxSensorLow = new DigitalInput(2);
+    public static final DigitalInput proxSensorHigh = new DigitalInput(3);
 
 
     public static final Servo limelightServo = new Servo(0);
+
+    
+    public static final AnalogInput pressureTransducer = new AnalogInput(3);
 
 }

@@ -25,7 +25,7 @@ public class MechanismsJoystick {
           return joystick.getRawButtonPressed(11);
         }
 
-        public static boolean intake(){
+        public static boolean conveyor2(){
           return joystick.getRawButton(9);
         }
         
@@ -72,8 +72,8 @@ public class MechanismsJoystick {
           return joystick.getRawAxis(3) > 0.6;
         }
 
-        public static boolean staticArmPancakeRelease() {
-          if(joystick.getPOV() == 0){
+        public static boolean armPancakeRetract() {
+          if(joystick.getPOV() == 180){
             return true;
           }
           else{
@@ -81,8 +81,8 @@ public class MechanismsJoystick {
           }
         }
 
-        public static boolean dynamicArmPancakeRelease() {
-          if(joystick.getPOV() == 180){
+        public static boolean armPancakeExtend() {
+          if(joystick.getPOV() == 0){
             return true;
           }
           else{

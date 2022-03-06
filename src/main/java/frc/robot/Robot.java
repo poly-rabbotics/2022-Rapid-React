@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Controls.MechanismsJoystick;
 import frc.robot.subsystems.AHRSGyro;
+import frc.robot.subsystems.AutoModes;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drive;
@@ -83,7 +84,6 @@ public class Robot extends TimedRobot {
     limelight = new Limelight();
     
     comp.enableDigital();
-    
   }
 
   /**
@@ -97,7 +97,9 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     //SmartDashboard.putNumber("PSI", comp.getPressure());
     SmartDashboard.putNumber("Timer", timer.get());
-    SmartDashboard.putBoolean("Limit Switch", !RobotMap.magLimitSwitch.get());
+    SmartDashboard.putBoolean("DA Limit Switch", !RobotMap.limitSwitchDA.get());
+    SmartDashboard.putBoolean("SA Limit Switch", !RobotMap.limitSwitchSA.get());
+
     SmartDashboard.putNumber("Gyro Degrees", gyro.getDegrees());
     
     leftEncoderCounts = Drive.leftBack.getSelectedSensorPosition();
@@ -108,9 +110,13 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("right Encoder Counts", rightEncoderCounts);
     SmartDashboard.putNumber("left Encoder Degrees", leftEncoderCounts / Drive.encoderCountsPer360/360);
     SmartDashboard.putNumber("right Encoder Degrees", rightEncoderCounts / Drive.encoderCountsPer360/360);
-    SmartDashboard.putBoolean("prox 1", !RobotMap.proxSensor1.get());
-    SmartDashboard.putBoolean("prox 2", !RobotMap.proxSensor2.get());
+    SmartDashboard.putBoolean("prox 1", RobotMap.proxSensorLow.get());
+    SmartDashboard.putBoolean("prox 2", RobotMap.proxSensorHigh.get());
 
+    double robotPressure = 40.16 * (RobotMap.pressureTransducer.getVoltage() - 0.52);
+  
+    SmartDashboard.putNumber("Robot Pressure",robotPressure );
+    
     if(isDisabled()) LEDLights.rainbow();
     //LEDLights.singleColor(0, 255, 0);
     limelight.run();
@@ -118,6 +124,13 @@ public class Robot extends TimedRobot {
     //CLIMB DATA
     SmartDashboard.putNumber("DA encoder counts", Climb.dynamicArmWinch.getSelectedSensorPosition());
     SmartDashboard.putNumber("SA encoder counts", Climb.staticArmWinch.getSelectedSensorPosition());
+
+    if (timer.get() > 5 && timer.get() < 6) {
+      AHRSGyro.reset();
+    }
+
+    AutoModes.setAutoMode();
+
   }
 
   /**
@@ -132,7 +145,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    AHRSGyro.reset();
+    //AHRSGyro.reset();
     m_autoSelected = m_chooser.getSelected();
     timer.reset();
     drive.initAutoDrive();
@@ -144,40 +157,25 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    //intake.deployIntake(0, 2, false);
+    
+    //AutoModes.runAuto();
+    
+    RobotMap.drivePancake.set(Value.kForward);
     shooter.autoRun(0, 15, -4600);
     conveyor.autoRun(1, 4, 0.7);
-    conveyor.autoRun(4, 5, 0);
+    //conveyor.autoRun(4, 5, 0);
     intake.deployIntake(2, 5, true);
-    drive.moveByInches(3, 5, 48);
+    drive.moveByInches(3, 5, 60); //fix this distance setpoint for actual field geometry
     intake.autoRun(3, 6, 0.5);
-    drive.moveByInches(6, 8, -48);
-    conveyor.autoRun(6, 15, 0.7);
-    //conveyor.autoRun(9, 15, 0);
-    //shooter.autoRun(8, 15, 0);
+    drive.moveByInches(6, 8, -5);
+    conveyor.autoRun(4, 10, 0.2);
+    conveyor.autoRun(10, 15, 0.7);
+    intake.deployIntake(7, 12, false);
     intake.autoRun(6, 15, 0);
-
-
-
-    //intake.autoRun(0, 5, 0.5);
-    //intake.deployIntake(0, 5, true);
-    //intake.deployIntake(5, 6, false);
-    //drive.turnByDegrees(0, 5, 90);
-    //drive.moveByInches(0, 5, -36);
-  
-
-    //drive.turnByDegrees(30);
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    } 
-
     LEDLights.up(2);
+    
+    drive.turnByDegrees(10, 12, 180);
+    drive.moveByInches(12, 15, -60);
   }
 
   /** This function is called once when teleop is enabled. */
@@ -194,7 +192,8 @@ public class Robot extends TimedRobot {
     intake.run();
     climb.run();
     drive.run();
-    LEDLights.GreenGold();
+    //limelight.run();
+    //LEDLights.GreenGold();
     //if(MechanismsJoystick.arm()) LEDLights.nice();
 
     /*

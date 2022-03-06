@@ -101,11 +101,12 @@ public void calibrateLimelight(){
         
 }
 public void setTrackingMode() {
-    if(MechanismsJoystick.targetHub()) 
+    if(MechanismsJoystick.targetHub()) //LIMELIGHT MODES: PIPELINE 2 FOR HUB TARGETING
     limelightProfile = 2;
+    
     else{
-        if(MechanismsJoystick.red()) limelightProfile = 1;
-        else if(MechanismsJoystick.blue()) limelightProfile = 0;
+        if(MechanismsJoystick.red()) limelightProfile = 1; //PIPELINE 1 FOR RED BALLS
+        else if(MechanismsJoystick.blue()) limelightProfile = 0; //PIPELINE 0 FOR BLUE BALLS
     }
 
     switchPipeline(limelightProfile);
@@ -114,9 +115,9 @@ public void setTrackingMode() {
 
 public void setServoPos() {
     if (limelightProfile == 2) {
-        servo.setAngle(135);
+        servo.setAngle(180); //FINAL SERVO ANGLES, THESE WORK
     } else {
-        servo.setAngle(0);
+        servo.setAngle(30);
     }
 }
 

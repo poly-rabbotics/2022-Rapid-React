@@ -14,6 +14,7 @@ import frc.robot.Robot;
 
 import com.ctre.phoenix.led.CANdle.VBatOutputMode;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 
 import frc.robot.Controls.DriveJoystick;
 import frc.robot.Controls.MechanismsJoystick;
@@ -32,12 +33,13 @@ public class Intake {
     intakeSolenoid = RobotMap.intakeSolenoid;
     intake = RobotMap.intakeMotor;
     intakeSpeed = 0.6;
+    intake.setIdleMode(IdleMode.kBrake);
   }
   public void run() {
     
-    if (MechanismsJoystick.reverse()) {
+    /*if (MechanismsJoystick.reverse()) {
       intakeSpeed = -intakeSpeed;
-    }
+    } */
 
     if (DriveJoystick.runIntake()) {
       intake.set(intakeSpeed);

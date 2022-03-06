@@ -116,6 +116,7 @@ public class Drive {
      */
     gyroToRadians = Rotation2d.fromDegrees(gyro.getDegrees());
     odometry = new DifferentialDriveOdometry(gyroToRadians, new Pose2d(0, 0, new Rotation2d()));
+    RobotMap.drivePancake.set(Value.kReverse); //REVERSE IS TORQUE MODE
     
   }
 
@@ -145,9 +146,9 @@ public class Drive {
     // DRIVE GEAR SHIFTING PANCAKES //
 
     if (highTorqueModeActive) {
-      RobotMap.drivePancake.set(Value.kForward);
+      RobotMap.drivePancake.set(Value.kReverse); //REVERSE IS TORQUE MODE
     } else
-      RobotMap.drivePancake.set(Value.kReverse);
+      RobotMap.drivePancake.set(Value.kForward); //FORWARD IS SPEED MODE
        
     SmartDashboard.putBoolean("High Torque Mode?", highTorqueModeActive);
 
@@ -160,12 +161,12 @@ public class Drive {
       driveSelection = !driveSelection;
 
     move = Math.signum(move) * Math.pow(move, 2); // DRIVE CURVES
-    turn = Math.pow(turn, 1) * 0.75;
+    turn = Math.pow(turn, 1) * 0.5;
 
-    if ((move < 0.05) && (move > -0.05)) { // JOYSTICK DEADZONE
+    if ((move < 0.1) && (move > -0.1)) { // JOYSTICK DEADZONE
       move = 0;
     }
-    if ((turn < 0.05) && (turn > -0.05)) { // JOYSTICK DEADZONE
+    if ((turn < 0.15) && (turn > -0.15)) { // JOYSTICK DEADZONE
       turn = 0;
     }
 
@@ -200,7 +201,11 @@ public class Drive {
     x = Limelight.getX();
     double deltaVelocity = (x - oldX) / (time - oldTime);
     power_LL = cP_LL * x + (cD_LL * deltaVelocity) + cI_LL * accumError; // The PID-based power calculation for LL
-                                                                         // auto-aim
+
+    /*
+    if (Limelight.limelightProfile == 2) { //inverts LL values when it is upside down 
+      power_LL = power_LL * -1;
+    } */
     isAligned = x < 6 && x > -6;
     SmartDashboard.putBoolean("Aim Aligned?", isAligned);
     SmartDashboard.putNumber("deltaVelocity", deltaVelocity);
@@ -234,6 +239,7 @@ public class Drive {
         leftBack.set(ControlMode.PercentOutput, move - x * 0.01667);
         rightBack.set(ControlMode.PercentOutput, -move - x * 0.01667);
         */
+
         leftBack.set(ControlMode.PercentOutput, move - power_LL);
         rightBack.set(ControlMode.PercentOutput, -move - power_LL);
       } else {
@@ -373,6 +379,7 @@ public class Drive {
     //rightBack.getSensorCollection().setAnalogPosition(0, 30);
     leftBack.setSelectedSensorPosition(0);
     rightBack.setSelectedSensorPosition(0);
+
   }
   public void moveByInches(double startTime, double endTime, double inches) { //AUTONOMOUS DRIVE METHOD
     double time = Robot.timer.get();
@@ -404,6 +411,7 @@ public class Drive {
       gyroAngle = gyro.getDegrees();
       if ((gyroAngle < (finalAngle - 1)) && (gyroAngle > (finalAngle + 1))) {
         rotateInitialized = false;
+        resetEncoders();
         return true;
       } else {
         targetAngle = finalAngle - gyroAngle;

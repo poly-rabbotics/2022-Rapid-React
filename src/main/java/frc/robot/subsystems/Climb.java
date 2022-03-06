@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
@@ -10,15 +11,21 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.Controls.MechanismsJoystick;
+import frc.robot.Controls.ClimbJoystick;
 import frc.robot.Robot;
 
 public class Climb {
     static DoubleSolenoid staticArmPancake, dynamicArmPancake, dynamicArmPivot;
     public static TalonSRX staticArmWinch;
     public static TalonSRX dynamicArmWinch;
-    boolean runAutoClimbHigh, runAutoClimbTraversal;
+    //boolean runAutoClimbHigh, runAutoClimbTraversal;
     static Timer climbTimer;
-    double DAHalfwayPosition;
+    static double DAHalfwayPosition, SAHalfWayPosition, DARetractPosition, SARetractPosition;
+    static int autoStep = 0;
+    static boolean highBarReached;
+    static boolean SALimitSwitch, DALimitSwitch;
+    static double SAAxis, DAAxis;
+    static boolean SARetracted, DARetracted;
 
     public Climb() {
         staticArmPancake = RobotMap.staticArmPancake;
@@ -26,10 +33,13 @@ public class Climb {
         dynamicArmPivot = RobotMap.dynamicArmPivot;
         staticArmWinch = RobotMap.staticArmWinch;
         dynamicArmWinch = RobotMap.dynamicArmWinch;
-        runAutoClimbHigh = false;
-        runAutoClimbTraversal = false;
+        //runAutoClimbHigh = false;
+        //runAutoClimbTraversal = false;
         climbTimer = new Timer();
-        DAHalfwayPosition = 5000; //F I N D   O U T   T H I S   N U M B E R
+        DAHalfwayPosition = 5000; //F I N D   O U T   T H E S E   N U M B E R S
+        DARetractPosition = 10000; 
+        SAHalfWayPosition = 5000;
+        SARetractPosition = 10000;
         dynamicArmWinch.configFactoryDefault();
         staticArmWinch.configFactoryDefault();
         dynamicArmWinch.setSelectedSensorPosition(0);
@@ -37,46 +47,57 @@ public class Climb {
         dynamicArmWinch.setNeutralMode(NeutralMode.Brake);
         staticArmWinch.setNeutralMode(NeutralMode.Brake);
 
-        //DYNAMIC ARM WINCH 
-
     }
 
     public void run() {
+      dynamicArmPancake.set(Value.kOff);
+        DALimitSwitch = !RobotMap.limitSwitchDA.get();
+        SALimitSwitch = !RobotMap.limitSwitchSA.get();
+        DARetracted = DALimitSwitch;
+        SARetracted = SALimitSwitch;
+      SmartDashboard.putNumber("SA Encoder Counts", staticArmWinch.getSelectedSensorPosition());
+      SmartDashboard.putNumber("DA Encoder Counts", dynamicArmWinch.getSelectedSensorPosition());
+
+
+        if (MechanismsJoystick.arm()) {
+          //autoClimb();
+        }
 
          //PANCAKE PIN RELEASE, SENDS UP ARMS
-        if (MechanismsJoystick.staticArmPancakeRelease()) {
-            dynamicArmPancake.set(Value.kReverse);
+         
+        if (ClimbJoystick.armPancakeRetract()) {
+            dynamicArmPancake.set(Value.kForward); //RETRACT PANCAKES
         }
-        if (MechanismsJoystick.dynamicArmPancakeRelease()) {
-            dynamicArmPancake.set(Value.kForward);
+        if (ClimbJoystick.armPancakeExtend()) {
+            dynamicArmPancake.set(Value.kReverse); //EXTEND PANCAKES
         }
         
 
         // RUNS DYNAMIC ARM PIVOT CYLINDER
-        if (MechanismsJoystick.dynamicArmPivot()) {
+        if (ClimbJoystick.dynamicArmPivot()) {
             if (dynamicArmPivot.get() == Value.kForward) {
                 dynamicArmPivot.set(Value.kReverse);
             } else dynamicArmPivot.set(Value.kForward);
         }
+        SAAxis = ClimbJoystick.axis5();
+        DAAxis = ClimbJoystick.axis1();
 
-        // RUNS STATIC AND DYNAMIC ARM MOTORS
+        if ((SAAxis < 0.15) && (SAAxis > -0.15)) { // JOYSTICK DEADZONE
+          SAAxis = 0;
+        }
+        if ((DAAxis < 0.15) && (DAAxis > -0.15)) { // JOYSTICK DEADZONE
+          DAAxis = 0;
+        }
+        if (SAAxis < 0 && SARetracted) {
+          SAAxis = 0;
+        } 
+        if (DAAxis < 0 && DARetracted) {
+          DAAxis = 0;
+        }
+        dynamicArmWinch.set(ControlMode.PercentOutput, DAAxis);
+        staticArmWinch.set(ControlMode.PercentOutput, SAAxis);
+
         /*
-        if (MechanismsJoystick.staticArmRun()) {
-            staticArmWinch.set(ControlMode.PercentOutput, 0.5); }
-        else if (MechanismsJoystick.staticArmPancakeRelease()) {
-              staticArmWinch.set(ControlMode.PercentOutput, -0.5);
-        } else staticArmWinch.set(ControlMode.PercentOutput, 0);
-
-        if (MechanismsJoystick.dynamicArmRun()) {
-            dynamicArmWinch.set(ControlMode.PercentOutput, 0.5); }
-        else if (MechanismsJoystick.dynamicArmPancakeRelease()) {
-              dynamicArmWinch.set(ControlMode.PercentOutput, -0.5);
-        } else dynamicArmWinch.set(ControlMode.PercentOutput, 0);
-        */
-        dynamicArmWinch.set(ControlMode.PercentOutput, MechanismsJoystick.axis1());
-        staticArmWinch.set(ControlMode.PercentOutput, MechanismsJoystick.axis5());
-
-        //dynamicArmWinch.set(ControlMode.PercentOutput, MechanismsJoystick.testJoystick());
         if (runAutoClimbHigh) { //AT THIS POINT, STATIC ARM WILL ALREADY BE HOOKED ON TO MIDDLE BAR
           climbTimer.start();
           autoDAPivot(0, 2, "back"); //pivots DA back
@@ -100,11 +121,116 @@ public class Climb {
           autoDAWinch(18, 25, 0);
           //again end position of zero to return to original position
           //REACHES HIGH BAR HERE
+    
+        } */
+    }
+
+    public static void autoClimb() { //auto climb step by step
+      if (MechanismsJoystick.climbPressed()) autoStep += 1; //increment step every time the button is pressed
+      if (autoStep == 8 && !highBarReached) {
+        autoStep = 4; //jump back to step 
+        highBarReached = true;
+      } if (autoStep == 8 && highBarReached) {
+        autoStep = 8;
+      }
+
+      switch (autoStep) {
+        case 1: { //POP UP ARMS
+          staticArmPancake.set(Value.kReverse);
+          dynamicArmPancake.set(Value.kReverse);
+        }
+        case 2: { //PIVOT BACK ARM
+          dynamicArmPivot.set(Value.kReverse);
+        }
+        case 3: { //FULLY RETRACT STATIC ARM
+          fullRetractSA();
+        }        
+        case 4: { //PIVOT FORWARD ARM TO HIT DYNAMIC ARM
+          dynamicArmPivot.set(Value.kForward);
+        }
+        case 5: { //RETRACT DYNAMIC ARM FULLY AND EXTEND STATIC ARM SLIGHTLY
+          fullRetractDA();
+          initPIDControlSA();
+          staticArmWinch.set(ControlMode.Position, SAHalfWayPosition);
+        }
+        case 6: { //PIVOT TO MAKE STATIC ARM HIT NEXT BAR, FULLY RETRACT STATIC ARM
+          dynamicArmPivot.set(Value.kReverse);
+          fullRetractSA();
+        }
+        case 7: { //FULLY EXTEND DYNAMIC ARM
+          initPIDControlDA();
+          dynamicArmWinch.set(ControlMode.Position, 0);
+        }
+        case 8: {
 
         }
+         
+      }
+    }
+
+    public static void fullRetractDA() {
+      dynamicArmWinch.configFactoryDefault();
+      if (!DARetracted) { 
+        dynamicArmWinch.set(ControlMode.PercentOutput, -1);
+      } else {
+        dynamicArmWinch.set(ControlMode.PercentOutput, 0);
+      }
+    }
+
+    public static void fullRetractSA() {
+      staticArmWinch.configFactoryDefault();
+      if (!SARetracted) {
+        staticArmWinch.set(ControlMode.PercentOutput, -1);
+      } else {
+        staticArmWinch.set(ControlMode.PercentOutput, 0);
+      }
+    }
+
+    public static void fullExtendDA() {
+      initPIDControlDA();
+      dynamicArmWinch.set(ControlMode.Position, 0);
+    }
+
+
+    public static void fullExtendSA() {
+      initPIDControlSA();
+      staticArmWinch.set(ControlMode.Position, 0);
+    }
+
+    public static void initPIDControlSA() {
+      staticArmWinch.configFactoryDefault();
+      staticArmWinch.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
+      staticArmWinch.configNominalOutputForward(0);
+      staticArmWinch.configNominalOutputReverse(0);
+      staticArmWinch.configPeakOutputForward(1);
+      staticArmWinch.configPeakOutputReverse(-1);
+      staticArmWinch.setSensorPhase(false);
+      staticArmWinch.config_kP(0, .1);
+      staticArmWinch.config_kI(0, 0.0005);
+      staticArmWinch.config_kD(0, .0001);
+      staticArmWinch.config_kF(0, 0);
+      staticArmWinch.selectProfileSlot(0, 0);
+    }
+
+    public static void initPIDControlDA() {
+      dynamicArmWinch.configFactoryDefault();
+      dynamicArmWinch.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
+      dynamicArmWinch.configNominalOutputForward(0);
+      dynamicArmWinch.configNominalOutputReverse(0);
+      dynamicArmWinch.configPeakOutputForward(1);
+      dynamicArmWinch.configPeakOutputReverse(-1);
+      dynamicArmWinch.setSensorPhase(false);
+      dynamicArmWinch.config_kP(0, .1);
+      dynamicArmWinch.config_kI(0, 0.0005);
+      dynamicArmWinch.config_kD(0, .0001);
+      dynamicArmWinch.config_kF(0, 0);
+      dynamicArmWinch.selectProfileSlot(0, 0);
     }
 
     // AUTO CLIMB METHODS (WILL BE CALLED IN TELEOP THOUGH)
+    /*************************************************
+    WE ARE NOT USING THESE, BUT WE MIGHT SWITCH TO THEM LATER
+    **************************************************/
     public static void autoDAWinch(double startTime, double endTime, double endPosition) {
         double time = climbTimer.get();
         if (time > startTime && time < endTime) {
@@ -146,7 +272,4 @@ public class Climb {
         }
       }
 
-      public static void runAutoClimbHigh() {
-
-      }
 }

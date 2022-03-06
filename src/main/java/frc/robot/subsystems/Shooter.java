@@ -3,6 +3,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.Robot;
@@ -16,9 +17,10 @@ public class Shooter {
     static double kP, kI, kD;
     public static LEDLights LEDLights;
     public static boolean upToSpeed;
+    Timer conveyorDelay = new Timer();
+
     
     public Shooter() {
-
         LEDLights = new LEDLights();
         shooterSpeedSetpoint = 0;
         shooterMotor = RobotMap.shooterMotor;
@@ -33,15 +35,19 @@ public class Shooter {
     }
     public void run() {
         
-       if (MechanismsJoystick.closeShot()) {
-           shooterSpeedSetpoint=-4600;
-           shooterPIDController.setReference(shooterSpeedSetpoint, ControlType.kVelocity);
-           LEDLights.up(2);
-              }
-       else {
+       if (MechanismsJoystick.farShot()) {
+        conveyorDelay.start();
+        shooterSpeedSetpoint=-4500;
+        if(conveyorDelay.get()>1.5) Conveyor.conveyorSpeed=0.8;
+        LEDLights.up(2);
+        } else if (MechanismsJoystick.closeShot()) {
+            shooterSpeedSetpoint=-1000;
+        }
+         else {
            shooterSpeedSetpoint=0;
-           shooterPIDController.setReference(0, ControlType.kVelocity);
        } 
+       shooterPIDController.setReference(shooterSpeedSetpoint, ControlType.kVelocity);
+
 
        upToSpeed = shooterMotor.getEncoder().getVelocity() < -4300;
        SmartDashboard.putBoolean("shooter up to speed?", upToSpeed);
