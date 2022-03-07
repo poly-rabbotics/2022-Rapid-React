@@ -13,7 +13,7 @@ public class AHRSGyro {
         return gyro.getAngle();
     }
 
-    public static void reset() {
+    public void reset() {
         gyro.zeroYaw();
         gyro.reset();
     }

@@ -31,51 +31,45 @@ import frc.robot.subsystems.LEDLights;
  * project.
  */
 public class Robot extends TimedRobot {
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
   
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
   public static Intake intake;
   public static Shooter shooter;
   public static Conveyor conveyor;
   public static Climb climb;
   public static Drive drive;
-  public static LEDLights LEDLights;
+  public static LEDLights LEDs;
   public static Limelight limelight;
-  public static Timer timer;
+  public static Timer masterTimer, autoTimer;
   public static AHRSGyro gyro;
   public static double leftEncoderCounts, rightEncoderCounts;
-
+  boolean pressureGood;
+  boolean isGyroReset = false;
   Compressor comp;
   PneumaticHub hub;
   
   @Override
   public void robotInit() {
     comp = new Compressor(1, PneumaticsModuleType.REVPH);
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto); //EG: Not using this, delete
-    m_chooser.addOption("My Auto", kCustomAuto);   //EG: Not using this, delete
-    SmartDashboard.putData("Auto choices", m_chooser);   //EG: Not using this, delete
     
     RobotMap.initShooter();
     shooter = new Shooter();
-    RobotMap.initDriveMotors();
     RobotMap.initIntake();
     intake = new Intake();
 
-    RobotMap.initDriveMotors();   //EG: Why is this being init twice?  Remove line 62 and keep this one
+    RobotMap.initDriveMotors();  
     RobotMap.initDrivePancakes();
     drive = new Drive();
 
     RobotMap.initClimb();
     climb = new Climb();
     
-    LEDLights = new LEDLights();  //EG: Class name same as variable name.  It technically works but will get confusing
+    LEDs = new LEDLights();  //EG: Class name same as variable name.  It technically works but will get confusing
 
-    timer = new Timer();
-    timer.start();
+    masterTimer = new Timer();
+    masterTimer.start();
+    autoTimer = new Timer();
+    
 
-    AHRSGyro.reset();  //EG: Shouldnt reset be AFTER constructing the AHRSGyro below?  I doubt this will work right before initializing
     gyro = new AHRSGyro();
 
     RobotMap.initConveyor();
@@ -95,8 +89,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    //SmartDashboard.putNumber("PSI", comp.getPressure());
-    SmartDashboard.putNumber("Timer", timer.get());
+    SmartDashboard.putNumber("Timer", masterTimer.get());
     SmartDashboard.putBoolean("DA Limit Switch", !RobotMap.limitSwitchDA.get());
     SmartDashboard.putBoolean("SA Limit Switch", !RobotMap.limitSwitchSA.get());
 
@@ -115,10 +108,11 @@ public class Robot extends TimedRobot {
 
     double robotPressure = 40.16 * (RobotMap.pressureTransducer.getVoltage() - 0.52);
   
-    SmartDashboard.putNumber("Robot Pressure",robotPressure );   //EG: Please add a boolean to dashboard per line below
-    //EG: If robotPressure < 60.0, false, else true  (tells us if the robot pressure is low)
+    SmartDashboard.putNumber("Robot Pressure",robotPressure ); 
+    pressureGood = robotPressure > 60;
+    SmartDashboard.putBoolean("Pressure Good?", pressureGood);  
     
-    if(isDisabled()) LEDLights.rainbow();
+    //if(isDisabled()) LEDs.rainbow();
 //EG: Let's not hardcode this here, lets do LEDLights.pattern=4; and then call LEDLights.run();
 
     //LEDLights.singleColor(0, 255, 0);
@@ -128,11 +122,11 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("DA encoder counts", Climb.dynamicArmWinch.getSelectedSensorPosition());
     SmartDashboard.putNumber("SA encoder counts", Climb.staticArmWinch.getSelectedSensorPosition());
 
-    if (timer.get() > 5 && timer.get() < 6) {
-      AHRSGyro.reset();
+    if (masterTimer.get() > 5 && !isGyroReset) {
+      gyro.reset();
+      isGyroReset = true;
     }
-    // EG: This will keep calling the reset function for a full second.  Instead, can we create a boolean in Robot
-    // init to false and then put if(time.get() > 5.0 && !alreadyReset) {  AHRSGyro.reset();   alreadyReset=true;}
+    
 
     AutoModes.setAutoMode();
 
@@ -150,21 +144,18 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    //AHRSGyro.reset();
-    m_autoSelected = m_chooser.getSelected();  //EG: Not used, delete this line
-    timer.reset();    // EG: This is the same timer as the one which resets the gyro, lets use a different one
+    autoTimer.start();    // EG: This is the same timer as the one which resets the gyro, lets use a different one
     drive.initAutoDrive();
-    drive.resetEncoders();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);   // EG: Delete this, it's already in AutoModes.java
+    drive.resetEncoders(); 
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
     
-    //AutoModes.runAuto();
+    AutoModes.runAuto();
     
+    /*
     RobotMap.drivePancake.set(Value.kForward);
     shooter.autoRun(0, 15, -4600);
     conveyor.autoRun(1, 4, 0.7);
@@ -177,16 +168,17 @@ public class Robot extends TimedRobot {
     conveyor.autoRun(10, 15, 0.7);
     intake.deployIntake(7, 12, false);
     intake.autoRun(6, 15, 0);
-    LEDLights.up(2);
+    LEDs.up(2);
     
     drive.turnByDegrees(10, 12, 180);
     drive.moveByInches(12, 15, -60);
+    */
   }
 
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    AHRSGyro.reset();
+    gyro.reset();
   }
 
   /** This function is called periodically during operator control. */
@@ -197,7 +189,7 @@ public class Robot extends TimedRobot {
     intake.run();
     climb.run();
     drive.run();
-    //limelight.run();
+    limelight.run();
     //LEDLights.GreenGold();
     //if(MechanismsJoystick.arm()) LEDLights.nice();
 

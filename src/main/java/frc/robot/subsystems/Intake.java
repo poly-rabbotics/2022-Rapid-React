@@ -49,14 +49,14 @@ public class Intake {
   }
 
   public void autoRun(double startTime, double endTime, double intakeSpeed) {
-    double time = Robot.timer.get();
+    double time = Robot.autoTimer.get();
     if (time > startTime && time < endTime) {
       intake.set(intakeSpeed);
     }
   }
 
   public void deployIntake(double startTime, double endTime, boolean isDeployed) {
-    double time = Robot.timer.get();
+    double time = Robot.autoTimer.get();
     if (time > startTime && time < endTime) {
       if (isDeployed) {
         RobotMap.intakeSolenoid.set(Value.kForward);

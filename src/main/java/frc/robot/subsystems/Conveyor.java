@@ -63,7 +63,7 @@ public class Conveyor {
   }
 
   public void autoRun(double startTime, double endTime, double conveyorSpeed) {
-    double time = Robot.timer.get();
+    double time = Robot.autoTimer.get();
     if (time > startTime && time < endTime) {
       conveyorMotor.set(conveyorSpeed);
     }

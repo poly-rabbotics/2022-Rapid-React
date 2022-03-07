@@ -66,7 +66,7 @@ public class Shooter {
     }
     
     public void autoRun(double startTime, double endTime, double shooterSpeed) {
-        double time = Robot.timer.get();
+        double time = Robot.autoTimer.get();
         if (time > startTime && time < endTime) {
           shooterPIDController.setReference(shooterSpeed, ControlType.kVelocity);
         }

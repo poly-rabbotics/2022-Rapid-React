@@ -377,12 +377,12 @@ public class Drive {
   public void resetEncoders() { //SETS THE ENCODER COUNTS TO ZERO BOTH SIDES
     //leftBack.getSensorCollection().setAnalogPosition(0, 30);
     //rightBack.getSensorCollection().setAnalogPosition(0, 30);
-    leftBack.setSelectedSensorPosition(0);
-    rightBack.setSelectedSensorPosition(0);
-
+    //leftBack.setSelectedSensorPosition(0);
+    //rightBack.setSelectedSensorPosition(0);
+    
   }
   public void moveByInches(double startTime, double endTime, double inches) { //AUTONOMOUS DRIVE METHOD
-    double time = Robot.timer.get();
+    double time = Robot.autoTimer.get();
     if (time < endTime && time > startTime) {
       leftBack.set(ControlMode.Position, inches * 1120);
       rightBack.set(ControlMode.Position, inches * -1120);
@@ -390,7 +390,7 @@ public class Drive {
   }
 
   public boolean turnByDegrees(double startTime, double endTime, double finalAngle) { //AUTONOMOUS TURN METHOD
-    double time = Robot.timer.get();
+    double time = Robot.autoTimer.get();
     double initialPosition = leftBack.getSelectedSensorPosition();
     
     if (time < endTime && time > startTime) {
@@ -403,7 +403,7 @@ public class Drive {
       rightBack.getSensorCollection().setAnalogPosition(0, 30);
       leftBack.setSelectedSensorPosition(0);
       rightBack.setSelectedSensorPosition(0);
-      AHRSGyro.reset();
+      gyro.reset();
     }
 
     if (leftBack.getSelectedSensorPosition() > positionSetpoint - 100
@@ -419,7 +419,7 @@ public class Drive {
         rightBack.getSensorCollection().setAnalogPosition(0, 30);
         leftBack.setSelectedSensorPosition(0);
         rightBack.setSelectedSensorPosition(0);
-        AHRSGyro.reset();
+        gyro.reset();
         return false;
       }
     } else { // Encoder target not yet reached

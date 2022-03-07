@@ -35,7 +35,7 @@ public class AutoModes {
     } 
 
     public static void runAuto() {
-        //EG: Case structures dont use brackets for each case... this may not hurt anything but it's not standard
+        
         switch (selectedMode) {
             case 0: 
                 autoModeZero(); 
@@ -49,10 +49,18 @@ public class AutoModes {
             case 3:
                 autoModeThree();
                 break;
-            case 4: {autoModeFour(); break;}  // EG: Fix the rest of these...
-            case 5: {autoModeFive(); break;}
-            case 6: {autoModeSix(); break;}
-            case 7: {autoModeSeven(); break;}
+            case 4: 
+                autoModeFour(); 
+                break;  
+            case 5: 
+                autoModeFive(); 
+                break;
+            case 6: 
+                autoModeSix(); 
+                break;
+            case 7: 
+                autoModeSeven(); 
+                break;
             default: 
                 break;
         }
