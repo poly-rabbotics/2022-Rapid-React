@@ -39,23 +39,31 @@ public class Conveyor {
       conveyorSpeed = 0.7;
     } else if (!Shooter.upToSpeed){ */
       if (MechanismsJoystick.conveyor()&&!ballDetectedHigh) {
-        conveyorSpeed = 0.7;
-
-      } else if (MechanismsJoystick.conveyor2()){ 
-        conveyorSpeed = -0.7;
+        //Normal intake, stop at prox switch
+        conveyorSpeed = setpoint;
+      }
+      if (MechanismsJoystick.conveyor()&&MechanismsJoystick.farShot()) {
+        //Allow conveyor to run when shooter is also activated regardless of prox switch
+        conveyorSpeed = setpoint;
+      }
+      else if (MechanismsJoystick.conveyor2()){ 
+        // Run conveyor backwards
+        conveyorSpeed = -1*setpoint;
       } else if (ballDetectedLow && !ballDetectedHigh) {
-      conveyorSpeed = setpoint;
-      ballDetect = true;
-      ballSpacer.reset();
-      ballSpacer.start();
+        // Auto intake feature
+        conveyorSpeed = setpoint;
+        ballDetect = true;
+        ballSpacer.reset();
+        ballSpacer.start();
     } else if (!ballDetectedLow && ballDetect) {
+        // Executed for indexing purposes
       SmartDashboard.putNumber("Ball Spacer", ballSpacer.get());
       conveyorSpeed = setpoint;
       if (ballSpacer.get() > 0.2) {
         ballDetect = false;
         conveyorSpeed = 0;
       }
-    } else if(!MechanismsJoystick.farShot()) conveyorSpeed = 0;
+    } else conveyorSpeed = 0;
     
     conveyorMotor.set(conveyorSpeed);
 
