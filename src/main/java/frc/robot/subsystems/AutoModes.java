@@ -2,8 +2,10 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.Controls.MechanismsJoystick;
+
 public class AutoModes {
     static Shooter autoShooter;
     static Conveyor autoConveyor;
@@ -12,10 +14,12 @@ public class AutoModes {
     static int selectedMode;
     static int autoSwitchOne, autoSwitchTwo, autoSwitchThree;
     public AutoModes() {
-        autoShooter = new Shooter();
-        autoConveyor = new Conveyor();
-        autoIntake = new Intake();
-        autoDrive = new Drive();
+
+        //EG: These cannot be re-constructed, that need to reference existing Robot objects
+        autoShooter = Robot.shooter;
+        autoConveyor = Robot.conveyor;
+        autoIntake = Robot.intake;
+        autoDrive = Robot.drive;
     }
 
     public static void setAutoMode() {
@@ -31,16 +35,26 @@ public class AutoModes {
     } 
 
     public static void runAuto() {
+        //EG: Case structures dont use brackets for each case... this may not hurt anything but it's not standard
         switch (selectedMode) {
-            case 0: {autoModeZero(); break;}
-            case 1: {autoModeOne(); break;}
-            case 2: {autoModeTwo(); break;}
-            case 3: {autoModeThree(); break;}
-            case 4: {autoModeFour(); break;}
+            case 0: 
+                autoModeZero(); 
+                break;
+            case 1: 
+                autoModeOne(); 
+                break;
+            case 2:
+                autoModeTwo();
+                break;
+            case 3:
+                autoModeThree();
+                break;
+            case 4: {autoModeFour(); break;}  // EG: Fix the rest of these...
             case 5: {autoModeFive(); break;}
             case 6: {autoModeSix(); break;}
             case 7: {autoModeSeven(); break;}
-            default: break;
+            default: 
+                break;
         }
     }
 
@@ -52,7 +66,7 @@ public class AutoModes {
     
     public static void autoModeOne() { //TWO BALL AUTO
         RobotMap.drivePancake.set(Value.kForward);
-        autoShooter.autoRun(0, 15, -4800);
+        autoShooter.autoRun(0, 15, -4600);
         autoConveyor.autoRun(1, 4, 0.7);
         //conveyor.autoRun(4, 5, 0);
         autoIntake.deployIntake(2, 5, true);

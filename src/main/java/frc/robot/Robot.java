@@ -53,9 +53,9 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     comp = new Compressor(1, PneumaticsModuleType.REVPH);
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
+    m_chooser.setDefaultOption("Default Auto", kDefaultAuto); //EG: Not using this, delete
+    m_chooser.addOption("My Auto", kCustomAuto);   //EG: Not using this, delete
+    SmartDashboard.putData("Auto choices", m_chooser);   //EG: Not using this, delete
     
     RobotMap.initShooter();
     shooter = new Shooter();
@@ -63,19 +63,19 @@ public class Robot extends TimedRobot {
     RobotMap.initIntake();
     intake = new Intake();
 
-    RobotMap.initDriveMotors();
+    RobotMap.initDriveMotors();   //EG: Why is this being init twice?  Remove line 62 and keep this one
     RobotMap.initDrivePancakes();
     drive = new Drive();
 
     RobotMap.initClimb();
     climb = new Climb();
     
-    LEDLights = new LEDLights();
+    LEDLights = new LEDLights();  //EG: Class name same as variable name.  It technically works but will get confusing
 
     timer = new Timer();
     timer.start();
 
-    AHRSGyro.reset();
+    AHRSGyro.reset();  //EG: Shouldnt reset be AFTER constructing the AHRSGyro below?  I doubt this will work right before initializing
     gyro = new AHRSGyro();
 
     RobotMap.initConveyor();
@@ -115,9 +115,12 @@ public class Robot extends TimedRobot {
 
     double robotPressure = 40.16 * (RobotMap.pressureTransducer.getVoltage() - 0.52);
   
-    SmartDashboard.putNumber("Robot Pressure",robotPressure );
+    SmartDashboard.putNumber("Robot Pressure",robotPressure );   //EG: Please add a boolean to dashboard per line below
+    //EG: If robotPressure < 60.0, false, else true  (tells us if the robot pressure is low)
     
     if(isDisabled()) LEDLights.rainbow();
+//EG: Let's not hardcode this here, lets do LEDLights.pattern=4; and then call LEDLights.run();
+
     //LEDLights.singleColor(0, 255, 0);
     limelight.run();
 
@@ -128,6 +131,8 @@ public class Robot extends TimedRobot {
     if (timer.get() > 5 && timer.get() < 6) {
       AHRSGyro.reset();
     }
+    // EG: This will keep calling the reset function for a full second.  Instead, can we create a boolean in Robot
+    // init to false and then put if(time.get() > 5.0 && !alreadyReset) {  AHRSGyro.reset();   alreadyReset=true;}
 
     AutoModes.setAutoMode();
 
@@ -146,12 +151,12 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     //AHRSGyro.reset();
-    m_autoSelected = m_chooser.getSelected();
-    timer.reset();
+    m_autoSelected = m_chooser.getSelected();  //EG: Not used, delete this line
+    timer.reset();    // EG: This is the same timer as the one which resets the gyro, lets use a different one
     drive.initAutoDrive();
     drive.resetEncoders();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+    System.out.println("Auto selected: " + m_autoSelected);   // EG: Delete this, it's already in AutoModes.java
   }
 
   /** This function is called periodically during autonomous. */
