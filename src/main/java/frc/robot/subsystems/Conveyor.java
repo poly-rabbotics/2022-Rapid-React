@@ -32,30 +32,30 @@ public class Conveyor {
     conveyorMotor.setIdleMode(IdleMode.kBrake);
   }
   public void run() {
-    ballDetectedLow = RobotMap.proxSensorLow.get();
-    ballDetectedHigh = RobotMap.proxSensorHigh.get();
+    ballDetectedLow = !RobotMap.proxSensorLow.get();
+    ballDetectedHigh = !RobotMap.proxSensorHigh.get();
     /*
     if (Shooter.upToSpeed) {
       conveyorSpeed = 0.7;
     } else if (!Shooter.upToSpeed){ */
-      if (MechanismsJoystick.conveyor()) {
+      if (MechanismsJoystick.conveyor()&&!ballDetectedHigh) {
         conveyorSpeed = 0.7;
 
       } else if (MechanismsJoystick.conveyor2()){ 
         conveyorSpeed = -0.7;
-      } else if (!ballDetectedLow && ballDetectedHigh) {
+      } else if (ballDetectedLow && !ballDetectedHigh) {
       conveyorSpeed = setpoint;
       ballDetect = true;
       ballSpacer.reset();
       ballSpacer.start();
-    } else if (ballDetectedLow && ballDetect) {
+    } else if (!ballDetectedLow && ballDetect) {
       SmartDashboard.putNumber("Ball Spacer", ballSpacer.get());
       conveyorSpeed = setpoint;
       if (ballSpacer.get() > 0.2) {
         ballDetect = false;
         conveyorSpeed = 0;
       }
-    } else conveyorSpeed = 0;
+    } else if(!MechanismsJoystick.farShot()) conveyorSpeed = 0;
     
     conveyorMotor.set(conveyorSpeed);
 
