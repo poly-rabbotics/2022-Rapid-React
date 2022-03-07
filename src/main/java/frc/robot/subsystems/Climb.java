@@ -62,6 +62,9 @@ public class Climb {
         if (MechanismsJoystick.arm()) {
           //autoClimb();
         }
+        // EG: else, dynamicArmWinch.set(ControlMode.PercentOutput, DAAxis);
+        // EG: staticArmWinch.set(ControlMode.PercentOutput, SAAxis);
+        // Make sure the logic for all this is AFTER your deadband logic below
 
          //PANCAKE PIN RELEASE, SENDS UP ARMS
          
@@ -134,9 +137,9 @@ public class Climb {
         autoStep = 8;
       }
 
-      switch (autoStep) {
+      switch (autoStep) {   //EG: Remove all brackets betwwen cases and add break;
         case 1: { //POP UP ARMS
-          staticArmPancake.set(Value.kReverse);
+          staticArmPancake.set(Value.kReverse); //EG: Does this exist?  Same as dynamicArmPancake
           dynamicArmPancake.set(Value.kReverse);
         }
         case 2: { //PIVOT BACK ARM
@@ -154,12 +157,12 @@ public class Climb {
           staticArmWinch.set(ControlMode.Position, SAHalfWayPosition);
         }
         case 6: { //PIVOT TO MAKE STATIC ARM HIT NEXT BAR, FULLY RETRACT STATIC ARM
-          dynamicArmPivot.set(Value.kReverse);
+          dynamicArmPivot.set(Value.kReverse);   // EG: I'm a bit concerned these will happen too fast relative to eachother, nmaybe they need to be explicit steps
           fullRetractSA();
         }
         case 7: { //FULLY EXTEND DYNAMIC ARM
           initPIDControlDA();
-          dynamicArmWinch.set(ControlMode.Position, 0);
+          dynamicArmWinch.set(ControlMode.Position, 0);  //EG: This needs to be whatever the actual extended position is of the arm, not 0
         }
         case 8: {
 
