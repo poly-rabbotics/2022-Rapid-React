@@ -38,11 +38,12 @@ public class Conveyor {
     if (Shooter.upToSpeed) {
       conveyorSpeed = 0.7;
     } else if (!Shooter.upToSpeed){ */
+
       if (MechanismsJoystick.conveyor()&&!ballDetectedHigh) {
-        //Normal intake, stop at prox switch
+        //Normal conveyance, stop at prox switch
         conveyorSpeed = setpoint;
       }
-      if (MechanismsJoystick.conveyor()&&MechanismsJoystick.farShot()) {
+      else if (MechanismsJoystick.conveyor()&&MechanismsJoystick.farShot()) {
         //Allow conveyor to run when shooter is also activated regardless of prox switch
         conveyorSpeed = setpoint;
       }
