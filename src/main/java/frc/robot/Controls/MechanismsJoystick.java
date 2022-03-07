@@ -6,6 +6,10 @@ import frc.robot.RobotMap;
 public class MechanismsJoystick {
     private static Joystick joystick = RobotMap.mechanismsJoystick;
 
+    public static boolean farShotPressed(){
+      return  joystick.getRawButtonPressed(7); //needs to be given an actual number
+        }
+
      public static boolean farShot(){
         return  joystick.getRawButton(7); //needs to be given an actual number
           }

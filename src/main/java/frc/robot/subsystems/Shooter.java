@@ -34,14 +34,20 @@ public class Shooter {
         upToSpeed = false;
     }
     public void run() {
+
+        if(MechanismsJoystick.farShotPressed())
+        {
+            conveyorDelay.reset();
+            conveyorDelay.start();
+        }
         
        if (MechanismsJoystick.farShot()) {
-        conveyorDelay.start();
+        
         shooterSpeedSetpoint=-4500;
         if(conveyorDelay.get()>1.5) Conveyor.conveyorSpeed=0.8;
         LEDLights.up(2);
         } else if (MechanismsJoystick.closeShot()) {
-            shooterSpeedSetpoint=-1000;
+            shooterSpeedSetpoint=-2000;
         }
          else {
            shooterSpeedSetpoint=0;
