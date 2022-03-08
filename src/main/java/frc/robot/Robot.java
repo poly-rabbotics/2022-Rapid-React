@@ -216,7 +216,8 @@ public class Robot extends TimedRobot {
     */
 
     //LEDS
-    if(Shooter.upToSpeed && !Drive.PIDDriveActive && !Drive.highTorqueModeActive) LEDs.run(5);
+    if(masterTimer.get() > 110 && masterTimer.get() < 112) LEDs.run(12);
+    else if(Shooter.upToSpeed && !Drive.PIDDriveActive && !Drive.highTorqueModeActive) LEDs.run(5);
     else if(Drive.PIDDriveActive && !Drive.highTorqueModeActive) LEDs.run(6);
     else if(Drive.highTorqueModeActive && !Drive.PIDDriveActive) LEDs.run(7);
     else if(Drive.PIDDriveActive && Shooter.upToSpeed) LEDs.run(8);

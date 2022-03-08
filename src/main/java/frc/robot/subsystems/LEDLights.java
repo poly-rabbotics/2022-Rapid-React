@@ -101,6 +101,10 @@ public class LEDLights {
             blinkMultipleColors(0, 0, 255, 255, 100, 0);
             break;
 
+          //40 seconds left / Flashing purple
+          case 12:
+            blink(255, 0, 255);
+
           //Default / Rainbow
           default:
             rainbow();
