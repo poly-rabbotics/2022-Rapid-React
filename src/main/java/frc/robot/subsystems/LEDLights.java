@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.Timer;
 
 /**
  * 
- * LEDs:
+ * LEDs:pp
  * Green (Moving Upward):     Ready to shoot
  * Green (static):            Idling
  * Yellow (Static):           Teleop Activated
@@ -55,20 +55,30 @@ public class LEDLights {
         m_led.start();
       }
 
-      public void run(int pattern, int[] values) {
+      public void run(int pattern) {
          switch(pattern){
+            //disabled/rainbow
             case 1:
-                up(values[0]);
-                break;
-
+              rainbow();
+              break;
+            //teleop/greengold  
             case 2:
-                singleColor(values[0], values[1], values[2]);
-
+              GreenGold();
+              break;
+            //autonomous
             case 3:
-                blink(values[0], values[1], values[2]);
-                
+            //one ball recieved
             case 4:
-                rainbow();
+            //two balls recieved
+            case 5:
+            //ready to shoot
+            case 6:
+            //shooter up to speed
+            case 7:
+            //PID drive enabled
+            case 8:
+            
+
 
             default:
                 singleColor(0,0,0);
@@ -127,20 +137,6 @@ public class LEDLights {
             m_ledBuffer.setRGB(setbrightestone + 5, 125, 83, 0);
             m_ledBuffer.setRGB(setbrightestone + 6, 150, 70, 0);
           }
-
-          /*
-          // (int i=setbrightestone;i<setbrightestone+4;i+=4){
-          m_ledBuffer.setRGB(setbrightestone, 25, 25, 0);
-          m_ledBuffer.setRGB(setbrightestone + 1, 75, 75, 0);
-          m_ledBuffer.setRGB(setbrightestone + 2, 150, 150, 0);
-          m_ledBuffer.setRGB(setbrightestone + 3, 255, 255, 0);
-
-          m_ledBuffer.setRGB(55-setbrightestone, 25, 25, 0);
-          m_ledBuffer.setRGB(55-setbrightestone-1, 75, 75, 0);
-          m_ledBuffer.setRGB(55-setbrightestone-2, 150, 150, 0);
-          m_ledBuffer.setRGB(55-setbrightestone-3, 255, 255, 0);
-         // }
-         */
          setbrightestone+=1;
          if(setbrightestone>75)
             setbrightestone=0;
@@ -148,10 +144,6 @@ public class LEDLights {
             m_led.setData(m_ledBuffer);
 
             if(upCounter >= 76) {
-              /*for(int i = 0; i < 112; i++) {
-                if(!greenUp) m_ledBuffer.setRGB(i, 150, 70, 0);
-                else if(greenUp) m_ledBuffer.setRGB(i, 0, 150, 0);
-              }*/
               greenUp = !greenUp;
               upCounter = 0;
             }
