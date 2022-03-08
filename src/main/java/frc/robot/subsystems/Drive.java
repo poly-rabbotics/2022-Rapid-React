@@ -43,7 +43,8 @@ public class Drive {
   static double targetVRight;
   private Field2d field = new Field2d();
   private Limelight limelight;
-  public static boolean PIDDriveActive, highTorqueModeActive;
+  public static boolean PIDDriveActive;
+public boolean highTorqueModeActive;
   boolean rotateInitialized;
   Rotation2d gyroToRadians;
   DifferentialDriveOdometry odometry;

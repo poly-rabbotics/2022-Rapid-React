@@ -71,7 +71,7 @@ public class LEDLights {
               break;
             //one ball recieved/solid purple
             case 4:
-              singleColor(255, 0, 255);
+              singleColor(255, 0, 255); //RR: actually lets change this to solid green if that's not already used for something else
               break;
             //shooter up to speed/flash blue
             case 5:
