@@ -25,7 +25,7 @@ public class Conveyor {
     boolean ballDetect;
     Timer ballSpacer = new Timer();
     boolean ballDetectedLow, ballDetectedHigh;
-    public static int ballCount;
+    public int ballCount;
     
   public Conveyor() {
     conveyorMotor = RobotMap.conveyorMotor;

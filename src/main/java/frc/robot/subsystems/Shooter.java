@@ -16,7 +16,7 @@ public class Shooter {
     static SparkMaxPIDController shooterPIDController;
     static double kP, kI, kD;
     public static LEDLights LEDLights;
-    public static boolean upToSpeed;
+    public boolean upToSpeed;
     Timer conveyorDelay = new Timer();
 
     

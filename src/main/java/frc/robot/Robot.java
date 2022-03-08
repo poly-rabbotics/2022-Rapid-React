@@ -4,15 +4,14 @@
 
 package frc.robot;
 
-import com.kauailabs.navx.frc.AHRS;
+
+import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Controls.DriveJoystick;
 import frc.robot.Controls.MechanismsJoystick;
@@ -217,13 +216,13 @@ public class Robot extends TimedRobot {
 
     //LEDS
     if(masterTimer.get() > 110 && masterTimer.get() < 112) LEDs.run(12);
-    else if(Shooter.upToSpeed && !Drive.PIDDriveActive && !Drive.highTorqueModeActive) LEDs.run(5);
-    else if(Drive.PIDDriveActive && !Drive.highTorqueModeActive) LEDs.run(6);
-    else if(Drive.highTorqueModeActive && !Drive.PIDDriveActive) LEDs.run(7);
-    else if(Drive.PIDDriveActive && Shooter.upToSpeed) LEDs.run(8);
-    else if(Drive.PIDDriveActive && Drive.highTorqueModeActive) LEDs.run(9);
-    else if(Drive.highTorqueModeActive && Shooter.upToSpeed) LEDs.run(11);
-    else if(Conveyor.ballCount > 0) LEDs.run(4);
+    else if(shooter.upToSpeed && !Drive.PIDDriveActive && !drive.highTorqueModeActive) LEDs.run(5);
+    else if(Drive.PIDDriveActive && !drive.highTorqueModeActive) LEDs.run(6);
+    else if(drive.highTorqueModeActive && !Drive.PIDDriveActive) LEDs.run(7);
+    else if(Drive.PIDDriveActive && shooter.upToSpeed) LEDs.run(8);
+    else if(Drive.PIDDriveActive && drive.highTorqueModeActive) LEDs.run(9);
+    else if(drive.highTorqueModeActive && shooter.upToSpeed) LEDs.run(11);
+    else if(conveyor.ballCount > 0) LEDs.run(4);
     else if(MechanismsJoystick.arm()) LEDs.run(10);
     else LEDs.run(0);
   }
@@ -242,5 +241,6 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+  }
 }
