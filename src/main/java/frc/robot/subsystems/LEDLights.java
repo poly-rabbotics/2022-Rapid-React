@@ -47,7 +47,7 @@ public class LEDLights {
     
         
         // Length is expensive to set, so only set it once, then just update data
-        m_ledBuffer = new AddressableLEDBuffer(150);
+        m_ledBuffer = new AddressableLEDBuffer(65);
         m_led.setLength(m_ledBuffer.getLength());
     
         // Set the data
@@ -67,27 +67,41 @@ public class LEDLights {
               break;
             //autonomous
             case 3:
-            //one ball recieved
+              up(2);
+              break;
+            //one ball recieved/solid purple
             case 4:
-            //two balls recieved
+              singleColor(255, 0, 255);
+              break;
+            //shooter up to speed/flash blue
             case 5:
-            //ready to shoot
+              blink(0, 0, 255);
+              break;
+            //PID drive enabled/flash red
             case 6:
-            //shooter up to speed
+              blink(255, 0, 0);
+              break;
+            //High Torque Mode enabled/solid orange
             case 7:
-            //PID drive enabled
+              singleColor(255, 100, 0);
+              break;
+            //Shooter up to speed & PID enabled/flashing blue & red
             case 8:
-            
-
+              blinkMultipleColors(255, 0, 0, 0, 0, 255);
+              break;
+            //HTM & PID Enabled/flashing red & orange
+            case 9:
+              blinkMultipleColors(255, 0, 0, 255, 100, 0);
+              break;
 
             default:
-                singleColor(0,0,0);
+              rainbow();
          }
  
       }
 
       public void singleColor(int r,int g, int b) {
-        for (int i = 0; i < 75; i++) {
+        for (int i = 0; i < m_ledBuffer.getLength(); i++) {
             // Sets the specified LED to the RGB values for red
             m_ledBuffer.setRGB(i, r, g, b);
          }
@@ -119,31 +133,25 @@ public class LEDLights {
           if(!greenUp) {
 
             m_ledBuffer.setRGB(setbrightestone, 150, 70, 0);
-            m_ledBuffer.setRGB(setbrightestone + 1, 125, 83, 0);
             m_ledBuffer.setRGB(setbrightestone + 2, 100, 97, 0);
-            m_ledBuffer.setRGB(setbrightestone + 3, 75, 110, 0);
             m_ledBuffer.setRGB(setbrightestone + 4, 50, 123, 0);
-            m_ledBuffer.setRGB(setbrightestone + 5, 25, 137, 0);
             m_ledBuffer.setRGB(setbrightestone + 6, 0, 150, 0);
 
           }
           
           else if(greenUp) {            
             m_ledBuffer.setRGB(setbrightestone, 0, 150, 0);
-            m_ledBuffer.setRGB(setbrightestone + 1, 25, 137, 0);
             m_ledBuffer.setRGB(setbrightestone + 2, 50, 123, 0);
-            m_ledBuffer.setRGB(setbrightestone + 3, 75, 110, 0);
             m_ledBuffer.setRGB(setbrightestone + 4, 100, 97, 0);
-            m_ledBuffer.setRGB(setbrightestone + 5, 125, 83, 0);
             m_ledBuffer.setRGB(setbrightestone + 6, 150, 70, 0);
           }
          setbrightestone+=1;
-         if(setbrightestone>75)
+         if(setbrightestone>33)
             setbrightestone=0;
             upCounter++;
             m_led.setData(m_ledBuffer);
 
-            if(upCounter >= 76) {
+            if(upCounter >= 34) {
               greenUp = !greenUp;
               upCounter = 0;
             }
@@ -246,7 +254,7 @@ public class LEDLights {
             }
 
          for (int i = startingLED; i < 56; i+=2){
-            m_ledBuffer.setRGB(i, 255, 0, 0);
+            m_ledBuffer.setRGB(i, r, g, b);
              
             }
             counter++;
@@ -258,18 +266,32 @@ public class LEDLights {
         
     }
 
-    public void blue(int setBrighteStone, AddressableLEDBuffer m_ledBuffer) {
-      m_ledBuffer.setRGB(setbrightestone, 25, 25, 255);
-      m_ledBuffer.setRGB(setbrightestone + 1, 75, 75, 255);
-      m_ledBuffer.setRGB(setbrightestone + 2, 150, 150, 255);
-      m_ledBuffer.setRGB(setbrightestone + 3, 255, 255, 255);
-    }
+    public void blinkMultipleColors(int r1, int g1, int b1, int r2, int g2, int b2)
+    {
+        int startingLED;
+        if (blinkeven)  {
+            startingLED=1;
+        }
+        else startingLED = 0;
+        
 
-    public void green(int setBrighteStone, AddressableLEDBuffer m_ledBuffer) {
-      m_ledBuffer.setRGB(setbrightestone, 25, 255, 25);
-      m_ledBuffer.setRGB(setbrightestone + 1, 75, 255, 75);
-      m_ledBuffer.setRGB(setbrightestone + 2, 150, 255, 150);
-      m_ledBuffer.setRGB(setbrightestone + 3, 255, 255, 255);
+        for (int i = 0; i < 56; i++){
+            m_ledBuffer.setRGB(i, r2, g2, b2);
+        
+            }
+
+         for (int i = startingLED; i < 56; i+=2){
+            m_ledBuffer.setRGB(i, r1, g1, b1);
+             
+            }
+
+            counter++;
+            if (counter % 10 == 0)
+            {
+                blinkeven = !blinkeven;
+                m_led.setData(m_ledBuffer);
+            }
+        
     }
 
 }
