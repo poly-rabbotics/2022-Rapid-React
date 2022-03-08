@@ -128,8 +128,8 @@ public class Robot extends TimedRobot {
       isGyroReset = true;
     }
     
-    if (masterTimer.get() > 40 && masterTimer.get() < 41) {
-      DriveJoystick.rumble(0.5);
+    if (masterTimer.get() > 110 && masterTimer.get() < 111) {
+      DriveJoystick.rumble(0.1);
     } else {
       DriveJoystick.rumble(0);
     }
@@ -185,6 +185,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     gyro.reset();
+    Climb.dynamicArmWinch.setSelectedSensorPosition(0);
+    Climb.staticArmWinch.setSelectedSensorPosition(0);
+    Climb.autoStep = 0;
   }
 
   /** This function is called periodically during operator control. */
