@@ -114,9 +114,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("Pressure Good?", pressureGood);  
     
     if(isDisabled()) LEDs.run(1);
-//EG: Let's not hardcode this here, lets do LEDLights.pattern=4; and then call LEDLights.run();
 
-    //LEDLights.singleColor(0, 255, 0);
     limelight.run();
 
     //CLIMB DATA
@@ -193,14 +191,13 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
+    LEDs.run(2);
     shooter.run();
     conveyor.run();
     intake.run();
     climb.run();
     drive.run();
     limelight.run();
-    //LEDLights.GreenGold();
-    //if(MechanismsJoystick.arm()) LEDLights.nice();
 
     /*
     
@@ -218,7 +215,13 @@ public class Robot extends TimedRobot {
     }
     */
 
-    
+    //LEDS
+    if(conveyor.ballCount > 0) LEDs.run(4);
+    else if(shooter.upToSpeed) LEDs.run(5);
+    else if(drive.PIDDriveActive && !drive.highTorqueModeActive) LEDs.run(6);
+    else if(drive.highTorqueModeActive && !drive.PIDDriveActive) LEDs.run(7);
+    else if(drive.PIDDriveActive && shooter.upToSpeed) LEDs.run(8);
+    else if(drive.PIDDriveActive && drive.highTorqueModeActive) LEDs.run(9);
     
   }
 

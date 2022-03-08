@@ -63,7 +63,6 @@ public class Conveyor {
     if (ballDetectedHigh && ballDetectedLow) ballCount = 2;
 
     conveyorMotor.set(conveyorSpeed);
-  
     
   }
 
