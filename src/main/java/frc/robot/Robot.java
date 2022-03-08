@@ -113,7 +113,7 @@ public class Robot extends TimedRobot {
     pressureGood = robotPressure > 60;
     SmartDashboard.putBoolean("Pressure Good?", pressureGood);  
     
-    if(isDisabled()) LEDs.run(4, [1]);
+    if(isDisabled()) LEDs.run(1);
 //EG: Let's not hardcode this here, lets do LEDLights.pattern=4; and then call LEDLights.run();
 
     //LEDLights.singleColor(0, 255, 0);
