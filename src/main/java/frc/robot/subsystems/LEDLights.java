@@ -96,6 +96,11 @@ public class LEDLights {
             autoClimbLEDs(1);
             break;
 
+          //HTM & Shooter up to speed / Flashing blue and orange
+          case 11:
+            blinkMultipleColors(0, 0, 255, 255, 100, 0);
+            break;
+
           //Default / Rainbow
           default:
             rainbow();
