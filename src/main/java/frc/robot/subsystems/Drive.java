@@ -377,8 +377,8 @@ public class Drive {
   public void resetEncoders() { //SETS THE ENCODER COUNTS TO ZERO BOTH SIDES
     //leftBack.getSensorCollection().setAnalogPosition(0, 30);
     //rightBack.getSensorCollection().setAnalogPosition(0, 30);
-    //leftBack.setSelectedSensorPosition(0);
-    //rightBack.setSelectedSensorPosition(0);
+    leftBack.setSelectedSensorPosition(0);
+    rightBack.setSelectedSensorPosition(0);
     
   }
   public void moveByInches(double startTime, double endTime, double inches) { //AUTONOMOUS DRIVE METHOD

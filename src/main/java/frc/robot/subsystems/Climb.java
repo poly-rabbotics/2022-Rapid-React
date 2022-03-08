@@ -22,10 +22,11 @@ public class Climb {
     static Timer climbTimer;
     static double DAHalfwayPosition, SAHalfWayPosition, DARetractPosition, SARetractPosition;
     static int autoStep = 0;
-    static boolean highBarReached;
+    static boolean highBarReached, traversalBarReached;
     static boolean SALimitSwitch, DALimitSwitch;
     static double SAAxis, DAAxis;
     static boolean SARetracted, DARetracted;
+
 
     public Climb() {
         staticArmPancake = RobotMap.staticArmPancake;
@@ -58,14 +59,6 @@ public class Climb {
       SmartDashboard.putNumber("SA Encoder Counts", staticArmWinch.getSelectedSensorPosition());
       SmartDashboard.putNumber("DA Encoder Counts", dynamicArmWinch.getSelectedSensorPosition());
 
-
-        if (MechanismsJoystick.arm()) {
-          //autoClimb();
-        }
-        // EG: else, dynamicArmWinch.set(ControlMode.PercentOutput, DAAxis);
-        // EG: staticArmWinch.set(ControlMode.PercentOutput, SAAxis);
-        // Make sure the logic for all this is AFTER your deadband logic below
-
          //PANCAKE PIN RELEASE, SENDS UP ARMS
          
         if (ClimbJoystick.armPancakeRetract()) {
@@ -97,8 +90,12 @@ public class Climb {
         if (DAAxis < 0 && DARetracted) {
           DAAxis = 0;
         }
-        dynamicArmWinch.set(ControlMode.PercentOutput, DAAxis);
-        staticArmWinch.set(ControlMode.PercentOutput, SAAxis);
+        if (MechanismsJoystick.arm()) {
+          //autoClimb();
+        } else {
+          dynamicArmWinch.set(ControlMode.PercentOutput, DAAxis);
+          staticArmWinch.set(ControlMode.PercentOutput, SAAxis);
+        }
 
         /*
         if (runAutoClimbHigh) { //AT THIS POINT, STATIC ARM WILL ALREADY BE HOOKED ON TO MIDDLE BAR
@@ -130,43 +127,36 @@ public class Climb {
 
     public static void autoClimb() { //auto climb step by step
       if (MechanismsJoystick.climbPressed()) autoStep += 1; //increment step every time the button is pressed
-      if (autoStep == 8 && !highBarReached) {
+      if (autoStep == 9 && !highBarReached) {
         autoStep = 4; //jump back to step 
         highBarReached = true;
-      } if (autoStep == 8 && highBarReached) {
-        autoStep = 8;
+      } if (autoStep == 9 && highBarReached) {
+        autoStep = 9;
+        traversalBarReached = true;
       }
 
-      switch (autoStep) {   //EG: Remove all brackets betwwen cases and add break;
-        case 1: { //POP UP ARMS
-          staticArmPancake.set(Value.kReverse); //EG: Does this exist?  Same as dynamicArmPancake
+      switch (autoStep) { 
+        case 1:  //POP UP ARMS
           dynamicArmPancake.set(Value.kReverse);
-        }
-        case 2: { //PIVOT BACK ARM
+        case 2:  //PIVOT BACK ARM
           dynamicArmPivot.set(Value.kReverse);
-        }
-        case 3: { //FULLY RETRACT STATIC ARM
-          fullRetractSA();
-        }        
-        case 4: { //PIVOT FORWARD ARM TO HIT DYNAMIC ARM
+        case 3:  //FULLY RETRACT STATIC ARM
+          fullRetractSA();        
+        case 4:  //PIVOT FORWARD ARM TO HIT DYNAMIC ARM
           dynamicArmPivot.set(Value.kForward);
-        }
-        case 5: { //RETRACT DYNAMIC ARM FULLY AND EXTEND STATIC ARM SLIGHTLY
+        case 5:  //RETRACT DYNAMIC ARM FULLY AND EXTEND STATIC ARM SLIGHTLY
           fullRetractDA();
           initPIDControlSA();
           staticArmWinch.set(ControlMode.Position, SAHalfWayPosition);
-        }
-        case 6: { //PIVOT TO MAKE STATIC ARM HIT NEXT BAR, FULLY RETRACT STATIC ARM
-          dynamicArmPivot.set(Value.kReverse);   // EG: I'm a bit concerned these will happen too fast relative to eachother, nmaybe they need to be explicit steps
+        case 6:  //PIVOT TO MAKE STATIC ARM HIT NEXT BAR, FULLY RETRACT STATIC ARM
+          dynamicArmPivot.set(Value.kReverse); 
+        case 7: 
           fullRetractSA();
-        }
-        case 7: { //FULLY EXTEND DYNAMIC ARM
+        case 8:  //FULLY EXTEND DYNAMIC ARM
           initPIDControlDA();
           dynamicArmWinch.set(ControlMode.Position, 0);  //EG: This needs to be whatever the actual extended position is of the arm, not 0
-        }
-        case 8: {
+        case 9: 
 
-        }
          
       }
     }

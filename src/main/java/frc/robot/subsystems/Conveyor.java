@@ -25,11 +25,13 @@ public class Conveyor {
     boolean ballDetect;
     Timer ballSpacer = new Timer();
     boolean ballDetectedLow, ballDetectedHigh;
+    public static int ballCount;
     
   public Conveyor() {
     conveyorMotor = RobotMap.conveyorMotor;
     reversed = false;
     conveyorMotor.setIdleMode(IdleMode.kBrake);
+    ballCount = 1;
   }
   public void run() {
     ballDetectedLow = !RobotMap.proxSensorLow.get();
@@ -48,6 +50,7 @@ public class Conveyor {
       ballDetect = true;
       ballSpacer.reset();
       ballSpacer.start();
+      ballCount = 1;
     } else if (!ballDetectedLow && ballDetect) {
       SmartDashboard.putNumber("Ball Spacer", ballSpacer.get());
       conveyorSpeed = setpoint;
@@ -57,8 +60,10 @@ public class Conveyor {
       }
     } else if(!MechanismsJoystick.farShot()) conveyorSpeed = 0;
     
-    conveyorMotor.set(conveyorSpeed);
+    if (ballDetectedHigh && ballDetectedLow) ballCount = 2;
 
+    conveyorMotor.set(conveyorSpeed);
+  
     
   }
 

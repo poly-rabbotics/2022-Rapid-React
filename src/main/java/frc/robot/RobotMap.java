@@ -10,11 +10,12 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AnalogInput;
 public class RobotMap {
     
-    public static final Joystick driveJoystick = new Joystick(0);
+    public static final XboxController driveJoystick = new XboxController(0);
     public static final Joystick mechanismsJoystick = new Joystick(1);
     public static final Joystick climbJoystick = new Joystick(2);
     

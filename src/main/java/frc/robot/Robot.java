@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Controls.DriveJoystick;
 import frc.robot.Controls.MechanismsJoystick;
 import frc.robot.subsystems.AHRSGyro;
 import frc.robot.subsystems.AutoModes;
@@ -127,6 +128,11 @@ public class Robot extends TimedRobot {
       isGyroReset = true;
     }
     
+    if (masterTimer.get() > 40 && masterTimer.get() < 41) {
+      DriveJoystick.rumble(0.5);
+    } else {
+      DriveJoystick.rumble(0);
+    }
 
     AutoModes.setAutoMode();
 
