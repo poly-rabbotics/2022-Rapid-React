@@ -213,13 +213,15 @@ public class Robot extends TimedRobot {
     */
 
     //LEDS
-    if(conveyor.ballCount > 0) LEDs.run(4);
-    else if(shooter.upToSpeed) LEDs.run(5);
-    else if(drive.PIDDriveActive && !drive.highTorqueModeActive) LEDs.run(6);
-    else if(drive.highTorqueModeActive && !drive.PIDDriveActive) LEDs.run(7);
-    else if(drive.PIDDriveActive && shooter.upToSpeed) LEDs.run(8);
-    else if(drive.PIDDriveActive && drive.highTorqueModeActive) LEDs.run(9);
-    
+    if(Conveyor.ballCount > 0) LEDs.run(4);
+    else if(Shooter.upToSpeed) LEDs.run(5);
+    else if(Drive.PIDDriveActive && !Drive.highTorqueModeActive) LEDs.run(6);
+    else if(Drive.highTorqueModeActive && !Drive.PIDDriveActive) LEDs.run(7);
+    else if(Drive.PIDDriveActive && Shooter.upToSpeed) LEDs.run(8);
+    else if(Drive.PIDDriveActive && Drive.highTorqueModeActive) LEDs.run(9);
+
+    else if(MechanismsJoystick.arm()) LEDs.run(10);
+    else LEDs.run(0);
   }
 
   /** This function is called once when the robot is disabled. */
