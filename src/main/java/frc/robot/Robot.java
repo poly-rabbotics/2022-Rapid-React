@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Controls.DriveJoystick;
+import frc.robot.Controls.MechanismsJoystick;
 import frc.robot.subsystems.AHRSGyro;
 import frc.robot.subsystems.AutoModes;
 import frc.robot.subsystems.Climb;
@@ -214,13 +215,15 @@ public class Robot extends TimedRobot {
     */
 
     //LEDS
-    if(conveyor.ballCount > 0) LEDs.run(4);
-    else if(shooter.upToSpeed) LEDs.run(5);
+    if(shooter.upToSpeed && !Drive.PIDDriveActive && !drive.highTorqueModeActive) LEDs.run(5);
     else if(Drive.PIDDriveActive && !drive.highTorqueModeActive) LEDs.run(6);
     else if(drive.highTorqueModeActive && !Drive.PIDDriveActive) LEDs.run(7);
     else if(Drive.PIDDriveActive && shooter.upToSpeed) LEDs.run(8);
     else if(Drive.PIDDriveActive && drive.highTorqueModeActive) LEDs.run(9);
-    
+    else if(drive.highTorqueModeActive && shooter.upToSpeed) LEDs.run(11);
+    else if(conveyor.ballCount > 0) LEDs.run(4);
+    else if(MechanismsJoystick.arm()) LEDs.run(10);
+    else LEDs.run(0);
   }
 
   /** This function is called once when the robot is disabled. */
