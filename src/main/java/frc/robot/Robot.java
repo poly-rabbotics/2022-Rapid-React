@@ -64,7 +64,7 @@ public class Robot extends TimedRobot {
     RobotMap.initClimb();
     climb = new Climb();
     
-    LEDs = new LEDLights();  //EG: Class name same as variable name.  It technically works but will get confusing
+    LEDs = new LEDLights();
 
     masterTimer = new Timer();
     masterTimer.start();
@@ -113,7 +113,7 @@ public class Robot extends TimedRobot {
     pressureGood = robotPressure > 60;
     SmartDashboard.putBoolean("Pressure Good?", pressureGood);  
     
-    //if(isDisabled()) LEDs.rainbow();
+    if(isDisabled()) LEDs.run(4, [1]);
 //EG: Let's not hardcode this here, lets do LEDLights.pattern=4; and then call LEDLights.run();
 
     //LEDLights.singleColor(0, 255, 0);
