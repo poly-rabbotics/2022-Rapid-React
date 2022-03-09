@@ -41,7 +41,7 @@ public class Intake {
       intakeSpeed = -intakeSpeed;
     } */
 
-    if (DriveJoystick.runIntake()) {
+    if (DriveJoystick.runIntake() && intakeSolenoid.get() == Value.kForward) {
       intake.set(intakeSpeed);
     } else intake.set(0);
 

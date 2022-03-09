@@ -61,9 +61,9 @@ public class LEDLights {
             up(2);
             break;
 
-          //One ball recieved / Solid purple
+          //One ball recieved / Solid green
           case 4:
-            singleColor(255, 0, 255);
+            singleColor(0, 255, 0);
             break;
 
           //Shooter up to speed / Flash blue
@@ -214,7 +214,7 @@ public class LEDLights {
       }
 
       //Makes the LED lights run the assigned colors
-      for(int i = 0; i < 100; i++) {
+      for(int i = 0; i < m_ledBuffer.getLength(); i++) {
           if(i % 2 == 0) m_ledBuffer.setRGB(i, colorOne[0], colorOne[1], colorOne[2]);
          else {
           m_ledBuffer.setRGB(i, colorTwo[0], colorTwo[1], colorTwo[2]);

@@ -88,7 +88,10 @@ public class AutoModes {
     }
 
     public static void autoModeTwo() { //shoot 1 ball and leave tarmac
-        
+        autoShooter.autoRun(0, 6, -4600);
+        autoConveyor.autoRun(1, 4, 0.7);
+        autoIntake.deployIntake(2, 5, true);
+        autoDrive.moveByInches(3, 5, 60);
     }
 
     public static void autoModeThree() { //delay, then shoot 1 and leave tarmac
