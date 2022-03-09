@@ -35,7 +35,7 @@ public class RobotMap {
     public static DoubleSolenoid dynamicArmPancake;
     public static DoubleSolenoid dynamicArmPivot;
     public static DoubleSolenoid intakeSolenoid;
-    public static final AddressableLED led = new AddressableLED(0);
+    public static final AddressableLED led = new AddressableLED(1);
 
     public static void initDriveMotors() {
         leftBack = new TalonSRX(1);
