@@ -73,7 +73,7 @@ public class LEDLights {
 
           //PID drive enabled / Flash red
           case 6:
-            blink(255, 0, 0);
+            singleColor(255, 0, 0);
             break;
 
           //High Torque Mode enabled / Solid orange
@@ -307,12 +307,12 @@ public class LEDLights {
       else startingLED = 0;
         
       //Sets the LEDs to the first color
-      for (int i = 0; i < 56; i++){
+      for (int i = 0; i < m_ledBuffer.getLength(); i++){
         m_ledBuffer.setRGB(i, r2, g2, b2);
       }
 
       //Sets the LEDs to the second color
-      for (int i = startingLED; i < 56; i+=2){
+      for (int i = startingLED; i < m_ledBuffer.getLength(); i+=2){
         m_ledBuffer.setRGB(i, r1, g1, b1);
       }
 

@@ -190,7 +190,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    LEDs.run(2);
     shooter.run();
     conveyor.run();
     intake.run();
@@ -217,13 +216,14 @@ public class Robot extends TimedRobot {
     //LEDS
     if(masterTimer.get() > 110 && masterTimer.get() < 112) LEDs.run(12);
     else if(shooter.upToSpeed && !Drive.PIDDriveActive && !drive.highTorqueModeActive) LEDs.run(5);
-    else if(Drive.PIDDriveActive && !drive.highTorqueModeActive) LEDs.run(6);
+    else if(Drive.PIDDriveActive && !drive.highTorqueModeActive) LEDs.run(9);
     else if(drive.highTorqueModeActive && !Drive.PIDDriveActive) LEDs.run(7);
     else if(Drive.PIDDriveActive && shooter.upToSpeed) LEDs.run(8);
-    else if(Drive.PIDDriveActive && drive.highTorqueModeActive) LEDs.run(9);
+    else if(Drive.PIDDriveActive && drive.highTorqueModeActive) LEDs.run(6);
     else if(drive.highTorqueModeActive && shooter.upToSpeed) LEDs.run(11);
     else if(conveyor.ballCount > 0) LEDs.run(4);
     else if(MechanismsJoystick.arm()) LEDs.run(10);
+    else if (!isDisabled()) LEDs.run(2);
     else LEDs.run(0);
   }
 

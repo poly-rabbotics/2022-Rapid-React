@@ -71,8 +71,8 @@ public class Climb {
               dynamicArmPivot.set(Value.kReverse);
           } else dynamicArmPivot.set(Value.kForward);
       }
-      SAAxis = ClimbJoystick.axis5();
-      DAAxis = ClimbJoystick.axis1();
+      SAAxis = -ClimbJoystick.axis5();
+      DAAxis = -ClimbJoystick.axis1();
 
       if ((SAAxis < 0.15) && (SAAxis > -0.15)) { // JOYSTICK DEADZONE
         SAAxis = 0;

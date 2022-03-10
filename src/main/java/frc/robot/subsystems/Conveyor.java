@@ -31,11 +31,12 @@ public class Conveyor {
     conveyorMotor = RobotMap.conveyorMotor;
     reversed = false;
     conveyorMotor.setIdleMode(IdleMode.kBrake);
-    ballCount = 1;
+    ballCount = 0;
   }
   public void run() {
     ballDetectedLow = !RobotMap.proxSensorLow.get();
     ballDetectedHigh = !RobotMap.proxSensorHigh.get();
+    
     /*
     if (Shooter.upToSpeed) {
       conveyorSpeed = 0.7;
@@ -58,9 +59,10 @@ public class Conveyor {
         ballDetect = false;
         conveyorSpeed = 0;
       }
-    } else if(!MechanismsJoystick.farShot()) conveyorSpeed = 0;
+    } else if(!MechanismsJoystick.farShot() && !MechanismsJoystick.closeShot()) conveyorSpeed = 0;
     
     if (ballDetectedHigh && ballDetectedLow) ballCount = 2;
+    else ballCount = 0;
 
     conveyorMotor.set(conveyorSpeed);
     
