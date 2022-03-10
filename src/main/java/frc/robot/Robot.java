@@ -46,9 +46,12 @@ public class Robot extends TimedRobot {
   boolean isGyroReset = false;
   Compressor comp;
   PneumaticHub hub;
+  AutoModes auto;
   
   @Override
   public void robotInit() {
+    auto = new AutoModes();
+
     comp = new Compressor(1, PneumaticsModuleType.REVPH);
     
     RobotMap.initShooter();
@@ -131,7 +134,7 @@ public class Robot extends TimedRobot {
       DriveJoystick.rumble(0);
     }
 
-    AutoModes.setAutoMode();
+    auto.setAutoMode();
 
   }
 
@@ -156,7 +159,7 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     
-    AutoModes.runAuto();
+    auto.runAuto();
     
     /*
     RobotMap.drivePancake.set(Value.kForward);

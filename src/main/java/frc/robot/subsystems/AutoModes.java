@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
@@ -15,14 +14,13 @@ public class AutoModes {
     static int autoSwitchOne, autoSwitchTwo, autoSwitchThree;
     public AutoModes() {
 
-        //EG: These cannot be re-constructed, that need to reference existing Robot objects
         autoShooter = Robot.shooter;
         autoConveyor = Robot.conveyor;
         autoIntake = Robot.intake;
         autoDrive = Robot.drive;
     }
 
-    public static void setAutoMode() {
+    public void setAutoMode() {
         if (MechanismsJoystick.autoSwitchOne()) autoSwitchOne = 1; //0 or 1
         else autoSwitchOne = 0;
         if (MechanismsJoystick.autoSwitchTwo()) autoSwitchTwo = 2; //0 or 2
@@ -34,7 +32,7 @@ public class AutoModes {
         SmartDashboard.putNumber("Selected Auto", selectedMode);
     } 
 
-    public static void runAuto() {
+    public void runAuto() {
         
         switch (selectedMode) {
             case 0: 
@@ -110,7 +108,7 @@ public class AutoModes {
     }
 
     public static void autoModeFour() {
-        
+        autoDrive.turnByDegrees(0, 5, 180);
     }
 
     public static void autoModeFive() {

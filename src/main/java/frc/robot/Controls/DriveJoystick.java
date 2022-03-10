@@ -69,7 +69,7 @@ public class DriveJoystick {
     return joystick.getRawButton(1); //A button
   }
 
-  // SLOW MODE (unused, maybe useful later)
+  // SLOW MODE 
   public static boolean dPad(){
     if(getPreciseFront() || getPreciseRight() || getPreciseBack() || getPreciseLeft()){
       return true;
@@ -128,8 +128,11 @@ public class DriveJoystick {
     return joystick.getRawButton(6);
   }
 
+  public static boolean runIntakeReverse() {
+    return joystick.getRawButton(5);
+  }
   public static boolean toggleIntakePiston() {
-    return joystick.getRawButtonPressed(5);
+    return joystick.getRawAxis(2) > 0.7;
   }
 
   public static void rumble(double intensity) {
