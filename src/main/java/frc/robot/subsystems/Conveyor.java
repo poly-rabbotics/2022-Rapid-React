@@ -25,15 +25,18 @@ public class Conveyor {
     boolean ballDetect;
     Timer ballSpacer = new Timer();
     boolean ballDetectedLow, ballDetectedHigh;
+    public int ballCount;
     
   public Conveyor() {
     conveyorMotor = RobotMap.conveyorMotor;
     reversed = false;
     conveyorMotor.setIdleMode(IdleMode.kBrake);
+    ballCount = 0;
   }
   public void run() {
     ballDetectedLow = !RobotMap.proxSensorLow.get();
     ballDetectedHigh = !RobotMap.proxSensorHigh.get();
+    
     /*
     if (Shooter.upToSpeed) {
       conveyorSpeed = 0.7;
@@ -51,11 +54,11 @@ public class Conveyor {
         // Run conveyor backwards
         conveyorSpeed = -1*setpoint;
       } else if (ballDetectedLow && !ballDetectedHigh) {
-        // Auto intake feature
-        conveyorSpeed = setpoint;
-        ballDetect = true;
-        ballSpacer.reset();
-        ballSpacer.start();
+      conveyorSpeed = setpoint;
+      ballDetect = true;
+      ballSpacer.reset();
+      ballSpacer.start();
+      ballCount = 1;
     } else if (!ballDetectedLow && ballDetect) {
         // Executed for indexing purposes
       SmartDashboard.putNumber("Ball Spacer", ballSpacer.get());
@@ -64,15 +67,17 @@ public class Conveyor {
         ballDetect = false;
         conveyorSpeed = 0;
       }
-    } else conveyorSpeed = 0;
+    } else if(!MechanismsJoystick.farShot() && !MechanismsJoystick.closeShot() && !MechanismsJoystick.conveyor()) conveyorSpeed = 0;
     
-    conveyorMotor.set(conveyorSpeed);
+    if (ballDetectedHigh && ballDetectedLow) ballCount = 2;
+    else ballCount = 0;
 
+    conveyorMotor.set(conveyorSpeed);
     
   }
 
   public void autoRun(double startTime, double endTime, double conveyorSpeed) {
-    double time = Robot.timer.get();
+    double time = Robot.autoTimer.get();
     if (time > startTime && time < endTime) {
       conveyorMotor.set(conveyorSpeed);
     }

@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
@@ -15,14 +14,13 @@ public class AutoModes {
     static int autoSwitchOne, autoSwitchTwo, autoSwitchThree;
     public AutoModes() {
 
-        //EG: These cannot be re-constructed, that need to reference existing Robot objects
         autoShooter = Robot.shooter;
         autoConveyor = Robot.conveyor;
         autoIntake = Robot.intake;
         autoDrive = Robot.drive;
     }
 
-    public static void setAutoMode() {
+    public void setAutoMode() {
         if (MechanismsJoystick.autoSwitchOne()) autoSwitchOne = 1; //0 or 1
         else autoSwitchOne = 0;
         if (MechanismsJoystick.autoSwitchTwo()) autoSwitchTwo = 2; //0 or 2
@@ -34,8 +32,8 @@ public class AutoModes {
         SmartDashboard.putNumber("Selected Auto", selectedMode);
     } 
 
-    public static void runAuto() {
-        //EG: Case structures dont use brackets for each case... this may not hurt anything but it's not standard
+    public void runAuto() {
+        
         switch (selectedMode) {
             case 0: 
                 autoModeZero(); 
@@ -49,10 +47,18 @@ public class AutoModes {
             case 3:
                 autoModeThree();
                 break;
-            case 4: {autoModeFour(); break;}  // EG: Fix the rest of these...
-            case 5: {autoModeFive(); break;}
-            case 6: {autoModeSix(); break;}
-            case 7: {autoModeSeven(); break;}
+            case 4: 
+                autoModeFour(); 
+                break;  
+            case 5: 
+                autoModeFive(); 
+                break;
+            case 6: 
+                autoModeSix(); 
+                break;
+            case 7: 
+                autoModeSeven(); 
+                break;
             default: 
                 break;
         }
@@ -68,27 +74,39 @@ public class AutoModes {
         RobotMap.drivePancake.set(Value.kForward);
         autoShooter.autoRun(0, 15, -4600);
         autoConveyor.autoRun(1, 4, 0.7);
+        autoConveyor.autoRun(4, 6, 0);
         //conveyor.autoRun(4, 5, 0);
         autoIntake.deployIntake(2, 5, true);
         autoDrive.moveByInches(3, 5, 60); //fix this distance setpoint for actual field geometry
         autoIntake.autoRun(3, 15, 0.5);
         autoDrive.moveByInches(6, 8, 0);
-        autoConveyor.autoRun(4, 10, 0.2);
-        autoConveyor.autoRun(10, 15, 0.7);
-        autoIntake.deployIntake(7, 12, false);
-        autoIntake.autoRun(6, 15, 0);
+        autoConveyor.autoRun(6, 15, 0.7);
     }
 
     public static void autoModeTwo() { //shoot 1 ball and leave tarmac
-        
+        autoShooter.autoRun(0, 6, -4600);
+        autoConveyor.autoRun(1, 6, 0.7);
+        autoIntake.deployIntake(2, 5, true);
+        autoDrive.moveByInches(3, 5, 60);
     }
 
-    public static void autoModeThree() { //delay, then shoot 1 and leave tarmac
-        
+    public static void autoModeThree() { //delay 3 seconds, then shoot 1 and leave tarmac
+        RobotMap.drivePancake.set(Value.kForward);
+        autoShooter.autoRun(3, 15, -4600);
+        autoConveyor.autoRun(4, 7, 0.7);
+        //conveyor.autoRun(4, 5, 0);
+        autoIntake.deployIntake(5, 8, true);
+        autoDrive.moveByInches(6, 8, 60); 
+        autoIntake.autoRun(6, 9, 0.5);
+        autoDrive.moveByInches(9, 11, 0);
+        autoConveyor.autoRun(7, 13, 0.4);
+        autoConveyor.autoRun(13, 15, 0.7);
+        autoIntake.deployIntake(9, 15, false);
+        autoIntake.autoRun(9, 15, 0);
     }
 
     public static void autoModeFour() {
-        
+        autoDrive.turnByDegrees(0, 5, 180);
     }
 
     public static void autoModeFive() {

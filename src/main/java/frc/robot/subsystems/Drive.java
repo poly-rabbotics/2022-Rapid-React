@@ -43,7 +43,8 @@ public class Drive {
   static double targetVRight;
   private Field2d field = new Field2d();
   private Limelight limelight;
-  static boolean PIDDriveActive, highTorqueModeActive;
+  public static boolean PIDDriveActive;
+public boolean highTorqueModeActive;
   boolean rotateInitialized;
   Rotation2d gyroToRadians;
   DifferentialDriveOdometry odometry;
@@ -179,14 +180,14 @@ public class Drive {
     }
 
     if (DriveJoystick.getPreciseFront()) { //SLOW MODE
-      move = 0.1;
+      move = 0.25;
     } else if (DriveJoystick.getPreciseBack()) {
-      move = -0.1;
+      move = -0.25;
     }
     if (DriveJoystick.getPreciseRight()) {
-      turn = 0.1;
+      turn = 0.25;
     } else if (DriveJoystick.getPreciseLeft()) {
-      turn = -0.1;
+      turn = -0.25;
     }
     move();
 
@@ -379,10 +380,10 @@ public class Drive {
     //rightBack.getSensorCollection().setAnalogPosition(0, 30);
     leftBack.setSelectedSensorPosition(0);
     rightBack.setSelectedSensorPosition(0);
-
+    
   }
   public void moveByInches(double startTime, double endTime, double inches) { //AUTONOMOUS DRIVE METHOD
-    double time = Robot.timer.get();
+    double time = Robot.autoTimer.get();
     if (time < endTime && time > startTime) {
       leftBack.set(ControlMode.Position, inches * 1120);
       rightBack.set(ControlMode.Position, inches * -1120);
@@ -390,7 +391,7 @@ public class Drive {
   }
 
   public boolean turnByDegrees(double startTime, double endTime, double finalAngle) { //AUTONOMOUS TURN METHOD
-    double time = Robot.timer.get();
+    double time = Robot.autoTimer.get();
     double initialPosition = leftBack.getSelectedSensorPosition();
     
     if (time < endTime && time > startTime) {
@@ -403,7 +404,7 @@ public class Drive {
       rightBack.getSensorCollection().setAnalogPosition(0, 30);
       leftBack.setSelectedSensorPosition(0);
       rightBack.setSelectedSensorPosition(0);
-      AHRSGyro.reset();
+      gyro.reset();
     }
 
     if (leftBack.getSelectedSensorPosition() > positionSetpoint - 100
@@ -419,7 +420,7 @@ public class Drive {
         rightBack.getSensorCollection().setAnalogPosition(0, 30);
         leftBack.setSelectedSensorPosition(0);
         rightBack.setSelectedSensorPosition(0);
-        AHRSGyro.reset();
+        gyro.reset();
         return false;
       }
     } else { // Encoder target not yet reached

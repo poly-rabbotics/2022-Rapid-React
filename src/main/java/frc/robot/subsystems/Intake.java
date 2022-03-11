@@ -28,12 +28,14 @@ public class Intake {
     static boolean intakeDown;
     static double intakeWinchPower = 0;
     static DoubleSolenoid intakeSolenoid;
+    static boolean pneumaticsTransitioning;
 
   public Intake() {
     intakeSolenoid = RobotMap.intakeSolenoid;
     intake = RobotMap.intakeMotor;
     intakeSpeed = 0.6;
     intake.setIdleMode(IdleMode.kBrake);
+    pneumaticsTransitioning = false;
   }
   public void run() {
     
@@ -41,22 +43,24 @@ public class Intake {
       intakeSpeed = -intakeSpeed;
     } */
 
-    if (DriveJoystick.runIntake()) {
+    if ((DriveJoystick.runIntake() || MechanismsJoystick.midShot()) && intakeSolenoid.get() == Value.kForward) {
       intake.set(intakeSpeed);
+    } else if (DriveJoystick.runIntakeReverse() && intakeSolenoid.get() == Value.kForward) {
+      intake.set(-intakeSpeed);
     } else intake.set(0);
 
     intakePneumatics();
   }
 
   public void autoRun(double startTime, double endTime, double intakeSpeed) {
-    double time = Robot.timer.get();
+    double time = Robot.autoTimer.get();
     if (time > startTime && time < endTime) {
       intake.set(intakeSpeed);
     }
   }
 
   public void deployIntake(double startTime, double endTime, boolean isDeployed) {
-    double time = Robot.timer.get();
+    double time = Robot.autoTimer.get();
     if (time > startTime && time < endTime) {
       if (isDeployed) {
         RobotMap.intakeSolenoid.set(Value.kForward);
@@ -68,14 +72,15 @@ public class Intake {
   }
 
 public static void intakePneumatics() {
-    if(DriveJoystick.toggleIntakePiston()) {
+    if(DriveJoystick.toggleIntakePiston() && !pneumaticsTransitioning) {
+      pneumaticsTransitioning = true;
         if (RobotMap.intakeSolenoid.get() == Value.kForward) {
           RobotMap.intakeSolenoid.set(Value.kReverse);
         }
         else RobotMap.intakeSolenoid.set(Value.kForward);
-        
 
-    }
+    } 
+    if (!DriveJoystick.toggleIntakePiston()) pneumaticsTransitioning = false;
     
 }
 

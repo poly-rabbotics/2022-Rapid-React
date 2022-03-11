@@ -4,11 +4,13 @@ import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 
 
 public class DriveJoystick {
   
-  public static Joystick joystick = RobotMap.driveJoystick;
+  public static XboxController joystick = RobotMap.driveJoystick;
   private static double lastMoveTime = 0;
 
   public static double getMove(){
@@ -67,7 +69,7 @@ public class DriveJoystick {
     return joystick.getRawButton(1); //A button
   }
 
-  // SLOW MODE (unused, maybe useful later)
+  // SLOW MODE 
   public static boolean dPad(){
     if(getPreciseFront() || getPreciseRight() || getPreciseBack() || getPreciseLeft()){
       return true;
@@ -126,8 +128,16 @@ public class DriveJoystick {
     return joystick.getRawButton(6);
   }
 
+  public static boolean runIntakeReverse() {
+    return joystick.getRawButton(5);
+  }
   public static boolean toggleIntakePiston() {
-    return joystick.getRawButtonPressed(5);
+    return joystick.getRawAxis(2) > 0.7;
+  }
+
+  public static void rumble(double intensity) {
+    joystick.setRumble(RumbleType.kLeftRumble, intensity);
+    joystick.setRumble(RumbleType.kRightRumble, intensity);
   }
   
 }
