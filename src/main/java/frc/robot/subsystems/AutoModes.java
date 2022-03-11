@@ -74,15 +74,13 @@ public class AutoModes {
         RobotMap.drivePancake.set(Value.kForward);
         autoShooter.autoRun(0, 15, -4600);
         autoConveyor.autoRun(1, 4, 0.7);
+        autoConveyor.autoRun(4, 6, 0);
         //conveyor.autoRun(4, 5, 0);
         autoIntake.deployIntake(2, 5, true);
         autoDrive.moveByInches(3, 5, 60); //fix this distance setpoint for actual field geometry
         autoIntake.autoRun(3, 15, 0.5);
         autoDrive.moveByInches(6, 8, 0);
-        autoConveyor.autoRun(4, 10, 0.2);
-        autoConveyor.autoRun(10, 15, 0.7);
-        autoIntake.deployIntake(6, 12, false);
-        autoIntake.autoRun(6, 15, 0);
+        autoConveyor.autoRun(6, 15, 0.7);
     }
 
     public static void autoModeTwo() { //shoot 1 ball and leave tarmac

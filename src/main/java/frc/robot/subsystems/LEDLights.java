@@ -68,7 +68,7 @@ public class LEDLights {
 
           //Shooter up to speed / Flash blue
           case 5:
-            blink(0, 0, 255);
+            singleColor(0, 0, 255);
             break;
 
           //PID drive enabled / Flash red

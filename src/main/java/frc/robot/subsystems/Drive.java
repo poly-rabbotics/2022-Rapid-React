@@ -180,14 +180,14 @@ public boolean highTorqueModeActive;
     }
 
     if (DriveJoystick.getPreciseFront()) { //SLOW MODE
-      move = 0.1;
+      move = 0.25;
     } else if (DriveJoystick.getPreciseBack()) {
-      move = -0.1;
+      move = -0.25;
     }
     if (DriveJoystick.getPreciseRight()) {
-      turn = 0.1;
+      turn = 0.25;
     } else if (DriveJoystick.getPreciseLeft()) {
-      turn = -0.1;
+      turn = -0.25;
     }
     move();
 

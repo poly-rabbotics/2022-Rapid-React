@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Controls.DriveJoystick;
 import frc.robot.Controls.MechanismsJoystick;
@@ -50,7 +51,7 @@ public class Robot extends TimedRobot {
   
   @Override
   public void robotInit() {
-    auto = new AutoModes();
+    
 
     comp = new Compressor(1, PneumaticsModuleType.REVPH);
     
@@ -81,6 +82,7 @@ public class Robot extends TimedRobot {
     limelight = new Limelight();
     
     comp.enableDigital();
+    auto = new AutoModes();
   }
 
   /**
@@ -172,10 +174,9 @@ public class Robot extends TimedRobot {
     drive.moveByInches(6, 8, -5);
     conveyor.autoRun(4, 10, 0.2);
     conveyor.autoRun(10, 15, 0.7);
-    intake.deployIntake(7, 12, false);
     intake.autoRun(6, 15, 0);
-    LEDs.up(2);
-    
+    LEDs.up(2); */
+    /*
     drive.turnByDegrees(10, 12, 180);
     drive.moveByInches(12, 15, -60);
     */
@@ -226,8 +227,7 @@ public class Robot extends TimedRobot {
     else if(drive.highTorqueModeActive && shooter.upToSpeed) LEDs.run(11);
     else if(conveyor.ballCount > 0) LEDs.run(4);
     else if(MechanismsJoystick.arm()) LEDs.run(10);
-    else if (!isDisabled()) LEDs.run(2);
-    else LEDs.run(0);
+    else LEDs.run(2);
   }
 
   /** This function is called once when the robot is disabled. */

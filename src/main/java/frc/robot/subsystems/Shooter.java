@@ -44,7 +44,7 @@ public class Shooter {
        if (MechanismsJoystick.farShot()) {
         
         shooterSpeedSetpoint=-4500;
-        if(conveyorDelay.get()>1.5) Conveyor.conveyorSpeed=0.8;
+        //if(conveyorDelay.get()>1.5) Conveyor.conveyorSpeed=0.8;
         LEDLights.up(2);
         } else if (MechanismsJoystick.closeShot()) {
             shooterSpeedSetpoint=-2500;
@@ -55,7 +55,7 @@ public class Shooter {
        shooterPIDController.setReference(shooterSpeedSetpoint, ControlType.kVelocity);
 
 
-       upToSpeed = shooterMotor.getEncoder().getVelocity() < -4300;
+       upToSpeed = shooterMotor.getEncoder().getVelocity() < -1000;
        SmartDashboard.putBoolean("shooter up to speed?", upToSpeed);
        /*
        if(MechanismsJoystick.shooterActive()) {

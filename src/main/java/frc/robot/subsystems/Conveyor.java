@@ -59,7 +59,7 @@ public class Conveyor {
         ballDetect = false;
         conveyorSpeed = 0;
       }
-    } else if(!MechanismsJoystick.farShot() && !MechanismsJoystick.closeShot()) conveyorSpeed = 0;
+    } else if(!MechanismsJoystick.farShot() && !MechanismsJoystick.closeShot() && !MechanismsJoystick.conveyor()) conveyorSpeed = 0;
     
     if (ballDetectedHigh && ballDetectedLow) ballCount = 2;
     else ballCount = 0;
