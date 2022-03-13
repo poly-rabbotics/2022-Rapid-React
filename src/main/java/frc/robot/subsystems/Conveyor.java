@@ -41,11 +41,18 @@ public class Conveyor {
     if (Shooter.upToSpeed) {
       conveyorSpeed = 0.7;
     } else if (!Shooter.upToSpeed){ */
-      if (MechanismsJoystick.conveyor()&&!ballDetectedHigh) {
-        conveyorSpeed = 0.6;
 
-      } else if (MechanismsJoystick.conveyor2()){ 
-        conveyorSpeed = -0.6;
+      if (MechanismsJoystick.conveyor()&&!ballDetectedHigh) {
+        //Normal conveyance, stop at prox switch
+        conveyorSpeed = setpoint;
+      }
+      else if (MechanismsJoystick.conveyor()&&MechanismsJoystick.farShot()) {
+        //Allow conveyor to run when shooter is also activated regardless of prox switch
+        conveyorSpeed = setpoint;
+      }
+      else if (MechanismsJoystick.conveyor2()){ 
+        // Run conveyor backwards
+        conveyorSpeed = -1*setpoint;
       } else if (ballDetectedLow && !ballDetectedHigh) {
       conveyorSpeed = setpoint;
       ballDetect = true;
@@ -53,6 +60,7 @@ public class Conveyor {
       ballSpacer.start();
       ballCount = 1;
     } else if (!ballDetectedLow && ballDetect) {
+        // Executed for indexing purposes
       SmartDashboard.putNumber("Ball Spacer", ballSpacer.get());
       conveyorSpeed = setpoint;
       if (ballSpacer.get() > 0.2) {
