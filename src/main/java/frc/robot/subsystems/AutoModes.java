@@ -78,7 +78,7 @@ public class AutoModes {
         //conveyor.autoRun(4, 5, 0);
         autoIntake.deployIntake(2, 5, true);
         autoDrive.moveByInches(3, 5, 60); //fix this distance setpoint for actual field geometry
-        autoIntake.autoRun(3, 15, 0.5);
+        autoIntake.autoRun(3, 15, 0.8);
         autoDrive.moveByInches(6, 8, 0);
         autoConveyor.autoRun(6, 15, 0.7);
     }

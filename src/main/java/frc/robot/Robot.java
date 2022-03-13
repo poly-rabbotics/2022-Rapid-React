@@ -70,7 +70,7 @@ public class Robot extends TimedRobot {
     LEDs = new LEDLights();
 
     masterTimer = new Timer();
-    masterTimer.start();
+    //masterTimer.start();
     autoTimer = new Timer();
     
 
@@ -152,6 +152,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    masterTimer.start();
     autoTimer.start();    // EG: This is the same timer as the one which resets the gyro, lets use a different one
     drive.initAutoDrive();
     drive.resetEncoders(); 

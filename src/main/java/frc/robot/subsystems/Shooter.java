@@ -43,7 +43,7 @@ public class Shooter {
         
        if (MechanismsJoystick.farShot()) {
         
-        shooterSpeedSetpoint=-4500;
+        shooterSpeedSetpoint=-4600;
         //if(conveyorDelay.get()>1.5) Conveyor.conveyorSpeed=0.8;
         LEDLights.up(2);
         } else if (MechanismsJoystick.closeShot()) {

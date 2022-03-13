@@ -33,7 +33,7 @@ public class Intake {
   public Intake() {
     intakeSolenoid = RobotMap.intakeSolenoid;
     intake = RobotMap.intakeMotor;
-    intakeSpeed = 0.6;
+    intakeSpeed = 0.85;
     intake.setIdleMode(IdleMode.kBrake);
     pneumaticsTransitioning = false;
   }

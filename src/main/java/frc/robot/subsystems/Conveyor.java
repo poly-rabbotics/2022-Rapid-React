@@ -21,7 +21,7 @@ public class Conveyor {
     static boolean reversed;
     static CANSparkMax conveyorMotor;
     static double conveyorSpeed;
-    double setpoint = 0.7;
+    double setpoint = 0.6;
     boolean ballDetect;
     Timer ballSpacer = new Timer();
     boolean ballDetectedLow, ballDetectedHigh;
@@ -42,10 +42,10 @@ public class Conveyor {
       conveyorSpeed = 0.7;
     } else if (!Shooter.upToSpeed){ */
       if (MechanismsJoystick.conveyor()&&!ballDetectedHigh) {
-        conveyorSpeed = 0.7;
+        conveyorSpeed = 0.6;
 
       } else if (MechanismsJoystick.conveyor2()){ 
-        conveyorSpeed = -0.7;
+        conveyorSpeed = -0.6;
       } else if (ballDetectedLow && !ballDetectedHigh) {
       conveyorSpeed = setpoint;
       ballDetect = true;
