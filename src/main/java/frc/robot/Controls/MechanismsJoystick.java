@@ -8,9 +8,9 @@ public class MechanismsJoystick {
 
     //All of the following methods are booleans that are set true whenever the assigned input is pressed
 
-    //joystick.getRawButtonPressed continuosly returns true whenever the input is being pressed.
-    
-    //joystick.getRawButton returns true a single time when the button is initially pressed
+    //joystick.getRawButton continuosly returns true whenever the input is being pressed.
+
+    //joystick.getRawButtonPressed returns true a single time when the button is initially pressed
 
     //joystick.getRawAxis checks the axis of the input and can compare it to a value if it is a boolean 
     //(If it is not compared to a value it will simply return the value of that axis itself, in this case it would be a double). 
