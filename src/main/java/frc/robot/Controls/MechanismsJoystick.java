@@ -6,6 +6,12 @@ import frc.robot.RobotMap;
 public class MechanismsJoystick {
     private static Joystick joystick = RobotMap.mechanismsJoystick;
 
+    //All of the following methods are booleans that are set true whenever the assigned input is pressed
+
+    //joystick.getRawButtonPressed continuosly returns true whenever the input is being pressed.
+    //joystick.getRawButton returns true a single time when the button is initially pressed
+    //joystick.getRawAxis checks the axis of the input and compares it to a value. Ex. return joystick.getRawAxis(1) > 0.5;
+     
     public static boolean farShotPressed(){
       return  joystick.getRawButtonPressed(7); //needs to be given an actual number
         }
