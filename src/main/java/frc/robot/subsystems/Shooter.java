@@ -11,7 +11,7 @@ import frc.robot.Controls.MechanismsJoystick;
 
 public class Shooter {
     
-    static double shooterSpeedSetpoint;
+    static double shooterSpeedSetpoint, highHubSetpoint, lowHubSetpoint;
     static CANSparkMax shooterMotor;
     static SparkMaxPIDController shooterPIDController;
     static double kP, kI, kD;
@@ -23,6 +23,8 @@ public class Shooter {
     public Shooter() {
         LEDLights = new LEDLights();
         shooterSpeedSetpoint = 0;
+        highHubSetpoint = 4600;
+        lowHubSetpoint = 2500;
         shooterMotor = RobotMap.shooterMotor;
         kP = 0.00013;
         kI = 0.000001;
@@ -43,11 +45,11 @@ public class Shooter {
         
        if (MechanismsJoystick.farShot()) {
         
-        shooterSpeedSetpoint=-4600;
+        shooterSpeedSetpoint = highHubSetpoint;
         //if(conveyorDelay.get()>1.5) Conveyor.conveyorSpeed=0.8;
         LEDLights.up(2);
         } else if (MechanismsJoystick.closeShot()) {
-            shooterSpeedSetpoint=-2500;
+            shooterSpeedSetpoint = lowHubSetpoint;
         }
          else {
            shooterSpeedSetpoint=0;
@@ -75,6 +77,14 @@ public class Shooter {
         double time = Robot.autoTimer.get();
         if (time > startTime && time < endTime) {
           shooterPIDController.setReference(shooterSpeed, ControlType.kVelocity);
+        }
+    }
+
+    public void adjustShooterSpeed() {
+        if (MechanismsJoystick.axis0() > 0) {
+            highHubSetpoint += 10;
+        } else if (MechanismsJoystick.axis0() < 0) {
+            highHubSetpoint -= 10;
         }
     }
 }

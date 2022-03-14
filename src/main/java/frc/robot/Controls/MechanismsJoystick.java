@@ -76,45 +76,6 @@ public class MechanismsJoystick {
           return joystick.getRawAxis(3) > 0.6;
         }
 
-        public static boolean armPancakeRetract() {
-          if(joystick.getPOV() == 180){
-            return true;
-          }
-          else{
-            return false;
-          }
-        }
-
-        public static boolean armPancakeExtend() {
-          if(joystick.getPOV() == 0){
-            return true;
-          }
-          else{
-            return false;
-          }
-        }
-
-        public static boolean staticArmRun() {
-          if(joystick.getPOV() == 90){
-            return true;
-          }
-          else{
-            return false;
-          }
-        }
-
-        public static boolean dynamicArmRun() {
-          if(joystick.getPOV() == 270){
-            return true;
-          }
-          else{
-            return false;
-          }
-        }
-
-        public static boolean dynamicArmPivot() {
-          return joystick.getRawButtonPressed(1);
-        }
         public static double testJoystick() {
           return joystick.getRawAxis(5);
         }
@@ -135,5 +96,9 @@ public class MechanismsJoystick {
         public static double axis5() {
           return joystick.getRawAxis(5);
         }  
+
+        public static double axis0() {
+          return joystick.getRawAxis(0);
+        }
 
 }
