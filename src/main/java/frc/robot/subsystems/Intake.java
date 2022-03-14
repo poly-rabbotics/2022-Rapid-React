@@ -39,10 +39,6 @@ public class Intake {
   }
   public void run() {
     
-    /*if (MechanismsJoystick.reverse()) {
-      intakeSpeed = -intakeSpeed;
-    } */
-
     if ((DriveJoystick.runIntake() || MechanismsJoystick.midShot()) && intakeSolenoid.get() == Value.kForward) {
       intake.set(intakeSpeed);
     } else if (DriveJoystick.runIntakeReverse() && intakeSolenoid.get() == Value.kForward) {

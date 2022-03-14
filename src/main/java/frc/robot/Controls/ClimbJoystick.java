@@ -52,4 +52,8 @@ public class ClimbJoystick {
       public static double axis5() {
         return joystick.getRawAxis(5);
       } 
+
+      public static boolean getEnableClimb() {
+        return joystick.getRawButtonPressed(10);
+      }
 }

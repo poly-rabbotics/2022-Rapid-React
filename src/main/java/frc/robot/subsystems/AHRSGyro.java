@@ -13,6 +13,9 @@ public class AHRSGyro {
         return gyro.getAngle();
     }
 
+    public boolean getMovementStatus() { //returns true if moving or rotating
+        return gyro.isMoving() && gyro.isRotating();
+    }
     public void reset() {
         gyro.zeroYaw();
         gyro.reset();

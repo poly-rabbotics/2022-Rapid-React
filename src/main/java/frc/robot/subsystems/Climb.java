@@ -26,6 +26,7 @@ public class Climb {
     static boolean SALimitSwitch, DALimitSwitch;
     static double SAAxis, DAAxis;
     static boolean SARetracted, DARetracted;
+    static boolean enableClimb;
 
 
     public Climb() {
@@ -47,47 +48,44 @@ public class Climb {
         staticArmWinch.setSelectedSensorPosition(0);
         dynamicArmWinch.setNeutralMode(NeutralMode.Brake);
         staticArmWinch.setNeutralMode(NeutralMode.Brake);
-
+        enableClimb = false;
     }
 
     public void run() {
+      if (ClimbJoystick.getEnableClimb()) {
+        enableClimb = !enableClimb;
+      }
+
       if (MechanismsJoystick.arm()) {
         autoClimb();
-      } else {
+      } else if (enableClimb) { //only run manual climb code if climb is enabled by pressing start on joystick
         dynamicArmWinch.set(ControlMode.PercentOutput, DAAxis);
         staticArmWinch.set(ControlMode.PercentOutput, SAAxis);
 
         if (ClimbJoystick.armPancakeRetract()) {
           dynamicArmPancake.set(Value.kForward); //RETRACT PANCAKES
-      }
-      if (ClimbJoystick.armPancakeExtend()) {
+        }
+        if (ClimbJoystick.armPancakeExtend()) {
           dynamicArmPancake.set(Value.kReverse); //EXTEND PANCAKES
-      }
+        }
       
 
-      // RUNS DYNAMIC ARM PIVOT CYLINDER
-      if (ClimbJoystick.dynamicArmPivot()) {
-          if (dynamicArmPivot.get() == Value.kForward) {
-              dynamicArmPivot.set(Value.kReverse);
-          } else dynamicArmPivot.set(Value.kForward);
-      }
-      SAAxis = -ClimbJoystick.axis5();
-      DAAxis = -ClimbJoystick.axis1();
+        // RUNS DYNAMIC ARM PIVOT CYLINDER
+        if (ClimbJoystick.dynamicArmPivot()) {
+            if (dynamicArmPivot.get() == Value.kForward) {
+                dynamicArmPivot.set(Value.kReverse);
+            } else dynamicArmPivot.set(Value.kForward);
+        }
+        SAAxis = -ClimbJoystick.axis5();
+        DAAxis = -ClimbJoystick.axis1();
 
-      if ((SAAxis < 0.15) && (SAAxis > -0.15)) { // JOYSTICK DEADZONE
-        SAAxis = 0;
-      }
-      if ((DAAxis < 0.15) && (DAAxis > -0.15)) { // JOYSTICK DEADZONE
-        DAAxis = 0;
-      }
-      /*
-      if (SAAxis < 0 && SARetracted) {
-        SAAxis = 0;
-      } 
-      if (DAAxis < 0 && DARetracted) {
-        DAAxis = 0;
-      }
-      */
+        if ((SAAxis < 0.15) && (SAAxis > -0.15)) { // JOYSTICK DEADZONE
+          SAAxis = 0;
+        }
+        if ((DAAxis < 0.15) && (DAAxis > -0.15)) { // JOYSTICK DEADZONE
+          DAAxis = 0;
+        }
+        
       }
       //dynamicArmPancake.set(Value.kOff);
         DALimitSwitch = !RobotMap.limitSwitchDA.get();
@@ -96,38 +94,6 @@ public class Climb {
         SARetracted = SALimitSwitch;
       SmartDashboard.putNumber("SA Encoder Counts", staticArmWinch.getSelectedSensorPosition());
       SmartDashboard.putNumber("DA Encoder Counts", dynamicArmWinch.getSelectedSensorPosition());
-
-         //PANCAKE PIN RELEASE, SENDS UP ARMS
-         
-        
-        
-
-        /*
-        if (runAutoClimbHigh) { //AT THIS POINT, STATIC ARM WILL ALREADY BE HOOKED ON TO MIDDLE BAR
-          climbTimer.start();
-          autoDAPivot(0, 2, "back"); //pivots DA back
-          autoDAPancake(2, 5); //releases DA to extend
-          autoSAWinch(0, 7, 0); //pulls robot up to middle bar
-          //end position 0 because that would retract it after it extended to begin with, pulling up robot
-          autoDAPivot(7, 11, "up"); //pivots DA to upright position, applying pressure to high bar
-          autoDAWinch(8, 13, DAHalfwayPosition); //pulls up robot slightly to get off of mid bar, delays bc swinging
-          autoDAWinch(18, 25, 0); //pulls up robot to high bar completely
-          //again end position of zero to return to original position
-        }
-        
-        else if (runAutoClimbTraversal) { //AT THIS POINT, STATIC ARM WILL ALREADY BE HOOKED ON TO MIDDLE BAR
-          climbTimer.start();
-          autoDAPivot(0, 2, "back"); //pivots DA back
-          autoDAPancake(2, 5); //releases DA to extend
-          autoSAWinch(0, 7, 0); //pulls robot up to middle bar
-          //end position 0 because that would retract it after it extended to begin with, pulling up robot
-          autoDAPivot(7, 12, "up"); //pivots DA to upright position, applying pressure to high bar
-          autoDAWinch(8, 13, DAHalfwayPosition); //pulls up robot slightly to get off mid bar, delays bc swinging
-          autoDAWinch(18, 25, 0);
-          //again end position of zero to return to original position
-          //REACHES HIGH BAR HERE
-    
-        } */
     }
 
     public static void autoClimb() { //auto climb step by step
@@ -167,7 +133,7 @@ public class Climb {
         case 8:  //FULLY EXTEND DYNAMIC ARM
           initPIDControlDA();
           dynamicArmWinch.set(ControlMode.Position, 0); 
-          break; //EG: This needs to be whatever the actual extended position is of the arm, not 0
+          break; 
         case 9: 
 
          

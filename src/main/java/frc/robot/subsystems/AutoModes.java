@@ -105,12 +105,15 @@ public class AutoModes {
         autoIntake.autoRun(9, 15, 0);
     }
 
-    public static void autoModeFour() {
+    public static void autoModeFour() { //experimental
         autoDrive.turnByDegrees(0, 5, 180);
     }
 
-    public static void autoModeFive() {
-        
+    public static void autoModeFive() { //experimental
+        autoDrive.moveByInches(0, 3, 36);
+        autoDrive.turnByDegrees(5, 7, 180);
+        autoDrive.moveByInches(10, 13, 36);
+
     }
 
     public static void autoModeSix() {
