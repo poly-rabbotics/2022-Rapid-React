@@ -25,7 +25,7 @@ public class DriveJoystick {
     return speed;
   }
   public static double axisFive(){
-    //Sets the axis double equal to input 4
+    //Sets the axis double equal to input 5
     double axis = joystick.getRawAxis(5); //right joystick vertical
     return axis;
   }
