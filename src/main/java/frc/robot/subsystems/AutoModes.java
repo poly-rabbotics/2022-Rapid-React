@@ -116,8 +116,24 @@ public class AutoModes {
 
     }
 
-    public static void autoModeSix() {
+    public static void autoModeSix() { //Four Ball Auto
+        autoDrive.moveByInches(0, 1, 64);
+        autoIntake.deployIntake(1, 4, true);
+        autoIntake.autoRun(1, 4, 0.4);
+        autoDrive.moveByInches(4, 6, -118);
+
+        autoConveyor.autoRun(4, 8, 0.7);
+        autoIntake.deployIntake(5, 7, false);
+        autoShooter.autoRun(4, 7, -4600);
+        autoDrive.moveByInches(7, 9, 277);
         
+        autoIntake.deployIntake(9, 11, true);
+        autoIntake.autoRun(9, 11, 0.4);
+        autoIntake.deployIntake(11, 13, false);
+
+        autoDrive.moveByInches(11, 13, 277);
+        autoConveyor.autoRun(11, 13, 0.7);
+        autoShooter.autoRun(13, 15, -4600);
     }
 
     public static void autoModeSeven() {
