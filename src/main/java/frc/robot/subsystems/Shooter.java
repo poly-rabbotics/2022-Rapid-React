@@ -16,7 +16,8 @@ public class Shooter {
     static SparkMaxPIDController shooterPIDController;
     static double kP, kI, kD;
     public static LEDLights LEDLights;
-    public boolean upToSpeed;
+    public boolean shooterRunning;
+    public static boolean shooterUpToSpeed;
     Timer conveyorDelay = new Timer();
 
     
@@ -33,7 +34,7 @@ public class Shooter {
         shooterPIDController.setP(kP);
         shooterPIDController.setI(kI);
         shooterPIDController.setD(kD);
-        upToSpeed = false;
+        shooterRunning = false;
     }
     public void run() {
 
@@ -57,8 +58,9 @@ public class Shooter {
        shooterPIDController.setReference(shooterSpeedSetpoint, ControlType.kVelocity);
 
 
-       upToSpeed = shooterMotor.getEncoder().getVelocity() < -1000;
-       SmartDashboard.putBoolean("shooter up to speed?", upToSpeed);
+       shooterRunning = shooterMotor.getEncoder().getVelocity() < -1000;
+       shooterUpToSpeed = shooterMotor.getEncoder().getVelocity() < -4400; 
+       SmartDashboard.putBoolean("shooter up to speed?", shooterRunning);
        /*
        if(MechanismsJoystick.shooterActive()) {
         shooterSpeedSetpoint=-5000;

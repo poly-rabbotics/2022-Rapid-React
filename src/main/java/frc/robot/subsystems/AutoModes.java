@@ -70,17 +70,30 @@ public class AutoModes {
         autoIntake.autoRun(0, 15, 0);
     }
     
-    public static void autoModeOne() { //TWO BALL AUTO
+    public static void autoModeOne() { //TWO BALL AUTO, needs testing
+        /*
         RobotMap.drivePancake.set(Value.kForward);
         autoShooter.autoRun(0, 15, -4600);
         autoConveyor.autoRun(1, 4, 0.7);
         autoConveyor.autoRun(4, 6, 0);
         //conveyor.autoRun(4, 5, 0);
         autoIntake.deployIntake(2, 5, true);
-        autoDrive.moveByInches(3, 5, 60); //fix this distance setpoint for actual field geometry
+        autoDrive.moveByInches(3, 5, 60); 
         autoIntake.autoRun(3, 15, 0.8);
         autoDrive.moveByInches(6, 8, 0);
         autoConveyor.autoRun(6, 15, 0.7);
+        */
+        RobotMap.drivePancake.set(Value.kForward);
+        autoIntake.deployIntake(0, 2, true);
+        autoDrive.moveByInches(0, 5, 50);
+        autoIntake.autoRun(3, 6, .8);
+        autoIntake.autoRun(6, 15, 0);
+        autoConveyor.autoRun(5, 6, 0.3);
+        autoConveyor.autoRun(6, 10, 0);
+        autoDrive.moveByInches(6, 9, -90);
+        autoDrive.turnByDegrees(9, 11, Limelight.getX());
+        autoShooter.autoRun(9, 15, -4600);
+        autoConveyor.autoRun(11, 15, 0.7);
     }
 
     public static void autoModeTwo() { //shoot 1 ball and leave tarmac
@@ -90,33 +103,15 @@ public class AutoModes {
         autoDrive.moveByInches(3, 5, 60);
     }
 
-    public static void autoModeThree() { //delay 3 seconds, then shoot 1 and leave tarmac
-        RobotMap.drivePancake.set(Value.kForward);
-        autoShooter.autoRun(3, 15, -4600);
-        autoConveyor.autoRun(4, 7, 0.7);
-        //conveyor.autoRun(4, 5, 0);
-        autoIntake.deployIntake(5, 8, true);
-        autoDrive.moveByInches(6, 8, 60); 
-        autoIntake.autoRun(6, 9, 0.5);
-        autoDrive.moveByInches(9, 11, 0);
-        autoConveyor.autoRun(7, 13, 0.4);
-        autoConveyor.autoRun(13, 15, 0.7);
-        autoIntake.deployIntake(9, 15, false);
-        autoIntake.autoRun(9, 15, 0);
+    public static void autoModeThree() { //3 ball auto from right position
+        
     }
 
-    public static void autoModeFour() { //experimental
-        autoDrive.turnByDegrees(0, 5, 180);
-    }
-
-    public static void autoModeFive() { //experimental
-        autoDrive.moveByInches(0, 3, 36);
-        autoDrive.turnByDegrees(5, 7, 180);
-        autoDrive.moveByInches(10, 13, 36);
+    public static void autoModeFour() { //3 ball auto from left/mid position
 
     }
 
-    public static void autoModeSix() { //Four Ball Auto
+    public static void autoModeFive() { //failed four ball auto (fix it!)
         autoDrive.moveByInches(0, 1, 64);
         autoIntake.deployIntake(1, 4, true);
         autoIntake.autoRun(1, 4, 0.4);
@@ -134,6 +129,10 @@ public class AutoModes {
         autoDrive.moveByInches(11, 13, 277);
         autoConveyor.autoRun(11, 13, 0.7);
         autoShooter.autoRun(13, 15, -4600);
+    }
+
+    public static void autoModeSix() { 
+
     }
 
     public static void autoModeSeven() {

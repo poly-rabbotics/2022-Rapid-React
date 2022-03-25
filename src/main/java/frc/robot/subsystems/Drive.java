@@ -44,7 +44,7 @@ public class Drive {
   private Field2d field = new Field2d();
   private Limelight limelight;
   public static boolean PIDDriveActive;
-public boolean highTorqueModeActive;
+  public boolean highTorqueModeActive;
   boolean rotateInitialized;
   Rotation2d gyroToRadians;
   DifferentialDriveOdometry odometry;
@@ -54,6 +54,7 @@ public boolean highTorqueModeActive;
   double targetAngle;
   double gyroAngle;
   public static double encoderCountsPer360;
+  double moveSetpoint;
 
   public Drive() {
     encoderCountsPer360 = 108200;
@@ -382,12 +383,17 @@ public boolean highTorqueModeActive;
     rightBack.setSelectedSensorPosition(0);
     
   }
-  public void moveByInches(double startTime, double endTime, double inches) { //AUTONOMOUS DRIVE METHOD
+  public boolean moveByInches(double startTime, double endTime, double inches) { //AUTONOMOUS DRIVE METHOD
     double time = Robot.autoTimer.get();
+    moveSetpoint = inches * 1120;
     if (time < endTime && time > startTime) {
-      leftBack.set(ControlMode.Position, inches * 1120);
-      rightBack.set(ControlMode.Position, inches * -1120);
+      leftBack.set(ControlMode.Position, moveSetpoint);
+      rightBack.set(ControlMode.Position, moveSetpoint);
     }
+    if ((leftEncoderCounts < moveSetpoint + 500) && (leftEncoderCounts > moveSetpoint - 500)) {
+      resetEncoders();
+      return true;
+    } else return false;
   }
 
   public boolean turnByDegrees(double startTime, double endTime, double finalAngle) { //AUTONOMOUS TURN METHOD
@@ -400,10 +406,7 @@ public boolean highTorqueModeActive;
       rotateInitialized = true;
       targetAngle = finalAngle;
       positionSetpoint = initialPosition + encoderCountsPer360/360 * finalAngle;
-      leftBack.getSensorCollection().setAnalogPosition(0, 30);
-      rightBack.getSensorCollection().setAnalogPosition(0, 30);
-      leftBack.setSelectedSensorPosition(0);
-      rightBack.setSelectedSensorPosition(0);
+      resetEncoders();
       gyro.reset();
     }
 
@@ -416,10 +419,7 @@ public boolean highTorqueModeActive;
         return true;
       } else {
         targetAngle = finalAngle - gyroAngle;
-        leftBack.getSensorCollection().setAnalogPosition(0, 30);
-        rightBack.getSensorCollection().setAnalogPosition(0, 30);
-        leftBack.setSelectedSensorPosition(0);
-        rightBack.setSelectedSensorPosition(0);
+        resetEncoders();
         gyro.reset();
         return false;
       }
