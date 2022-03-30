@@ -228,16 +228,42 @@ public class Robot extends TimedRobot {
     */
 
     //LEDS
+    //Master Timer (110 Seconds)
     if(masterTimer.get() > 110 && masterTimer.get() < 112) LEDs.run(12);
-    else if(shooter.shooterRunning && !Drive.PIDDriveActive && !drive.highTorqueModeActive) LEDs.run(5);
+    //Master Timer (All times other than 110 seconds)
+    else if(masterTimer.get() < 110 || masterTimer.get() > 112) {
+      //Ball Count > 0
+      if(conveyor.ballCount > 0 && !climb.enableClimb) LEDs.run(4);         //If we have 2 balls                        //4
+      else if(conveyor.ballCount > 0 && climb.enableClimb) LEDs.run(10);    //IF we have 2 balls and are climbing       //10
+      else if(conveyor.ballCount == 0 && !climb.enableClimb) {              //If we are < 2 balls and arent climbing    //...
+        if(Drive.PIDDriveActive){                                           //If PID active                             //...
+          if(shooter.shooterRunning) LEDs.run(8);                           //If shooter running in PID                 //8
+          else if(!shooter.shooterRunning) {                                //If shooter is not running                 //...
+            if(drive.highTorqueModeActive) LEDs.run(6);                     //If HTM is active in PID                   //6
+            else if(!drive.highTorqueModeActive) LEDs.run(9);               //If HTM is inactive in PID                 //9
+          }
+        }
+        else if(!Drive.PIDDriveActive)                                      //If PID is inactive                        //...
+          if(drive.highTorqueModeActive) LEDs.run(7);                       //If HTM is active: no PID                  //7
+          else if(!drive.highTorqueModeActive) {                            //If HTM is inactive: no PID                //...
+            if(!shooter.shooterRunning) LEDs.run(2);                        //If shooter is not running                 //2
+            else if(shooter.shooterRunning) LEDs.run(5);                    //IF shooter is running                     //5
+          }
+        }
+      } 
+    }
+
+    /*
+    if(masterTimer.get() > 110 && masterTimer.get() < 112) LEDs.run(12);
+    else if(shooter.shooterRunning && !Drive.PIDDriveActive && !drive.highTorqueModeActive) LEDs.run(5); SHOOTER NO PID NO HTM
     else if(Drive.PIDDriveActive && !drive.highTorqueModeActive) LEDs.run(9);
     else if(drive.highTorqueModeActive && !Drive.PIDDriveActive) LEDs.run(7);
-    else if(Drive.PIDDriveActive && shooter.shooterRunning) LEDs.run(8);
+    else if(Drive.PIDDriveActive && shooter.shooterRunning) LEDs.run(8);          SHOOTER PID
     else if(Drive.PIDDriveActive && drive.highTorqueModeActive) LEDs.run(6);
-    else if(drive.highTorqueModeActive && shooter.shooterRunning) LEDs.run(11);
     else if(conveyor.ballCount > 0) LEDs.run(4);
     else if(MechanismsJoystick.arm()) LEDs.run(10);
     else LEDs.run(2);
+    */
   }
 
   /** This function is called once when the robot is disabled. */
