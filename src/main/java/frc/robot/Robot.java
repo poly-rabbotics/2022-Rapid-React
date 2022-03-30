@@ -25,6 +25,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.LEDLights;
+import frc.robot.subsystems.LIDAR;
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -43,6 +44,7 @@ public class Robot extends TimedRobot {
   public static Timer masterTimer, autoTimer;
   public static AHRSGyro gyro;
   public static double leftEncoderCounts, rightEncoderCounts;
+  public static LIDAR lidar;
   boolean pressureGood;
   boolean isGyroReset = false;
   Compressor comp;
@@ -80,6 +82,8 @@ public class Robot extends TimedRobot {
     conveyor = new Conveyor();
 
     limelight = new Limelight();
+    lidar = new LIDAR();
+    lidar.start();
     
     comp.enableDigital();
     auto = new AutoModes();
@@ -120,7 +124,7 @@ public class Robot extends TimedRobot {
     if(isDisabled()) LEDs.run(1);
 
     limelight.run();
-
+    SmartDashboard.putNumber("LIDAR Distance Inches", lidar.getDistance() / 2.54);
     //CLIMB DATA
     SmartDashboard.putNumber("DA encoder counts", Climb.dynamicArmWinch.getSelectedSensorPosition());
     SmartDashboard.putNumber("SA encoder counts", Climb.staticArmWinch.getSelectedSensorPosition());
@@ -137,6 +141,8 @@ public class Robot extends TimedRobot {
     }
 
     auto.setAutoMode();
+    SmartDashboard.putBoolean("Auto movement completed?", drive.movementCompleted);
+    SmartDashboard.putBoolean("Auto turn completed?", drive.turnCompleted);
 
   }
 
@@ -153,7 +159,8 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousInit() {
     masterTimer.start();
-    autoTimer.start();    // EG: This is the same timer as the one which resets the gyro, lets use a different one
+    autoTimer.start(); 
+    autoTimer.reset();   
     drive.initAutoDrive();
     drive.resetEncoders(); 
   }
@@ -190,6 +197,7 @@ public class Robot extends TimedRobot {
     Climb.dynamicArmWinch.setSelectedSensorPosition(0);
     Climb.staticArmWinch.setSelectedSensorPosition(0);
     Climb.autoStep = 0;
+    drive.resetEncoders();
   }
 
   /** This function is called periodically during operator control. */

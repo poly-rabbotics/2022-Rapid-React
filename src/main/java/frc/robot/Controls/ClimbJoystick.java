@@ -54,6 +54,6 @@ public class ClimbJoystick {
       } 
 
       public static boolean getEnableClimb() {
-        return joystick.getRawButtonPressed(10);
+        return joystick.getRawButtonPressed(8);
       }
 }

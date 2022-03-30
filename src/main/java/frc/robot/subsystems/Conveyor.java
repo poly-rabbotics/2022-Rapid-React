@@ -41,12 +41,14 @@ public class Conveyor {
     if (Shooter.upToSpeed) {
       conveyorSpeed = 0.7;
     } else if (!Shooter.upToSpeed){ */
-
-      if (MechanismsJoystick.conveyor()&&!ballDetectedHigh) {
+      if (MechanismsJoystick.conveyor() && !(MechanismsJoystick.farShot() || MechanismsJoystick.closeShot()) && ballDetectedHigh) {
+        conveyorSpeed = 0;
+      }
+      else if (MechanismsJoystick.conveyor() && !ballDetectedHigh) {
         //Normal conveyance, stop at prox switch
         conveyorSpeed = setpoint;
       }
-      else if (MechanismsJoystick.conveyor() && MechanismsJoystick.farShot() && Shooter.shooterUpToSpeed) {
+      else if (MechanismsJoystick.conveyor() && (MechanismsJoystick.farShot() || MechanismsJoystick.closeShot()) && Shooter.shooterUpToSpeed) {
         //Allow conveyor to run when shooter is also activated regardless of prox switch
         //Does not run conveyor if shooter is not up to speed
         conveyorSpeed = setpoint;

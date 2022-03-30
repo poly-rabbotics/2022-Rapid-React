@@ -45,7 +45,8 @@ public class Drive {
   private Limelight limelight;
   public static boolean PIDDriveActive;
   public boolean highTorqueModeActive;
-  boolean rotateInitialized;
+  boolean rotateInitialized, movementInitialized;
+  public boolean movementCompleted, turnCompleted;
   Rotation2d gyroToRadians;
   DifferentialDriveOdometry odometry;
   AHRSGyro gyro;
@@ -53,11 +54,12 @@ public class Drive {
   double turnError;
   double targetAngle;
   double gyroAngle;
-  public static double encoderCountsPer360;
+  public static double encoderCountsPer360, encoderCountsPerInch;
   double moveSetpoint;
 
   public Drive() {
     encoderCountsPer360 = 108200;
+    encoderCountsPerInch = 1120;
     calibrateJoy = new Joystick(2);
     timer = new Timer();
     timer.start();
@@ -119,7 +121,6 @@ public class Drive {
     gyroToRadians = Rotation2d.fromDegrees(gyro.getDegrees());
     odometry = new DifferentialDriveOdometry(gyroToRadians, new Pose2d(0, 0, new Rotation2d()));
     RobotMap.drivePancake.set(Value.kReverse); //REVERSE IS TORQUE MODE
-    
   }
 
   public static boolean isAutoDrive = false;
@@ -385,20 +386,55 @@ public class Drive {
   }
   public boolean moveByInches(double startTime, double endTime, double inches) { //AUTONOMOUS DRIVE METHOD
     double time = Robot.autoTimer.get();
-    moveSetpoint = inches * 1120;
-    if (time < endTime && time > startTime) {
-      leftBack.set(ControlMode.Position, moveSetpoint);
-      rightBack.set(ControlMode.Position, moveSetpoint);
-    }
-    if ((leftEncoderCounts < moveSetpoint + 500) && (leftEncoderCounts > moveSetpoint - 500)) {
+    if (!movementInitialized) {
+      movementInitialized = true;
+      movementCompleted = false;
+      moveSetpoint = inches * encoderCountsPerInch;
       resetEncoders();
-      return true;
-    } else return false;
+    }
+    if (time < endTime && time > startTime && !movementCompleted) {
+      leftBack.set(ControlMode.Position, moveSetpoint);
+      rightBack.set(ControlMode.Position, -moveSetpoint);
+      if ((leftBack.getSelectedSensorPosition() < moveSetpoint + 1000) && (leftBack.getSelectedSensorPosition() > moveSetpoint - 1000) && !movementCompleted) {
+        System.out.println("EEEEEEEEEEEEE");
+        movementCompleted = true;
+        resetEncoders();
+      } else movementCompleted = false;
+    }
+    return movementCompleted;
   }
 
+  public boolean turnByDegreesBasic(double startTime, double endTime, double finalAngle) {
+    // NO GYRO TURN CORRECTION
+    double time = Robot.autoTimer.get();
+    double initialPosition = leftBack.getSelectedSensorPosition();
+    SmartDashboard.putNumber("position setpoint turn", positionSetpoint);
+    SmartDashboard.putBoolean("rotate initialized?", rotateInitialized);
+
+    if (time < endTime && time > startTime) {
+      if (!rotateInitialized) {
+        rotateInitialized = true;
+        positionSetpoint =  encoderCountsPer360/360 * finalAngle;
+        leftBack.set(ControlMode.Position, positionSetpoint * encoderCountsPer360/360);
+        rightBack.set(ControlMode.Position, positionSetpoint * encoderCountsPer360/360);
+      }
+
+      if ((leftBack.getSelectedSensorPosition() > positionSetpoint - 100 
+      && leftBack.getSelectedSensorPosition() < positionSetpoint + 100) && !turnCompleted) {
+        resetEncoders();
+        turnCompleted = true;
+      } else if (!turnCompleted) {
+        
+        turnCompleted = false;
+      }
+    } else {
+    }
+    return turnCompleted;
+  }
   public boolean turnByDegrees(double startTime, double endTime, double finalAngle) { //AUTONOMOUS TURN METHOD
     double time = Robot.autoTimer.get();
     double initialPosition = leftBack.getSelectedSensorPosition();
+
     
     if (time < endTime && time > startTime) {
 
@@ -406,7 +442,7 @@ public class Drive {
       rotateInitialized = true;
       targetAngle = finalAngle;
       positionSetpoint = initialPosition + encoderCountsPer360/360 * finalAngle;
-      resetEncoders();
+      //resetEncoders();
       gyro.reset();
     }
 

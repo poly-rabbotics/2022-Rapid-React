@@ -33,9 +33,11 @@ public class DriveJoystick {
     //Checks if input 2 on the controller is pressed and held.
     return joystick.getRawButtonPressed(2); //B button, switches orientation of f/b controls
   }
+  /*
   public static boolean getResetEncoder() {
-    return joystick.getRawButtonPressed(4); //Y button, zeroes out drive encoders
+    return joystick.getRawButtonPressed(4); //UNUSED
   }
+  */
   public static boolean getStartAutoOrientLeft() {
     return joystick.getRawButtonPressed(5);
   }

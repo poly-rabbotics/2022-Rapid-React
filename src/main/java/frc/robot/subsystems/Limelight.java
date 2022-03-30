@@ -117,7 +117,7 @@ public void setServoPos() {
     if (limelightProfile == 2) {
         servo.setAngle(170); //FINAL SERVO ANGLES, THESE WORK
     } else {
-        servo.setAngle(15);
+        servo.setAngle(0);
     }
 }
 

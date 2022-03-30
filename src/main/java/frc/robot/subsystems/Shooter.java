@@ -24,8 +24,8 @@ public class Shooter {
     public Shooter() {
         LEDLights = new LEDLights();
         shooterSpeedSetpoint = 0;
-        highHubSetpoint = 4600;
-        lowHubSetpoint = 2500;
+        highHubSetpoint = -4600;
+        lowHubSetpoint = -2500;
         shooterMotor = RobotMap.shooterMotor;
         kP = 0.00013;
         kI = 0.000001;
@@ -58,7 +58,7 @@ public class Shooter {
        shooterPIDController.setReference(shooterSpeedSetpoint, ControlType.kVelocity);
 
 
-       shooterRunning = shooterMotor.getEncoder().getVelocity() < -1000;
+       shooterRunning = shooterMotor.getEncoder().getVelocity() != 0;
        shooterUpToSpeed = shooterMotor.getEncoder().getVelocity() < -4400; 
        SmartDashboard.putBoolean("shooter up to speed?", shooterRunning);
        /*
