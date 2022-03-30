@@ -26,7 +26,7 @@ public class Climb {
     static boolean SALimitSwitch, DALimitSwitch;
     static double SAAxis, DAAxis;
     static boolean SARetracted, DARetracted;
-    static boolean enableClimb;
+    public boolean enableClimb;
 
 
     public Climb() {
@@ -94,6 +94,7 @@ public class Climb {
         SARetracted = SALimitSwitch;
       SmartDashboard.putNumber("SA Encoder Counts", staticArmWinch.getSelectedSensorPosition());
       SmartDashboard.putNumber("DA Encoder Counts", dynamicArmWinch.getSelectedSensorPosition());
+      SmartDashboard.putBoolean("Climb Enabled?", enableClimb);
     }
 
     public static void autoClimb() { //auto climb step by step

@@ -20,6 +20,8 @@ public class LIDAR {
 	private final int LIDAR_ADDR = 0x62;
 	private final int LIDAR_CONFIG_REGISTER = 0x00;
 	private final int LIDAR_DISTANCE_REGISTER = 0x8f;
+
+	public boolean inRange;
 	
 	public LIDAR() {
 		i2c = new I2C(Port.kMXP, LIDAR_ADDR);
@@ -68,7 +70,8 @@ public class LIDAR {
 				update();
 				double inches = getDistance() / 2.54;
 				SmartDashboard.putNumber("LIDAR distance Inches", inches);
-				
+				inRange = (22 < inches && inches < 42);
+				SmartDashboard.putBoolean("Shooter In Range", inRange);
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
