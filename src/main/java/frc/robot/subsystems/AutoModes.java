@@ -71,49 +71,63 @@ public class AutoModes {
     }
     
     public static void autoModeOne() { //TWO BALL AUTO, needs testing
-        
-        RobotMap.drivePancake.set(Value.kForward);
-        autoShooter.autoRun(0, 15, -4600);
-        autoConveyor.autoRun(1, 4, 0.7);
-        autoConveyor.autoRun(4, 6, 0);
-        //conveyor.autoRun(4, 5, 0);
-        autoIntake.deployIntake(2, 5, true);
-        autoDrive.moveByInches(3, 5, 60); 
-        autoIntake.autoRun(3, 15, 0.8);
-        autoDrive.moveByInches(6, 8, 0);
-        autoConveyor.autoRun(6, 15, 0.7);
-        
-        /*
-        RobotMap.drivePancake.set(Value.kForward);
-        autoIntake.deployIntake(0, 2, true);
-        autoDrive.moveByInches(0, 5, 50);
-        autoIntake.autoRun(3, 6, .8);
-        autoIntake.autoRun(6, 15, 0);
-        autoConveyor.autoRun(5, 6, 0.3);
-        autoConveyor.autoRun(6, 10, 0);
-        autoDrive.moveByInches(6, 9, -90);
-        autoDrive.turnByDegrees(9, 11, Limelight.getX());
-        autoShooter.autoRun(9, 15, -4600);
-        autoConveyor.autoRun(11, 15, 0.7);
-        */
+        autoIntake.deployIntake(0, 1, true);
+        autoIntake.autoRun(0, 10, -0.85);
+        autoShooter.autoRun(0, 3, -4600);
+        autoConveyor.autoRun(1.5, 3, 1);
+        autoConveyor.autoRun(3, 3.1, 0);
+        autoDrive.goToEncCounts(3, 5, 100000);
+        autoDrive.resetEncodersCall(5, 5.1);
+        autoDrive.goToEncCounts(5.1, 7, -100000);
+        autoConveyor.autoRun(7, 9, 1);
+        autoShooter.autoRun(5.5, 10, -4600);
     }
 
     public static void autoModeTwo() { //shoot 1 ball and leave tarmac
-        autoShooter.autoRun(0, 6, -4600);
-        autoConveyor.autoRun(1, 6, 0.7);
-        autoIntake.deployIntake(2, 5, true);
-        autoDrive.moveByInches(3, 5, 80);
+        autoIntake.deployIntake(0, 1, true);
+        autoIntake.autoRun(0, 10, -0.85);
+        autoShooter.autoRun(0, 3, -4600);
+        autoConveyor.autoRun(1.5, 3, 1);
+        autoConveyor.autoRun(3, 3.1, 0);
+        autoDrive.goToEncCounts(3, 5, 100000);
     }
 
-    public static void autoModeThree() { //3 ball auto from right position
-        
+    public static void autoModeThree() { //3 ball auto from right position WORKING
+        //USE THIS
+        autoIntake.deployIntake(0, 1, true);
+        autoDrive.resetEncodersCall(0, 0.01);
+        autoIntake.autoRun(0, 15, -0.85);
+        autoShooter.autoRun(0, 3, -4600);
+        autoConveyor.autoRun(2, 3, 1);
+        autoShooter.autoRun(3, 3.1, 0);
+        autoConveyor.autoRun(3, 3.1, 0);
+        autoDrive.goToEncCountsTurn(0 +1.5, 1+1.5, 6000);
+        autoDrive.resetEncodersCall(1+1.5, 1.01+1.5);
+        autoDrive.goToEncCounts(1.01+1.5,3+1.5,100000);
+        autoDrive.resetEncodersCall(3+1.5, 3.01+1.5);
+        autoDrive.goToEncCounts(3.01+1.5, 4.5+1.5, -82000);
+        autoDrive.resetEncodersCall(4.5+1.5, 4.51+1.5);
+        autoDrive.goToEncCountsTurn(4.51+1.5, 5.5+1.5, -26000);
+        autoDrive.resetEncodersCall(5.5+1.5, 5.51+1.5);
+        autoDrive.goToEncCounts(5.51+1.5, 7.5+1.5, 130000);
+        autoDrive.resetEncodersCall(7.5+1.5, 7.51+1.5);
+        autoDrive.goToEncCounts(7.51+1.5, 9.5+1.5, -120000);
+        autoDrive.resetEncodersCall(9.5+1.5, 9.51+1.5);
+        autoDrive.goToEncCountsTurn(9.51+1.5 ,10.5+1.5, 20000);
+        autoShooter.autoRun(10.5+1.5, 15+1.5, -4600);
+        autoConveyor.autoRun(11.5+1.5, 15+1.5, 0.8);
+        autoDrive.resetEncodersCall(10.5+1.5, 10.51+1.5);
+        autoDrive.goToEncCounts(10.51+1.5, 12.5+1.5, -30000);
+
     }
 
-    public static void autoModeFour() { //3 ball auto from left/mid position
-
+    public static void autoModeFour() { 
+       
     }
 
     public static void autoModeFive() { //failed four ball auto (NEEDS TESTING BEFORE RUNNING)
+
+        //DO NOT USE!!!
         autoIntake.deployIntake(0, 1, true);
         autoDrive.moveByInches(0, 1.5, 21);
         autoDrive.turnByDegrees(1.5, 3, 47);
@@ -148,18 +162,11 @@ public class AutoModes {
     }
 
     public static void autoModeSix() { 
-        RobotMap.drivePancake.set(Value.kForward);
-        if (autoDrive.moveByInches(0, 5, 36)) {
-            autoDrive.turnByDegreesBasic(3, 5, 180);
-        }
-        //autoDrive.turnByDegreesBasic(3, 5, 180);
-        //autoDrive.moveByInches(5, 8, 36);
-        //autoDrive.turnByDegrees(5, 8, 90);
-        //autoDrive.turnByDegrees(10, 13, -90);
+       
     }
 
     public static void autoModeSeven() {
-        autoDrive.moveByInches(0, 3, 48);
+        
     }
 
 }

@@ -3,10 +3,10 @@ import com.kauailabs.navx.frc.AHRS;
 
 public class AHRSGyro {
     public static AHRS gyro;
-
+    //CLOCKWISE IS POSITIVE
     public AHRSGyro() {
         gyro = new AHRS();
-        
+        gyro.enableBoardlevelYawReset(true);
     }
 
     public double getDegrees() {
@@ -18,7 +18,7 @@ public class AHRSGyro {
     }
     public void reset() {
         gyro.zeroYaw();
-        gyro.reset();
+        
     }
  
 }

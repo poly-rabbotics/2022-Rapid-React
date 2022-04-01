@@ -49,18 +49,21 @@ public class Drive {
   public boolean movementCompleted, turnCompleted;
   Rotation2d gyroToRadians;
   DifferentialDriveOdometry odometry;
-  AHRSGyro gyro;
+  static AHRSGyro gyro;
   double positionSetpoint;
   double turnError;
   double targetAngle;
   double gyroAngle;
   public static double encoderCountsPer360, encoderCountsPerInch;
   double moveSetpoint;
+  double currPositionL,currPositionR;
 
   public Drive() {
-    encoderCountsPer360 = 108200;
-    encoderCountsPerInch = 1120;
+    encoderCountsPer360 = 108200;  //300 per degree
+    encoderCountsPerInch = 1450;
     calibrateJoy = new Joystick(2);
+    currPositionL=0;
+    currPositionR=0;
     timer = new Timer();
     timer.start();
     cP_LL = 0.015; // old LL PIDs
@@ -120,7 +123,8 @@ public class Drive {
      */
     gyroToRadians = Rotation2d.fromDegrees(gyro.getDegrees());
     odometry = new DifferentialDriveOdometry(gyroToRadians, new Pose2d(0, 0, new Rotation2d()));
-    RobotMap.drivePancake.set(Value.kReverse); //REVERSE IS TORQUE MODE
+    RobotMap.drivePancake.set(Value.kForward); //speed mode
+    initAutoDrive();
   }
 
   public static boolean isAutoDrive = false;
@@ -287,8 +291,8 @@ public class Drive {
     leftBack.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
     leftBack.configNominalOutputForward(0);
     leftBack.configNominalOutputReverse(0);
-    leftBack.configPeakOutputForward(0.5);
-    leftBack.configPeakOutputReverse(-0.5);
+    leftBack.configPeakOutputForward(0.4);
+    leftBack.configPeakOutputReverse(-0.4);
     leftBack.setSensorPhase(false);
     leftBack.config_kP(0, .15);
     leftBack.config_kI(0, 0.0);
@@ -300,8 +304,8 @@ public class Drive {
     rightBack.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
     rightBack.configNominalOutputForward(0);
     rightBack.configNominalOutputReverse(0);
-    rightBack.configPeakOutputForward(0.5);
-    rightBack.configPeakOutputReverse(-0.5);
+    rightBack.configPeakOutputForward(0.6);
+    rightBack.configPeakOutputReverse(-0.6);
     rightBack.setSensorPhase(false);
     // THESE PIDS WORK WELL
     rightBack.config_kP(0, .15);
@@ -390,6 +394,7 @@ public class Drive {
       movementInitialized = true;
       movementCompleted = false;
       moveSetpoint = inches * encoderCountsPerInch;
+      initPIDDrive();
       resetEncoders();
     }
     if (time < endTime && time > startTime && !movementCompleted) {
@@ -401,7 +406,69 @@ public class Drive {
         resetEncoders();
       } else movementCompleted = false;
     }
+    
     return movementCompleted;
+  }
+
+  public boolean moveByInchesBasic(double startTime, double endTime, double inches) { //AUTONOMOUS DRIVE METHOD
+    double time = Robot.autoTimer.get();
+    double moveSetpointL = inches*encoderCountsPerInch+currPositionL;
+    double moveSetpointR = inches*encoderCountsPerInch-currPositionR;
+    
+    if (time < endTime && time > startTime && !movementCompleted) {
+      //initPIDDrive();
+      leftBack.set(ControlMode.Position, moveSetpointL);
+      rightBack.set(ControlMode.Position, -moveSetpointR);
+
+      if ((leftBack.getSelectedSensorPosition() < moveSetpointL + 1000) && (leftBack.getSelectedSensorPosition() > moveSetpointL - 1000))
+      {
+        movementCompleted=true;
+        currPositionL=leftBack.getSelectedSensorPosition();
+        currPositionR=rightBack.getSelectedSensorPosition();
+      }
+    }
+    return movementCompleted;
+  }
+
+    public boolean turnByDegreesBasic2(double startTime, double endTime, double inches) { //AUTONOMOUS DRIVE METHOD
+      double time = Robot.autoTimer.get();
+      double moveSetpointL = inches*encoderCountsPer360/360.0+currPositionL;
+      double moveSetpointR = inches*encoderCountsPer360/360.0-currPositionR;
+      
+      if (time < endTime && time > startTime && !movementCompleted) {
+        //initPIDDrive();
+        leftBack.set(ControlMode.Position, moveSetpointL);
+        rightBack.set(ControlMode.Position, moveSetpointR);
+  
+        if ((leftBack.getSelectedSensorPosition() < moveSetpointL + 1000) && (leftBack.getSelectedSensorPosition() > moveSetpointL - 1000))
+        {
+          movementCompleted=true;
+          currPositionL=leftBack.getSelectedSensorPosition();
+          currPositionR=rightBack.getSelectedSensorPosition();
+        }
+      }
+
+
+    
+    return movementCompleted;
+  }
+
+  public void setMoveInit(double startTime, double endTime) {
+    double time = Robot.autoTimer.get();
+    if (time < endTime && time > startTime) {
+      movementInitialized = false;
+      movementCompleted= false;
+      initAutoDrive();
+    }
+
+  }
+
+  public void resetEncodersCall(double startTime, double endTime) {
+    double time = Robot.autoTimer.get();
+    if (time < endTime && time > startTime) {
+      resetEncoders();
+    }
+
   }
 
   public boolean turnByDegreesBasic(double startTime, double endTime, double finalAngle) {
@@ -470,6 +537,107 @@ public class Drive {
 
   }
 
+  public boolean goToHeading(double startTime, double endTime, double finalAngle) {
+    double difference = finalAngle - gyro.getDegrees();
+    boolean targetReached = Math.abs(difference) < 2;
+    double kP = 1.0/60.0;
+    SmartDashboard.putBoolean("target reached?", targetReached);
+    SmartDashboard.putNumber("difference", difference);
+    double time = Robot.autoTimer.get();
+
+    if (time < endTime && time > startTime) {
+      initPercentOutputDrive();
+    if (!targetReached) {
+      leftBack.set(ControlMode.PercentOutput, -difference * kP);
+      rightBack.set(ControlMode.PercentOutput, -difference * kP);
+      currPositionL=leftBack.getSelectedSensorPosition();
+      currPositionR=rightBack.getSelectedSensorPosition();
+
+    } else {
+     // movementCompleted=true;
+     // currPositionL=leftBack.getSelectedSensorPosition();
+     // currPositionR=rightBack.getSelectedSensorPosition();
+    }
+
+    }
+    return false;
+  }
+  
+
+  public boolean goToEncCounts(double startTime, double endTime, double count) {
+    double difference = count - leftBack.getSelectedSensorPosition();
+    boolean targetReached = Math.abs(difference) < 1000;
+    double kP = 1.0/100000.0;
+    double power = difference*kP;
+    if(power>0.5)
+      power=0.5;
+    if(power<-.5)
+      power=-0.5;
+    SmartDashboard.putBoolean("target reached?", targetReached);
+    SmartDashboard.putNumber("difference", difference);
+    double time = Robot.autoTimer.get();
+
+    if (time < endTime && time > startTime) {
+      initPercentOutputDrive();
+    if (!targetReached) {
+      leftBack.set(ControlMode.PercentOutput, power);
+      rightBack.set(ControlMode.PercentOutput, -power);
+
+    } else {
+      resetEncoders();
+      leftBack.set(ControlMode.PercentOutput, 0);
+      rightBack.set(ControlMode.PercentOutput, 0);
+     // movementCompleted=true;
+     // currPositionL=leftBack.getSelectedSensorPosition();
+     // currPositionR=rightBack.getSelectedSensorPosition();
+    }
+
+    }
+    return false;
+  }
+
+  public boolean goToEncCountsTurn(double startTime, double endTime, double count) {
+    double difference = count - leftBack.getSelectedSensorPosition();
+    boolean targetReached = Math.abs(difference) < 1000;
+    double kP = 1.0/20000.0;
+    double power = difference*kP;
+    if(power>.5)
+      power=0.5;
+    if(power<-.5)
+      power=-0.5;
+    SmartDashboard.putBoolean("target reached?", targetReached);
+    SmartDashboard.putNumber("difference", difference);
+    double time = Robot.autoTimer.get();
+
+    if (time < endTime && time > startTime) {
+      initPercentOutputDrive();
+    if (!targetReached) {
+      leftBack.set(ControlMode.PercentOutput, power);
+      rightBack.set(ControlMode.PercentOutput, power);
+
+    } else {
+     // resetEncoders();
+     // leftBack.set(ControlMode.PercentOutput, 0);
+      //rightBack.set(ControlMode.PercentOutput, 0);
+     // movementCompleted=true;
+     // currPositionL=leftBack.getSelectedSensorPosition();
+     // currPositionR=rightBack.getSelectedSensorPosition();
+    }
+
+    }
+    return false;
+  }
+
+
+  public void stopMotors(double startTime, double endTime) {
+    double time = Robot.autoTimer.get();
+
+    if (time < endTime && time > startTime) {
+      leftBack.set(ControlMode.PercentOutput, 0);
+      rightBack.set(ControlMode.PercentOutput, 0);
+
+    }
+  }
 
 
 /*

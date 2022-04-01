@@ -128,12 +128,12 @@ public class Robot extends TimedRobot {
     //CLIMB DATA
     SmartDashboard.putNumber("DA encoder counts", Climb.dynamicArmWinch.getSelectedSensorPosition());
     SmartDashboard.putNumber("SA encoder counts", Climb.staticArmWinch.getSelectedSensorPosition());
-
+    /*
     if (masterTimer.get() > 5 && !isGyroReset) {
       gyro.reset();
       isGyroReset = true;
     }
-    
+    */
     if (masterTimer.get() > 110 && masterTimer.get() < 111) {
       DriveJoystick.rumble(0.1);
     } else {
@@ -145,6 +145,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("Auto turn completed?", drive.turnCompleted);
 
     SmartDashboard.putBoolean("Climb Enabled?", climb.enableClimb);
+
+    if (DriveJoystick.resetGyroButton()) gyro.reset();
   }
 
   /**
@@ -159,10 +161,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
+    //gyro.reset();
     masterTimer.start();
+    autoTimer.reset(); 
     autoTimer.start(); 
-    autoTimer.reset();   
+     
     drive.initAutoDrive();
+   // drive.initPercentOutputDrive();
     drive.resetEncoders(); 
   }
 
@@ -194,7 +199,7 @@ public class Robot extends TimedRobot {
   /** This function is called once when teleop is enabled. */
   @Override
   public void teleopInit() {
-    gyro.reset();
+    //gyro.reset();
     Climb.dynamicArmWinch.setSelectedSensorPosition(0);
     Climb.staticArmWinch.setSelectedSensorPosition(0);
     Climb.autoStep = 0;
@@ -250,10 +255,13 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when test mode is enabled. */
   @Override
-  public void testInit() {}
+  public void testInit() {
+    //gyro.reset();
+  }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+    drive.stopMotors(0, 5);
   }
 }

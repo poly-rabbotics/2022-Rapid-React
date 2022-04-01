@@ -157,4 +157,7 @@ public class DriveJoystick {
     joystick.setRumble(RumbleType.kRightRumble, intensity);
   }
   
+  public static boolean resetGyroButton() {
+    return joystick.getRawButtonPressed(7);
+  }
 }
