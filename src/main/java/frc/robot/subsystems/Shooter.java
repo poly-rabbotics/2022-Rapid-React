@@ -24,7 +24,7 @@ public class Shooter {
     public Shooter() {
         LEDLights = new LEDLights();
         shooterSpeedSetpoint = 0;
-        highHubSetpoint = -4600;
+        highHubSetpoint = -4550;
         lowHubSetpoint = -2500;
         shooterMotor = RobotMap.shooterMotor;
         kP = 0.00013;
@@ -37,6 +37,9 @@ public class Shooter {
         shooterRunning = false;
     }
     public void run() {
+        if (MechanismsJoystick.arm()) {
+            adjustShooterSpeed();
+        }
 
         if(MechanismsJoystick.farShotPressed())
         {
@@ -71,7 +74,7 @@ public class Shooter {
         shooterSpeedSetpoint=0;
         shooterMotor.set(0);
     } */
-        SmartDashboard.putNumber("Shooter speed setpoint", shooterSpeedSetpoint);
+        SmartDashboard.putNumber("Shooter speed setpoint", highHubSetpoint);
         SmartDashboard.putNumber("Shooter RPM", shooterMotor.getEncoder().getVelocity());
     }
     
@@ -83,10 +86,10 @@ public class Shooter {
     }
 
     public void adjustShooterSpeed() {
-        if (MechanismsJoystick.axis0() > 0) {
-            highHubSetpoint += 10;
-        } else if (MechanismsJoystick.axis0() < 0) {
-            highHubSetpoint -= 10;
+        if (MechanismsJoystick.axis1() > 0.5) {
+            highHubSetpoint += 2;
+        } else if (MechanismsJoystick.axis1() < -0.5) {
+            highHubSetpoint -= 2;
         }
     }
 }

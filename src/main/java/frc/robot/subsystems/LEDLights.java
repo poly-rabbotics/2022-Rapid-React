@@ -91,7 +91,7 @@ public class LEDLights {
             blinkMultipleColors(255, 0, 0, 255, 100, 0);
             break;
 
-          //Auto Climb Active / Yellow moving upward
+          //Climb Active / Yellow moving upward
           case 10:
             autoClimbLEDs(1);
             break;

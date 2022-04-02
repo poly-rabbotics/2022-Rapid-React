@@ -57,7 +57,7 @@ public class Climb {
       }
 
       if (MechanismsJoystick.arm()) {
-        autoClimb();
+        //autoClimb();
       } else if (enableClimb) { //only run manual climb code if climb is enabled by pressing start on joystick
         dynamicArmWinch.set(ControlMode.PercentOutput, DAAxis);
         staticArmWinch.set(ControlMode.PercentOutput, SAAxis);

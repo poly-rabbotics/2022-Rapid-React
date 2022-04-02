@@ -70,7 +70,7 @@ public class AutoModes {
         autoIntake.autoRun(0, 15, 0);
     }
     
-    public static void autoModeOne() { //TWO BALL AUTO, needs testing
+    public static void autoModeOne() { //TWO BALL AUTO
         autoIntake.deployIntake(0, 1, true);
         autoIntake.autoRun(0, 10, -0.85);
         autoShooter.autoRun(0, 3, -4600);
@@ -97,24 +97,26 @@ public class AutoModes {
         autoIntake.deployIntake(0, 1, true);
         autoDrive.resetEncodersCall(0, 0.01);
         autoIntake.autoRun(0, 15, -0.85);
-        autoShooter.autoRun(0, 3, -4600);
+        autoShooter.autoRun(0, 3, -4800);
         autoConveyor.autoRun(2, 3, 1);
         autoShooter.autoRun(3, 3.1, 0);
         autoConveyor.autoRun(3, 3.1, 0);
         autoDrive.goToEncCountsTurn(0 +1.5, 1+1.5, 6000);
         autoDrive.resetEncodersCall(1+1.5, 1.01+1.5);
-        autoDrive.goToEncCounts(1.01+1.5,3+1.5,100000);
+        autoDrive.goToEncCounts(1.01+1.5,3+1.5,90000);
         autoDrive.resetEncodersCall(3+1.5, 3.01+1.5);
-        autoDrive.goToEncCounts(3.01+1.5, 4.5+1.5, -82000);
+        autoConveyor.autoRun(3+1.5, 6+1.5, 0.3);
+        autoConveyor.autoRun(6+1.5, 6.1+1.5, 0);
+        autoDrive.goToEncCounts(3.01+1.5, 4.5+1.5, -80000);
         autoDrive.resetEncodersCall(4.5+1.5, 4.51+1.5);
-        autoDrive.goToEncCountsTurn(4.51+1.5, 5.5+1.5, -26000);
+        autoDrive.goToEncCountsTurn(4.51+1.5, 5.5+1.5, -26500);
         autoDrive.resetEncodersCall(5.5+1.5, 5.51+1.5);
         autoDrive.goToEncCounts(5.51+1.5, 7.5+1.5, 130000);
         autoDrive.resetEncodersCall(7.5+1.5, 7.51+1.5);
         autoDrive.goToEncCounts(7.51+1.5, 9.5+1.5, -120000);
         autoDrive.resetEncodersCall(9.5+1.5, 9.51+1.5);
         autoDrive.goToEncCountsTurn(9.51+1.5 ,10.5+1.5, 20000);
-        autoShooter.autoRun(10.5+1.5, 15+1.5, -4600);
+        autoShooter.autoRun(10.5+1.5, 15+1.5, -4700);
         autoConveyor.autoRun(11.5+1.5, 15+1.5, 0.8);
         autoDrive.resetEncodersCall(10.5+1.5, 10.51+1.5);
         autoDrive.goToEncCounts(10.51+1.5, 12.5+1.5, -30000);

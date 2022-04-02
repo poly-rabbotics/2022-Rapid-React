@@ -236,9 +236,10 @@ public class Robot extends TimedRobot {
     //Master Timer (110 Seconds)
     if(masterTimer.get() > 110 && masterTimer.get() < 112) LEDs.run(12);
     //Master Timer (All times other than 110 seconds)
-    else if(masterTimer.get() < 110 || masterTimer.get() > 112) {
+    else {
       //Ball Count > 0
-      if(conveyor.ballCount > 0 && !climb.enableClimb) LEDs.run(4);         //If we have 2 balls                        //4
+      if (climb.enableClimb) LEDs.run(10);
+      else if(conveyor.ballCount > 0 && !climb.enableClimb) LEDs.run(4);         //If we have 2 balls                        //4
       else if(conveyor.ballCount > 0 && climb.enableClimb) LEDs.run(10);    //IF we have 2 balls and are climbing       //10
       else if(conveyor.ballCount == 0 && !climb.enableClimb) {              //If we are < 2 balls and arent climbing    //...
         if(Drive.PIDDriveActive){                                           //If PID active                             //...
@@ -256,7 +257,7 @@ public class Robot extends TimedRobot {
           }
         }
       } 
-    }
+  }
 
     /*
     if(masterTimer.get() > 110 && masterTimer.get() < 112) LEDs.run(12);
@@ -269,7 +270,7 @@ public class Robot extends TimedRobot {
     else if(MechanismsJoystick.arm()) LEDs.run(10);
     else LEDs.run(2);
     */
-  }
+  
 
   /** This function is called once when the robot is disabled. */
   @Override
