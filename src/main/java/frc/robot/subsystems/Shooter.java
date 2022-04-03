@@ -24,7 +24,7 @@ public class Shooter {
     public Shooter() {
         LEDLights = new LEDLights();
         shooterSpeedSetpoint = 0;
-        highHubSetpoint = -4550;
+        highHubSetpoint = -4650;
         lowHubSetpoint = -2500;
         shooterMotor = RobotMap.shooterMotor;
         kP = 0.00013;

@@ -116,7 +116,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("prox 2", RobotMap.proxSensorHigh.get());
 
     double robotPressure = 40.16 * (RobotMap.pressureTransducer.getVoltage() - 0.52);
-  
+    
     SmartDashboard.putNumber("Robot Pressure",robotPressure ); 
     pressureGood = robotPressure > 60;
     SmartDashboard.putBoolean("Pressure Good?", pressureGood);  

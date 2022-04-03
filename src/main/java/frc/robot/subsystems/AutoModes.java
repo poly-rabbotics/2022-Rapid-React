@@ -95,7 +95,7 @@ public class AutoModes {
     public static void autoModeThree() { //3 ball auto from right position WORKING
         //USE THIS
         autoIntake.deployIntake(0, 1, true);
-        autoDrive.resetEncodersCall(0, 0.01);
+        autoDrive.resetEncodersCall(0, 0.05);
         autoIntake.autoRun(0, 15, -0.85);
         autoShooter.autoRun(0, 3, -4800);
         autoConveyor.autoRun(2, 3, 1);
@@ -109,7 +109,7 @@ public class AutoModes {
         autoConveyor.autoRun(6+1.5, 6.1+1.5, 0);
         autoDrive.goToEncCounts(3.01+1.5, 4.5+1.5, -80000);
         autoDrive.resetEncodersCall(4.5+1.5, 4.51+1.5);
-        autoDrive.goToEncCountsTurn(4.51+1.5, 5.5+1.5, -26500);
+        autoDrive.goToEncCountsTurn(4.51+1.5, 5.5+1.5, -25000);
         autoDrive.resetEncodersCall(5.5+1.5, 5.51+1.5);
         autoDrive.goToEncCounts(5.51+1.5, 7.5+1.5, 130000);
         autoDrive.resetEncodersCall(7.5+1.5, 7.51+1.5);
@@ -117,7 +117,7 @@ public class AutoModes {
         autoDrive.resetEncodersCall(9.5+1.5, 9.51+1.5);
         autoDrive.goToEncCountsTurn(9.51+1.5 ,10.5+1.5, 20000);
         autoShooter.autoRun(10.5+1.5, 15+1.5, -4700);
-        autoConveyor.autoRun(11.5+1.5, 15+1.5, 0.8);
+        autoConveyor.autoRun(12+1.5, 15+1.5, 0.8);
         autoDrive.resetEncodersCall(10.5+1.5, 10.51+1.5);
         autoDrive.goToEncCounts(10.51+1.5, 12.5+1.5, -30000);
 
