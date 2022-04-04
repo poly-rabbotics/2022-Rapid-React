@@ -105,8 +105,8 @@ public class AutoModes {
         autoDrive.resetEncodersCall(1+1.5, 1.01+1.5);
         autoDrive.goToEncCounts(1.01+1.5,3+1.5,90000);
         autoDrive.resetEncodersCall(3+1.5, 3.01+1.5);
-        autoConveyor.autoRun(3+1.5, 6+1.5, 0.3);
-        autoConveyor.autoRun(6+1.5, 6.1+1.5, 0);
+        autoConveyor.autoRun(3+1.5, 5+1.5, 0.3);
+        autoConveyor.autoRun(5+1.5, 5.1+1.5, 0);
         autoDrive.goToEncCounts(3.01+1.5, 4.5+1.5, -80000);
         autoDrive.resetEncodersCall(4.5+1.5, 4.51+1.5);
         autoDrive.goToEncCountsTurn(4.51+1.5, 5.5+1.5, -25000);
@@ -117,7 +117,7 @@ public class AutoModes {
         autoDrive.resetEncodersCall(9.5+1.5, 9.51+1.5);
         autoDrive.goToEncCountsTurn(9.51+1.5 ,10.5+1.5, 20000);
         autoShooter.autoRun(10.5+1.5, 15+1.5, -4700);
-        autoConveyor.autoRun(12+1.5, 15+1.5, 0.8);
+        autoConveyor.autoRun(12.2+1.5, 15+1.5, 0.8);
         autoDrive.resetEncodersCall(10.5+1.5, 10.51+1.5);
         autoDrive.goToEncCounts(10.51+1.5, 12.5+1.5, -30000);
 

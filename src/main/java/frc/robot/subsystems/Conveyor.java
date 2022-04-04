@@ -48,7 +48,7 @@ public class Conveyor {
         //Normal conveyance, stop at prox switch
         conveyorSpeed = setpoint;
       }
-      else if (MechanismsJoystick.conveyor() && (MechanismsJoystick.farShot() || MechanismsJoystick.closeShot()) && Shooter.shooterUpToSpeed) {
+      else if (MechanismsJoystick.conveyor() && (MechanismsJoystick.farShot() || MechanismsJoystick.closeShot())) {
         //Allow conveyor to run when shooter is also activated regardless of prox switch
         //Does not run conveyor if shooter is not up to speed
         conveyorSpeed = setpoint;
