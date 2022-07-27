@@ -42,8 +42,8 @@ public class ClimbJoystick {
     //This is a boolean called dynamicArmPivot. It makes the dynamic arm Pivot! ooga booga XD poggy woggy. I'm going insane.
     public static boolean dynamicArmPivot() {
       //This makes it so the button: '1' activates the dynamic arm pivot
-        return joystick.getRawButtonPressed(1);
-      }
+                                      return joystick.getRawButtonPressed(1);
+    }
     
     //The following doubles do the same as the method above.
       public static double axis1() {
