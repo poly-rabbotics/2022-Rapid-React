@@ -6,7 +6,7 @@ import frc.robot.RobotMap;
 
 //This is a class O_O woahhhhh. We named it ClimbJoystick because you CLIMB with the JOYSTICK *Mind explodes*.
 public class ClimbJoystick {
-    //This is a Joystick variable that we imported above. We difined 'joystick' as a Joystick... cuz yeah.
+    //This is a Joystick variable that we imported above. We defined 'joystick' as a Joystick... cuz yeah.
     private static Joystick joystick = RobotMap.climbJoystick;
 
     //This is a boolean that we named armPancakeRetract. We made it so it Retracts the arm Pancake. Ik, its insane.
@@ -42,7 +42,7 @@ public class ClimbJoystick {
     //This is a boolean called dynamicArmPivot. It makes the dynamic arm Pivot! ooga booga XD poggy woggy. I'm going insane.
     public static boolean dynamicArmPivot() {
       //This makes it so the button: '1' activates the dynamic arm pivot
-                                      return joystick.getRawButtonPressed(1);
+      return joystick.getRawButtonPressed(1);
     }
     
     //The following doubles do the same as the method above.
