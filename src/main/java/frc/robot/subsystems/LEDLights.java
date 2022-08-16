@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 import frc.robot.RobotMap;
+import frc.robot.Controls.GuitarJoystick;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.Timer;
@@ -165,6 +166,10 @@ public class LEDLights {
         }  
       } 
     }
+
+   /*public void guitarLEDControl() {
+     if(GuitarJoystick.getRawAxis(5) >  )
+   }*/
 
     //Displays a single group of lights continously running down the line
     public void down(){ 

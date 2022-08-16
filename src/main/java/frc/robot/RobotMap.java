@@ -13,11 +13,13 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AnalogInput;
+
 public class RobotMap {
     
     public static final XboxController driveJoystick = new XboxController(0);
     public static final Joystick mechanismsJoystick = new Joystick(1);
     public static final Joystick climbJoystick = new Joystick(2);
+    public static final Joystick guitarJoystick = new Joystick(3);
     
     public static TalonSRX leftBack;
     public static TalonSRX leftFront;

@@ -13,6 +13,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Controls.GuitarJoystick;
 import frc.robot.Controls.MechanismsJoystick;
 import frc.robot.Robot;
 
@@ -41,19 +42,19 @@ public class Conveyor {
     if (Shooter.upToSpeed) {
       conveyorSpeed = 0.7;
     } else if (!Shooter.upToSpeed){ */
-      if (MechanismsJoystick.conveyor() && !(MechanismsJoystick.farShot() || MechanismsJoystick.closeShot()) && ballDetectedHigh) {
+      if (GuitarJoystick.conveyorIn() && !(GuitarJoystick.farShot() || GuitarJoystick.closeShot()) && ballDetectedHigh) {
         conveyorSpeed = 0;
       }
-      else if (MechanismsJoystick.conveyor() && !ballDetectedHigh) {
+      else if (GuitarJoystick.conveyorIn() && !ballDetectedHigh) {
         //Normal conveyance, stop at prox switch
         conveyorSpeed = setpoint;
       }
-      else if (MechanismsJoystick.conveyor() && (MechanismsJoystick.farShot() || MechanismsJoystick.closeShot())) {
+      else if (GuitarJoystick.conveyorIn() && (GuitarJoystick.farShot() || GuitarJoystick.closeShot())) {
         //Allow conveyor to run when shooter is also activated regardless of prox switch
         //Does not run conveyor if shooter is not up to speed
         conveyorSpeed = setpoint;
       }
-      else if (MechanismsJoystick.conveyor2()){ 
+      else if (GuitarJoystick.conveyorOut()){ 
         // Run conveyor backwards
         conveyorSpeed = -1*setpoint;
       } else if (ballDetectedLow && !ballDetectedHigh) {
@@ -70,7 +71,7 @@ public class Conveyor {
         ballDetect = false;
         conveyorSpeed = 0;
       }
-    } else if(!MechanismsJoystick.farShot() && !MechanismsJoystick.closeShot() && !MechanismsJoystick.conveyor()) conveyorSpeed = 0;
+    } else if(!GuitarJoystick.farShot() && !GuitarJoystick.closeShot() && !GuitarJoystick.conveyorIn()) conveyorSpeed = 0;
     
     if (ballDetectedHigh && ballDetectedLow) ballCount = 2;
     else ballCount = 0;
