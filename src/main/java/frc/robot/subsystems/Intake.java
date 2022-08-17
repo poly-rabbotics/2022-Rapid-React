@@ -17,6 +17,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import frc.robot.Controls.DriveJoystick;
+import frc.robot.Controls.GuitarJoystick;
 import frc.robot.Controls.MechanismsJoystick;
 
 /** Add your docs here. */
@@ -39,7 +40,7 @@ public class Intake {
   }
   public void run() {
     
-    if ((DriveJoystick.runIntake() || MechanismsJoystick.midShot()) && intakeSolenoid.get() == Value.kForward) {
+    if ((DriveJoystick.runIntake() || GuitarJoystick.intake()) && intakeSolenoid.get() == Value.kForward) {
       intake.set(intakeSpeed);
     } else if (DriveJoystick.runIntakeReverse() && intakeSolenoid.get() == Value.kForward) {
       intake.set(-intakeSpeed);

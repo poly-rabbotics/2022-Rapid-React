@@ -47,7 +47,7 @@ public class ClimbJoystick {
     
     //The following doubles do the same as the method above.
       public static double axis1() {
-        return joystick.getRawAxis(1);
+        return                              joystick.getRawAxis(1);
       }     
       public static double axis5() {
         return joystick.getRawAxis(5);
