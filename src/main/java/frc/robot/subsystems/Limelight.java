@@ -3,127 +3,191 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.Controls.MechanismsJoystick;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.Timer;
 
-public class Limelight {
 //The "eyes" of the robot
-boolean isTracking;
-static double x, y, area;
+public class Limelight implements Runnable {
+	/* private static double CENTERING_TOLLERANCE = 1.5;
+	private static final NetworkTableEntry tv = table.getEntry("tv");
+	private NetworkTableEntry ledMode;
+	private NetworkTableEntry camMode; 
+	private boolean isTracking = false; */
 
+	private static final double LOOP_INTERVAL = 0.010;
 
-private NetworkTableEntry ledMode;
-private NetworkTableEntry camMode;
-public static int limelightProfile;
+	private static final NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+	private static final NetworkTableEntry pipeline = table.getEntry("pipeline");
+	private static final NetworkTableEntry tx = table.getEntry("tx");
+	private static final NetworkTableEntry ty = table.getEntry("ty");
+	private static final NetworkTableEntry ta = table.getEntry("ta");
+	private static final Servo servo = RobotMap.limelightServo;
+	private static final Timer timer = new Timer();
 
+	private boolean threadRunning = false;
+	private double x, y, area;
+	private int limelightProfile;
 
-static NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-static NetworkTableEntry tx = table.getEntry("tx");
-static  NetworkTableEntry ty = table.getEntry("ty");
-static  NetworkTableEntry ta = table.getEntry("ta");
-static  NetworkTableEntry tv = table.getEntry("tv");
+	//HOW TO CONNECT TO LIMELIGHT INTERFACE:
+	//IN BROWSER, while connected to robot,
+	//TRY limelight.local:5801
 
-static Servo servo;
+	/**
+	 * Creates a new instance of {@link Limelight}. There may only be one instance of this class and more than one warrants
+	 * undocumented behavior or failure.
+	 */
+	public Limelight() { }
 
+	/**
+	 * Gets the X position of this {@link Limelight}'s target.
+	 */
+	public double getX() {
+		return x;
+	}
 
- //HOW TO CONNECT TO LIMELIGHT INTERFACE:
- //IN BROWSER, while connected to robot,
- //TRY limelight.local:5801
+	/**
+	 * Gets the Y position of this {@link Limelight}'s target.
+	 */
+	public double getY() {
+		return y;
+	}
 
-public Limelight(){   
-    servo = RobotMap.limelightServo;
-    isTracking = false;
-}
-public static double getX() {
-    return tx.getDouble(0);
-}
-public double getY() {
-    return y;
-}
-public boolean getTargetFound() {
-    SmartDashboard.putBoolean("Tv?",table.containsKey("tv"));
-    double v = tv.getDouble(0);
-    if (v == 0.0){
-        return false;
-    }else {
-        return true;
-    }
-}
-public void trackingMode(){
-    camMode.setDouble(0);
-    ledMode.setDouble(0);
-    isTracking = true;
-}
+	/**
+	 * Gets the area of this {@link Limelight}'s target.
+	 */
+	public double getArea() {
+		return area;
+	}
 
-public void switchPipeline(int pipelineNumber) {
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(pipelineNumber);
-}
+	/**
+	 * Finishes executing the current <code>run()</code> call and terminates recursion.
+	 */
+	public void stopRunning() {
+		threadRunning = false;
+	}
 
-public void calibrateLimelight(){
-    //trackingMode();
-    //read values periodically
-    isTracking = true;
-    x = tx.getDouble(0.0);
-    y = ty.getDouble(0.0);
-    area = ta.getDouble(0.0);
-    ledMode = table.getEntry("ledMode");
-    camMode = table.getEntry("camMode");    
+	// Switches pipline on the NetworkTable
+	private void switchNetworkTablePipeline(int pipelineNumber) {
+		pipeline.setNumber(pipelineNumber);
+	}
 
-    
-    //post to smart dashboard periodically
-    SmartDashboard.putNumber("LimelightX", x);
-    SmartDashboard.putNumber("LimelightY", y);
-    SmartDashboard.putNumber("LimelightArea", area);
+	// Updates limelightProfile based on MechanismsJoystick.
+	private void updateTrackingMode() {
+		if (MechanismsJoystick.targetHub()) {
+			//LIMELIGHT MODES: PIPELINE 2 FOR HUB TARGETING
+			limelightProfile = 2;
+		} else if (MechanismsJoystick.red()) {
+			//PIPELINE 1 FOR RED BALLS
+			limelightProfile = 1; 
+		} else if (MechanismsJoystick.blue()) {
+			//PIPELINE 0 FOR BLUE BALLS
+			limelightProfile = 0;
+		}
 
-    if(getTargetFound() && isTracking == true){
+		switchNetworkTablePipeline(limelightProfile);
+		SmartDashboard.putNumber("Limelight Profile", limelightProfile);
+	}
 
-        if(x < -1.5 || x > 1.5){
-            SmartDashboard.putBoolean("is centered", false);
-        }
-        else{
-            SmartDashboard.putBoolean("is centered", true);
+	// Updates servo's position based on limelightProfile.
+	private void updateServoPosition() {
+		if (limelightProfile == 2) {
+			//FINAL SERVO ANGLES, THESE WORK
+			servo.setAngle(180); 
+		} else {
+			servo.setAngle(0);
+		}
+	}
 
-        }
-        
-        
+	// Updates feild based on network table data.
+	private void retreiveNetworkTableData() {
+		x = tx.getDouble(0.0);
+		y = ty.getDouble(0.0);
+		area = ta.getDouble(0.0);
+	}
 
-    }
-    else{
-        trackingMode();
-        isTracking = false;
-        SmartDashboard.putBoolean("is centered", false);
+	/**
+	 * Updates all feilds and properties of this {@link Limelight}.
+	 * Note that this method blocks the current thread and loops, see <code>runNonBlocking()</code>.
+	 */
+	public void run() {
+		while (threadRunning)
+		{
+			timer.reset();
+			timer.start();
 
-    }
-    
-    
-        
-}
-public void setTrackingMode() {
-    if(MechanismsJoystick.targetHub()) //LIMELIGHT MODES: PIPELINE 2 FOR HUB TARGETING
-    limelightProfile = 2;
-    
-    else{
-        if(MechanismsJoystick.red()) limelightProfile = 1; //PIPELINE 1 FOR RED BALLS
-        else if(MechanismsJoystick.blue()) limelightProfile = 0; //PIPELINE 0 FOR BLUE BALLS
-    }
+			// Run actual limelight code.
+			runNonBlocking();
 
-    switchPipeline(limelightProfile);
-    SmartDashboard.putNumber("Limelight Profile", limelightProfile);
-}
+			// Waits for the specified interval to be reached.
+			while (timer.get() < LOOP_INTERVAL) {
+				try {
+					// Wait a millisecond.
+					timer.wait(1);
+				} catch (InterruptedException e) { }
+			}
+		}
+	}
 
-public void setServoPos() {
-    if (limelightProfile == 2) {
-        servo.setAngle(180); //FINAL SERVO ANGLES, THESE WORK
-    } else {
-        servo.setAngle(0);
-    }
-}
+	/**
+	 * Updates all feilds and properties of this {@link Limelight} without blocking the current thread.
+	 * Use this method if your not using this class in its own thread.
+	 */
+	public void runNonBlocking() {
+		updateTrackingMode();
+		updateServoPosition();
+		retreiveNetworkTableData();
 
-public void run() {
-    setTrackingMode();
-    setServoPos();
-}
+		SmartDashboard.putNumber("LimelightX", x);
+		SmartDashboard.putNumber("LimelightY", y);
+		SmartDashboard.putNumber("LimelightArea", area);
+	}
 
+	/* private boolean getTargetFound() {
+		SmartDashboard.putBoolean("Tv?",table.containsKey("tv"));
+		double v = tv.getDouble(0);
+
+		if (v == 0.0) {
+			return false;
+		} else {
+			return true;
+		}
+	} */
+
+	/* private void trackingMode() {
+		camMode.setDouble(0);
+		ledMode.setDouble(0);
+		isTracking = true;
+	} */
+
+	/* private void calibrateLimelight(){
+		//trackingMode();
+		//read values periodically
+		isTracking = true;
+		x = tx.getDouble(0.0);
+		y = ty.getDouble(0.0);
+		area = ta.getDouble(0.0);
+		ledMode = table.getEntry("ledMode");
+		camMode = table.getEntry("camMode");    
+
+		//post to smart dashboard periodically
+		SmartDashboard.putNumber("LimelightX", x);
+		SmartDashboard.putNumber("LimelightY", y);
+		SmartDashboard.putNumber("LimelightArea", area);
+
+		if (getTargetFound() && isTracking) {
+			if (x < -CENTERING_TOLLERANCE || x > CENTERING_TOLLERANCE) {
+				SmartDashboard.putBoolean("is centered", false);
+			} else {
+				SmartDashboard.putBoolean("is centered", true);
+			}
+		} else {
+			trackingMode();
+			isTracking = false;
+			SmartDashboard.putBoolean("is centered", false);
+		}    
+	} */
 }

@@ -1,10 +1,13 @@
 package frc.robot;
-import edu.wpi.first.wpilibj.motorcontrol.Talon;
+
+import frc.robot.subsystems.Limelight;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Joystick;
 
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -82,7 +85,8 @@ public class RobotMap {
 
 
     public static final Servo limelightServo = new Servo(0);
-
+    public static final Limelight limelight = new Limelight();
+    public static final Thread limelightThread = new Thread(limelight);
     
     public static final AnalogInput pressureTransducer = new AnalogInput(3);
 

@@ -4,25 +4,19 @@
 
 package frc.robot;
 
-
-import com.ctre.phoenix.motorcontrol.ControlMode;
-
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Controls.DriveJoystick;
-import frc.robot.Controls.MechanismsJoystick;
 import frc.robot.subsystems.AHRSGyro;
 import frc.robot.subsystems.AutoModes;
 import frc.robot.subsystems.Climb;
 import frc.robot.subsystems.Conveyor;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.LEDLights;
 import frc.robot.subsystems.LIDAR;
@@ -40,7 +34,6 @@ public class Robot extends TimedRobot {
   public static Climb climb;
   public static Drive drive;
   public static LEDLights LEDs;
-  public static Limelight limelight;
   public static Timer masterTimer, autoTimer;
   public static AHRSGyro gyro;
   public static double leftEncoderCounts, rightEncoderCounts;
@@ -53,8 +46,7 @@ public class Robot extends TimedRobot {
   
   @Override
   public void robotInit() {
-    
-
+    RobotMap.limelightThread.start();
     comp = new Compressor(1, PneumaticsModuleType.REVPH);
     
     RobotMap.initShooter();
@@ -81,7 +73,6 @@ public class Robot extends TimedRobot {
     RobotMap.initConveyor();
     conveyor = new Conveyor();
 
-    limelight = new Limelight();
     lidar = new LIDAR();
     lidar.start();
     
@@ -123,7 +114,6 @@ public class Robot extends TimedRobot {
     
     if(isDisabled()) LEDs.run(1);
 
-    limelight.run();
     SmartDashboard.putNumber("LIDAR Distance Inches", lidar.getDistance() / 2.54);
     //CLIMB DATA
     SmartDashboard.putNumber("DA encoder counts", Climb.dynamicArmWinch.getSelectedSensorPosition());
@@ -214,7 +204,6 @@ public class Robot extends TimedRobot {
     intake.run();
     climb.run();
     drive.run();
-    limelight.run();
 
     /*
     

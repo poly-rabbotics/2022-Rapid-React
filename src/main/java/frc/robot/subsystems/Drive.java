@@ -20,7 +20,6 @@ import frc.robot.Controls.DriveJoystick;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import com.kauailabs.navx.frc.AHRS;
 
 public class Drive {
   Timer timer;
@@ -42,7 +41,6 @@ public class Drive {
   static double targetVLeft;
   static double targetVRight;
   private Field2d field = new Field2d();
-  private Limelight limelight;
   public static boolean PIDDriveActive;
   public boolean highTorqueModeActive;
   boolean rotateInitialized, movementInitialized;
@@ -108,7 +106,6 @@ public class Drive {
     fts_to_RPM = 409.3;
     maxFtPerSec = 60; // find this out through testing NOT ACTUALLY MAX FEET PER SECOND
 
-    limelight = new Limelight();
     leftBack.getSensorCollection().setAnalogPosition(0, 30);
     rightBack.getSensorCollection().setAnalogPosition(0, 30);
     leftBack.setSelectedSensorPosition(0);
@@ -205,7 +202,7 @@ public class Drive {
     oldTime = time;
     time = timer.get();
     oldX = x;
-    x = Limelight.getX();
+    x = RobotMap.limelight.getX();
     double deltaVelocity = (x - oldX) / (time - oldTime);
     power_LL = cP_LL * x + (cD_LL * deltaVelocity) + cI_LL * accumError; // The PID-based power calculation for LL
 
