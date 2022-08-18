@@ -8,7 +8,6 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.Timer;
 
 //The "eyes" of the robot
 public class Limelight implements Runnable {
@@ -18,7 +17,9 @@ public class Limelight implements Runnable {
 	private NetworkTableEntry camMode; 
 	private boolean isTracking = false; */
 
-	private static final double LOOP_INTERVAL = 0.010;
+	/* private static final double LOOP_INTERVAL = 0.010;
+	private static final Timer timer = new Timer();
+	private boolean threadRunning = false; */
 
 	private static final NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 	private static final NetworkTableEntry pipeline = table.getEntry("pipeline");
@@ -26,9 +27,7 @@ public class Limelight implements Runnable {
 	private static final NetworkTableEntry ty = table.getEntry("ty");
 	private static final NetworkTableEntry ta = table.getEntry("ta");
 	private static final Servo servo = RobotMap.limelightServo;
-	private static final Timer timer = new Timer();
 
-	private boolean threadRunning = false;
 	private double x, y, area;
 	private int limelightProfile;
 
@@ -66,9 +65,9 @@ public class Limelight implements Runnable {
 	/**
 	 * Finishes executing the current <code>run()</code> call and terminates recursion.
 	 */
-	public void stopRunning() {
+	/* public void stopRunning() {
 		threadRunning = false;
-	}
+	} */
 
 	// Switches pipline on the NetworkTable
 	private void switchNetworkTablePipeline(int pipelineNumber) {
@@ -113,7 +112,7 @@ public class Limelight implements Runnable {
 	 * Updates all feilds and properties of this {@link Limelight}.
 	 * Note that this method blocks the current thread and loops, see <code>runNonBlocking()</code>.
 	 */
-	public void run() {
+	/* public void run() {
 		while (threadRunning)
 		{
 			timer.reset();
@@ -130,13 +129,12 @@ public class Limelight implements Runnable {
 				} catch (InterruptedException e) { }
 			}
 		}
-	}
+	} */
 
 	/**
-	 * Updates all feilds and properties of this {@link Limelight} without blocking the current thread.
-	 * Use this method if your not using this class in its own thread.
+	 * Updates all feilds and properties of this {@link Limelight}.
 	 */
-	public void runNonBlocking() {
+	public void run() {
 		updateTrackingMode();
 		updateServoPosition();
 		retreiveNetworkTableData();

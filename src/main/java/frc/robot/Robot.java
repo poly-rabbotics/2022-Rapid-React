@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.concurrent.TimeUnit;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -20,6 +22,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.LEDLights;
 import frc.robot.subsystems.LIDAR;
+
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
  * each mode, as described in the TimedRobot documentation. If you change the name of this class or
@@ -27,7 +30,6 @@ import frc.robot.subsystems.LIDAR;
  * project.
  */
 public class Robot extends TimedRobot {
-  
   public static Intake intake;
   public static Shooter shooter;
   public static Conveyor conveyor;
@@ -46,7 +48,9 @@ public class Robot extends TimedRobot {
   
   @Override
   public void robotInit() {
-    RobotMap.limelightThread.start();
+    // Starts the limelight service and calls the limelights run() methods at a fixed rate of once every 10 ms or at 100hz.
+    RobotMap.limelightService.scheduleAtFixedRate(RobotMap.limelight, 0, 10, TimeUnit.MILLISECONDS);
+
     comp = new Compressor(1, PneumaticsModuleType.REVPH);
     
     RobotMap.initShooter();

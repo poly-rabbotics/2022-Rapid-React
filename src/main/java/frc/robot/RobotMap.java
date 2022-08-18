@@ -88,7 +88,7 @@ public class RobotMap {
 
     public static final Servo limelightServo = new Servo(0);
     public static final Limelight limelight = new Limelight();
-    public static final Thread limelightThread = new Thread(limelight);
+    public static final ScheduledExecutorService limelightService = Executors.newSingleThreadScheduledExecutor();
     
     public static final AnalogInput pressureTransducer = new AnalogInput(3);
 
