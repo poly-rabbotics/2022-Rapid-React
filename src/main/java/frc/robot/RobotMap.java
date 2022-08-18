@@ -14,15 +14,33 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AnalogInput;
 
 public class RobotMap {
     
-    public static final XboxController driveJoystick = new XboxController(0);
-    public static final Joystick mechanismsJoystick = new Joystick(1);
-    public static final Joystick climbJoystick = new Joystick(2);
-    public static final Joystick guitarJoystick = new Joystick(3);
+    public static XboxController driveJoystick;
+    public static Joystick mechanismsJoystick;
+    public static Joystick climbJoystick;
+    public static Joystick guitarJoystick;
+    
+    public void initJoysticks(){
+        try{
+            driveJoystick = new XboxController(0);
+            mechanismsJoystick = new Joystick(1);
+            climbJoystick = new Joystick(2);
+            guitarJoystick = new Joystick(3); 
+        } catch (Exception e) {
+            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Joysticks");
+            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
+        }
+        
+       
+    }
+     
+
+    
     
     public static TalonSRX leftBack;
     public static TalonSRX leftFront;
@@ -43,53 +61,120 @@ public class RobotMap {
     public static final AddressableLED led = new AddressableLED(1);
 
     public static void initDriveMotors() {
-        leftBack = new TalonSRX(1);
-        leftFront = new TalonSRX(2); 
-        rightBack = new TalonSRX(3);
-        rightFront = new TalonSRX(4); 
+        try{
+            leftBack = new TalonSRX(1);
+            leftFront = new TalonSRX(2); 
+            rightBack = new TalonSRX(3);
+            rightFront = new TalonSRX(4); 
+        } catch (Exception e) {
+        SmartDashboard.putString("Error Readouts", "Error in RobotMap: Drive Motors");
+        SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
+        }
     }
     public static void initDrivePancakes() {
+        try {
         drivePancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
+        } catch (Exception e) {
+            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Drive Pancakes");
+            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
+        }
     }
     
     public static void initIntake() {
-        intakeMotor = new CANSparkMax(5, MotorType.kBrushless);
-        intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);   
+        try {
+            intakeMotor = new CANSparkMax(5, MotorType.kBrushless);
+            intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);   
+        } catch (Exception e) {
+            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Intake");
+            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
+        }
     }
 
     public static void initConveyor() {
-        conveyorMotor = new CANSparkMax(6, MotorType.kBrushless);
+        try {
+            conveyorMotor = new CANSparkMax(6, MotorType.kBrushless);
+        } catch (Exception e) {
+            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Conveyor");
+            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
+        }
 
     }
 
     public static void initShooter() {
-        shooterMotor = new CANSparkMax(7, MotorType.kBrushless);
+        try {
+            shooterMotor = new CANSparkMax(7, MotorType.kBrushless);
+        } catch (Exception e) {
+            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Shooter");
+            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
+        }
     }
     
     public static void initClimb() {
-        staticArmWinch = new TalonSRX(5);
-        dynamicArmWinch = new TalonSRX(6);
-        dynamicArmPivot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
-        dynamicArmPancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 6, 7);
-        staticArmPancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 8, 9);
+        try {
+            staticArmWinch = new TalonSRX(5);
+            dynamicArmWinch = new TalonSRX(6);
+            dynamicArmPivot = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
+            dynamicArmPancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 6, 7);
+            staticArmPancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 8, 9);
+        } catch (Exception e) {
+            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Climb");
+            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
+        }
     }
     
     //public static final DoubleSolenoid testSolenoidOne = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
     //public static final DoubleSolenoid testSolenoidTwo = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
     //public static final DoubleSolenoid testSolenoidThree = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);
-
-    public static final DigitalInput limitSwitchDA = new DigitalInput(1);
-    public static final DigitalInput limitSwitchSA = new DigitalInput(0);
     
-
-    public static final DigitalInput proxSensorLow = new DigitalInput(2);
-    public static final DigitalInput proxSensorHigh = new DigitalInput(3);
-
-
-    public static final Servo limelightServo = new Servo(0);
-    public static final Limelight limelight = new Limelight();
-    public static final ScheduledExecutorService limelightService = Executors.newSingleThreadScheduledExecutor();
+    public static DigitalInput limitSwitchDA;
+    public static DigitalInput limitSwitchSA;
     
-    public static final AnalogInput pressureTransducer = new AnalogInput(3);
+    public static void initLimitSwitches() {
+        try {
+            limitSwitchDA = new DigitalInput(0);
+            limitSwitchSA = new DigitalInput(1);
+
+        }  catch (Exception e) {
+            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Limit Switches");
+            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
+        }
+    }
+
+    public static DigitalInput proxSensorLow; 
+    public static DigitalInput proxSensorHigh;
+
+    public static void initProxSensors() {
+        try {
+            proxSensorLow = new DigitalInput(2);
+            proxSensorHigh = new DigitalInput(3);
+        }  catch (Exception e) {
+            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Prox Sensors");
+            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
+        }
+    }
+
+    public static Servo limelightServo;
+    public static Limelight limelight;
+    
+    public static void initLimelight() {
+        try {
+            limelightServo = new Servo(0);
+            limelight = new Limelight();
+        }  catch (Exception e) {
+            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Limelight");
+            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
+        }
+    }
+
+    public static AnalogInput pressureTransducer;
+
+    public static void initPressureTransducer() {
+        try {
+            pressureTransducer = new AnalogInput(3);
+        }  catch (Exception e) {
+            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Pressure Transducer");
+            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
+        }
+    }
 
 }

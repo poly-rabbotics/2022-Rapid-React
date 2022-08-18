@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import edu.wpi.first.wpilibj.Compressor;
@@ -40,6 +42,7 @@ public class Robot extends TimedRobot {
   public static AHRSGyro gyro;
   public static double leftEncoderCounts, rightEncoderCounts;
   public static LIDAR lidar;
+  public static ScheduledExecutorService limelightService;
   boolean pressureGood;
   boolean isGyroReset = false;
   Compressor comp;
@@ -48,9 +51,10 @@ public class Robot extends TimedRobot {
   
   @Override
   public void robotInit() {
-    // Starts the limelight service and calls the limelights run() methods at a fixed rate of once every 10 ms or at 100hz.
-    RobotMap.limelightService.scheduleAtFixedRate(RobotMap.limelight, 0, 10, TimeUnit.MILLISECONDS);
+    limelightService = Executors.newSingleThreadScheduledExecutor();
 
+    // Starts the limelight service and calls the limelights run() methods at a fixed rate of once every 10 ms or at 100hz.
+    limelightService.scheduleAtFixedRate(RobotMap.limelight, 0, 10, TimeUnit.MILLISECONDS);
     comp = new Compressor(1, PneumaticsModuleType.REVPH);
     
     RobotMap.initShooter();
@@ -82,6 +86,10 @@ public class Robot extends TimedRobot {
     
     comp.enableDigital();
     auto = new AutoModes();
+    RobotMap.initLimitSwitches();
+    RobotMap.initProxSensors();
+    RobotMap.initPressureTransducer();
+    RobotMap.initLimelight();
   }
 
   /**
