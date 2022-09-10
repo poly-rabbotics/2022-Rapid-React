@@ -32,7 +32,7 @@ public class Shooter {
         //highHubSetpoint = -4650;
         //lowHubSetpoint = -2500;
         highHubSetpoint = -0.8;
-        lowHubSetpoint = -0.2;
+        lowHubSetpoint = -0.0;
         shooterMotor = RobotMap.shooterMotor;
         
         kP = 0.001; //NEW PIDS NEEDED FOR FALCON

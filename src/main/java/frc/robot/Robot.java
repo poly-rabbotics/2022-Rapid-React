@@ -48,6 +48,8 @@ public class Robot extends TimedRobot {
   Compressor comp;
   PneumaticHub hub;
   AutoModes auto;
+
+  private double prevPressure = 0.0;
   
   @Override
   public void robotInit() {
@@ -122,7 +124,14 @@ public class Robot extends TimedRobot {
 
     double robotPressure = 40.16 * (RobotMap.pressureTransducer.getVoltage() - 0.52);
     
-    SmartDashboard.putNumber("Robot Pressure",robotPressure ); 
+    SmartDashboard.putNumber("Robot Pressure", robotPressure);
+
+    // this is an aproximation based on the 50hz clock that periodic should run on.
+    // in the case that a cycle takes longer than 20 millisecond, or is run faster than
+    // 50 hz for whatever reason, this value will be innacurate.
+    SmartDashboard.putNumber("Pressure per Iteration Lost", prevPressure - robotPressure);
+    prevPressure = robotPressure;
+
     pressureGood = robotPressure > 60;
     SmartDashboard.putBoolean("Pressure Good?", pressureGood);  
     
