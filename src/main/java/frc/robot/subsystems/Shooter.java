@@ -2,6 +2,10 @@ package frc.robot.subsystems;
 import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMax;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -12,8 +16,9 @@ import frc.robot.Controls.MechanismsJoystick;
 public class Shooter {
     
     static double shooterSpeedSetpoint, highHubSetpoint, lowHubSetpoint;
-    static CANSparkMax shooterMotor;
-    static SparkMaxPIDController shooterPIDController;
+    //static CANSparkMax shooterMotor;
+    static TalonSRX shooterMotor;
+    //static SparkMaxPIDController shooterPIDController;
     static double kP, kI, kD;
     public static LEDLights LEDLights;
     public boolean shooterRunning;
@@ -24,16 +29,38 @@ public class Shooter {
     public Shooter() {
         LEDLights = new LEDLights();
         shooterSpeedSetpoint = 0;
-        highHubSetpoint = -4650;
-        lowHubSetpoint = -2500;
+        //highHubSetpoint = -4650;
+        //lowHubSetpoint = -2500;
+        highHubSetpoint = -0.8;
+        lowHubSetpoint = -0.2;
         shooterMotor = RobotMap.shooterMotor;
-        kP = 0.00013;
-        kI = 0.000001;
-        kD = 0.0001;
-        shooterPIDController =  shooterMotor.getPIDController();
-        shooterPIDController.setP(kP);
-        shooterPIDController.setI(kI);
-        shooterPIDController.setD(kD);
+        
+        kP = 0.001; //NEW PIDS NEEDED FOR FALCON
+        kI = 0.000000;
+        kD = 0.000000;
+        //shooterPIDController =  shooterMotor.getPIDController();
+
+        //typical falcon config, copied and adapted from drive
+        shooterMotor.configFactoryDefault();
+        shooterMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
+        shooterMotor.configNominalOutputForward(0);
+        shooterMotor.configNominalOutputReverse(0);
+        shooterMotor.configPeakOutputForward(1);
+        shooterMotor.configPeakOutputReverse(-1);
+        shooterMotor.setSensorPhase(false);
+        /*
+        shooterMotor.config_kP(0, kP);
+        shooterMotor.config_kI(0, kI);
+        shooterMotor.config_kD(0, kD);
+        shooterMotor.config_kF(0, 0);
+        */
+        shooterMotor.selectProfileSlot(0, 0);
+        
+
+
+        
+
+
         shooterRunning = false;
     }
     public void run() {
@@ -56,13 +83,14 @@ public class Shooter {
             shooterSpeedSetpoint = lowHubSetpoint;
         }
          else {
-           shooterSpeedSetpoint=0;
+           shooterSpeedSetpoint = 0;
        } 
-       shooterPIDController.setReference(shooterSpeedSetpoint, ControlType.kVelocity);
 
+       //shooterPIDController.setReference(shooterSpeedSetpoint, ControlType.kVelocity); THIS BUT FALCON INSTEAD
+       shooterMotor.set(ControlMode.PercentOutput, shooterSpeedSetpoint);
 
-       shooterRunning = shooterMotor.getEncoder().getVelocity() != 0;
-       shooterUpToSpeed = shooterMotor.getEncoder().getVelocity() < -4400; 
+       shooterRunning = shooterMotor.getSelectedSensorVelocity() != 0;
+       shooterUpToSpeed = shooterMotor.getSelectedSensorVelocity() < -4400; 
        SmartDashboard.putBoolean("shooter up to speed?", shooterRunning);
        /*
        if(MechanismsJoystick.shooterActive()) {
@@ -75,13 +103,13 @@ public class Shooter {
         shooterMotor.set(0);
     } */
         SmartDashboard.putNumber("Shooter speed setpoint", highHubSetpoint);
-        SmartDashboard.putNumber("Shooter RPM", shooterMotor.getEncoder().getVelocity());
+        SmartDashboard.putNumber("Shooter RPM", shooterMotor.getSelectedSensorVelocity());
     }
     
     public void autoRun(double startTime, double endTime, double shooterSpeed) {
         double time = Robot.autoTimer.get();
         if (time > startTime && time < endTime) {
-          shooterPIDController.setReference(shooterSpeed, ControlType.kVelocity);
+          shooterMotor.set(ControlMode.Velocity, shooterSpeed);
         }
     }
 

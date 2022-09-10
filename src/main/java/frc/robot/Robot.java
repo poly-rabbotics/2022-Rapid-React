@@ -51,17 +51,19 @@ public class Robot extends TimedRobot {
   
   @Override
   public void robotInit() {
-    limelightService = Executors.newSingleThreadScheduledExecutor();
+    RobotMap.initJoysticks();
+    //limelightService = Executors.newSingleThreadScheduledExecutor();
 
     // Starts the limelight service and calls the limelights run() methods at a fixed rate of once every 10 ms or at 100hz.
-    limelightService.scheduleAtFixedRate(RobotMap.limelight, 0, 10, TimeUnit.MILLISECONDS);
+    //limelightService.scheduleAtFixedRate(RobotMap.limelight, 0, 10, TimeUnit.MILLISECONDS);
     comp = new Compressor(1, PneumaticsModuleType.REVPH);
     
     RobotMap.initShooter();
     shooter = new Shooter();
     RobotMap.initIntake();
     intake = new Intake();
-
+    
+    
     RobotMap.initDriveMotors();  
     RobotMap.initDrivePancakes();
     drive = new Drive();
@@ -134,13 +136,13 @@ public class Robot extends TimedRobot {
     if (masterTimer.get() > 5 && !isGyroReset) {
       gyro.reset();
       isGyroReset = true;
-    }
-    */
+    } */
+    
     if (masterTimer.get() > 110 && masterTimer.get() < 111) {
       DriveJoystick.rumble(0.1);
     } else {
       DriveJoystick.rumble(0);
-    }
+    } 
 
     auto.setAutoMode();
     SmartDashboard.putBoolean("Auto movement completed?", drive.movementCompleted);
@@ -211,7 +213,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    shooter.run();
+    shooter.run(); //SHOOTER CURRENTLY HAS MECHANICAL ISSUES THAT NEED FIXING BEFORE IT CAN RUN AGAIN
     conveyor.run();
     intake.run();
     climb.run();

@@ -301,8 +301,8 @@ public class Drive {
     rightBack.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor, 0, 30);
     rightBack.configNominalOutputForward(0);
     rightBack.configNominalOutputReverse(0);
-    rightBack.configPeakOutputForward(0.6);
-    rightBack.configPeakOutputReverse(-0.6);
+    rightBack.configPeakOutputForward(0.4);
+    rightBack.configPeakOutputReverse(-0.4); //for some reason this was 0.6, -0.6 previously, meaning that the limit for left was different than right???
     rightBack.setSensorPhase(false);
     // THESE PIDS WORK WELL
     rightBack.config_kP(0, .15);

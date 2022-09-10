@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 import com.kauailabs.navx.frc.AHRS;
 
-public class AHRSGyro {
+public class AHRSGyro extends Thread{
     public static AHRS gyro;
     //CLOCKWISE IS POSITIVE
     public AHRSGyro() {

@@ -25,23 +25,25 @@ public class RobotMap {
     public static Joystick climbJoystick;
     public static Joystick guitarJoystick;
     
-    public void initJoysticks(){
+    public static void initJoysticks(){
+        /*
+        driveJoystick = new XboxController(0);
+        mechanismsJoystick = new Joystick(1);
+        climbJoystick = new Joystick(2);
+        guitarJoystick = new Joystick(3); 
+        */
         try{
             driveJoystick = new XboxController(0);
             mechanismsJoystick = new Joystick(1);
             climbJoystick = new Joystick(2);
             guitarJoystick = new Joystick(3); 
+
         } catch (Exception e) {
             SmartDashboard.putString("Error Readouts", "Error in RobotMap: Joysticks");
             SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
-        }
-        
-       
+        } 
     }
      
-
-    
-    
     public static TalonSRX leftBack;
     public static TalonSRX leftFront;
     public static TalonSRX rightBack;
@@ -51,7 +53,8 @@ public class RobotMap {
 
     public static CANSparkMax intakeMotor;
     public static CANSparkMax conveyorMotor;
-    public static CANSparkMax shooterMotor;
+    //public static CANSparkMax shooterMotor;
+    public static TalonSRX shooterMotor;
 
     public static DoubleSolenoid drivePancake;
     public static DoubleSolenoid staticArmPancake;
@@ -65,10 +68,10 @@ public class RobotMap {
             leftBack = new TalonSRX(1);
             leftFront = new TalonSRX(2); 
             rightBack = new TalonSRX(3);
-            rightFront = new TalonSRX(4); 
+            rightFront = new TalonSRX(4);
         } catch (Exception e) {
-        SmartDashboard.putString("Error Readouts", "Error in RobotMap: Drive Motors");
-        SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
+            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Drive Motors");
+            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
         }
     }
     public static void initDrivePancakes() {
@@ -102,7 +105,8 @@ public class RobotMap {
 
     public static void initShooter() {
         try {
-            shooterMotor = new CANSparkMax(7, MotorType.kBrushless);
+            //shooterMotor = new CANSparkMax(7, MotorType.kBrushless);
+            shooterMotor = new TalonSRX(7);
         } catch (Exception e) {
             SmartDashboard.putString("Error Readouts", "Error in RobotMap: Shooter");
             SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
