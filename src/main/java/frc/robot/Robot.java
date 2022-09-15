@@ -53,10 +53,9 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     RobotMap.initJoysticks();
-    limelightService = Executors.newSingleThreadScheduledExecutor();
 
     // Starts the limelight service and calls the limelights run() methods at a fixed rate of once every 10 ms or at 100hz.
-    //limelightService.scheduleAtFixedRate(RobotMap.limelight, 0, 10, TimeUnit.MILLISECONDS);
+    limelightService.scheduleAtFixedRate(RobotMap.limelight, 0, 10, TimeUnit.MILLISECONDS);
     comp = new Compressor(1, PneumaticsModuleType.REVPH);
     
     RobotMap.initShooter();
