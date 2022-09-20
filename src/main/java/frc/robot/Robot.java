@@ -6,7 +6,6 @@ package frc.robot;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -48,10 +47,12 @@ public class Robot extends TimedRobot {
   Compressor comp;
   PneumaticHub hub;
   AutoModes auto;
+
+  private double prevPressure = 0.0;
   
   @Override
   public void robotInit() {
-    limelightService = Executors.newSingleThreadScheduledExecutor();
+    RobotMap.initJoysticks();
 
     // Starts the limelight service and calls the limelights run() methods at a fixed rate of once every 10 ms or at 100hz.
     limelightService.scheduleAtFixedRate(RobotMap.limelight, 0, 10, TimeUnit.MILLISECONDS);
@@ -61,7 +62,8 @@ public class Robot extends TimedRobot {
     shooter = new Shooter();
     RobotMap.initIntake();
     intake = new Intake();
-
+    
+    
     RobotMap.initDriveMotors();  
     RobotMap.initDrivePancakes();
     drive = new Drive();
@@ -120,7 +122,14 @@ public class Robot extends TimedRobot {
 
     double robotPressure = 40.16 * (RobotMap.pressureTransducer.getVoltage() - 0.52);
     
-    SmartDashboard.putNumber("Robot Pressure",robotPressure ); 
+    SmartDashboard.putNumber("Robot Pressure", robotPressure);
+
+    // this is an aproximation based on the 50hz clock that periodic should run on.
+    // in the case that a cycle takes longer than 20 millisecond, or is run faster than
+    // 50 hz for whatever reason, this value will be innacurate.
+    SmartDashboard.putNumber("Pressure per Iteration Lost", prevPressure - robotPressure);
+    prevPressure = robotPressure;
+
     pressureGood = robotPressure > 60;
     SmartDashboard.putBoolean("Pressure Good?", pressureGood);  
     
@@ -134,13 +143,13 @@ public class Robot extends TimedRobot {
     if (masterTimer.get() > 5 && !isGyroReset) {
       gyro.reset();
       isGyroReset = true;
-    }
-    */
+    } */
+    
     if (masterTimer.get() > 110 && masterTimer.get() < 111) {
       DriveJoystick.rumble(0.1);
     } else {
       DriveJoystick.rumble(0);
-    }
+    } 
 
     auto.setAutoMode();
     SmartDashboard.putBoolean("Auto movement completed?", drive.movementCompleted);
@@ -211,7 +220,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    shooter.run();
+    shooter.run(); //SHOOTER CURRENTLY HAS MECHANICAL ISSUES THAT NEED FIXING BEFORE IT CAN RUN AGAIN
     conveyor.run();
     intake.run();
     climb.run();

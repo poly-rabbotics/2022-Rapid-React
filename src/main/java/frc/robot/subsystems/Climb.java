@@ -97,6 +97,10 @@ public class Climb {
 			SmartDashboard.putBoolean("Climb Enabled?", enableClimb);
 		}
 
+		
+		/**
+		 *Semi-autonomous climb method. Somewhat functional, but manual climb control is better
+		 */
 		public static void autoClimb() { //auto climb step by step
 			if (MechanismsJoystick.climbPressed()) autoStep += 1; //increment step every time the button is pressed
 			if (autoStep == 9 && !highBarReached) {

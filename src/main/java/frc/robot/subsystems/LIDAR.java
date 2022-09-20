@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //Mostly not used, but could be useful for autonomous later
+//THE LIDAR SENSOR DOES NOT WORK DUE TO THE TRANSPARENT MATERIAL USED FOR THE BASE OF THE HUB
 public class LIDAR {
 	private I2C i2c;
 	private static byte[] distance;
