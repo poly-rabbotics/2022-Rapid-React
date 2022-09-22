@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.Controls.MechanismsJoystick;
+import frc.robot.subsystems.autoModes.*;
 
 public class AutoModes {
     static Shooter autoShooter;
@@ -64,11 +65,12 @@ public class AutoModes {
         }
     }
 
-    public static void autoModeZero() { //DO NOTHING
-        autoShooter.autoRun(0,15,0);
-        autoConveyor.autoRun(0, 15, 0);
-        autoIntake.autoRun(0, 15, 0);
-    }
+	private modeZero modeZeroThread; 
+
+    public void autoModeZero() { //DO NOTHING
+		modeZeroThread = new modeZero();
+		modeZeroThread.start();
+	}
     
     public static void autoModeOne() { //TWO BALL AUTO
         autoIntake.deployIntake(0, 1, true);
