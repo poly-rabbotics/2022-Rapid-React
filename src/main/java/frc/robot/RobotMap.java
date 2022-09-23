@@ -159,10 +159,11 @@ public class RobotMap {
 
     public static Servo limelightServo;
     public static Limelight limelight;
-	public static ScheduledExecutorService limelightService = Executors.newSingleThreadScheduledExecutor();
+	public static ScheduledExecutorService limelightService;
 
     public static void initLimelight() {
         try {
+            limelightService = Executors.newSingleThreadScheduledExecutor();
             limelightServo = new Servo(0);
             limelight = new Limelight();
         }  catch (Exception e) {

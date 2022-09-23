@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -23,6 +24,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.LEDLights;
 import frc.robot.subsystems.LIDAR;
+import frc.robot.subsystems.Limelight;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -41,7 +43,6 @@ public class Robot extends TimedRobot {
   public static AHRSGyro gyro;
   public static double leftEncoderCounts, rightEncoderCounts;
   public static LIDAR lidar;
-  public static ScheduledExecutorService limelightService;
   boolean pressureGood;
   boolean isGyroReset = false;
   Compressor comp;
@@ -54,8 +55,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     RobotMap.initJoysticks();
 
-    // Starts the limelight service and calls the limelights run() methods at a fixed rate of once every 10 ms or at 100hz.
-    limelightService.scheduleAtFixedRate(RobotMap.limelight, 0, 10, TimeUnit.MILLISECONDS);
     comp = new Compressor(1, PneumaticsModuleType.REVPH);
     
     RobotMap.initShooter();
@@ -63,26 +62,25 @@ public class Robot extends TimedRobot {
     RobotMap.initIntake();
     intake = new Intake();
     
-    
     RobotMap.initDriveMotors();  
     RobotMap.initDrivePancakes();
     drive = new Drive();
-
+    
     RobotMap.initClimb();
     climb = new Climb();
     
     LEDs = new LEDLights();
-
+    
     masterTimer = new Timer();
     //masterTimer.start();
     autoTimer = new Timer();
     
-
+    
     gyro = new AHRSGyro();
-
+    
     RobotMap.initConveyor();
     conveyor = new Conveyor();
-
+    
     lidar = new LIDAR();
     lidar.start();
     
@@ -92,8 +90,11 @@ public class Robot extends TimedRobot {
     RobotMap.initProxSensors();
     RobotMap.initPressureTransducer();
     RobotMap.initLimelight();
+    
+    // Starts the limelight service and calls the limelights run() methods at a fixed rate of once every 10 ms or at 100hz.
+    RobotMap.limelightService.scheduleAtFixedRate(RobotMap.limelight, 0, 10, TimeUnit.MILLISECONDS);
   }
-
+  
   /**
    * This function is called every robot packet, no matter the mode. Use this for items like
    * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
@@ -108,6 +109,9 @@ public class Robot extends TimedRobot {
     SmartDashboard.putBoolean("SA Limit Switch", !RobotMap.limitSwitchSA.get());
 
     SmartDashboard.putNumber("Gyro Degrees", gyro.getDegrees());
+
+    SmartDashboard.putNumber("limelight servo", Limelight.servo.get());
+
     
     leftEncoderCounts = Drive.leftBack.getSelectedSensorPosition();
     rightEncoderCounts = -1 * Drive.rightBack.getSelectedSensorPosition();
@@ -220,7 +224,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    shooter.run(); //SHOOTER CURRENTLY HAS MECHANICAL ISSUES THAT NEED FIXING BEFORE IT CAN RUN AGAIN
+    shooter.run(); 
     conveyor.run();
     intake.run();
     climb.run();
@@ -293,12 +297,14 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
+    
     //gyro.reset();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+    Limelight.servo.set(0);
     drive.stopMotors(0, 5);
   }
 }
