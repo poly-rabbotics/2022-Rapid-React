@@ -26,7 +26,7 @@ public class Limelight implements Runnable {
 	private static final NetworkTableEntry tx = table.getEntry("tx");
 	private static final NetworkTableEntry ty = table.getEntry("ty");
 	private static final NetworkTableEntry ta = table.getEntry("ta");
-	private static final Servo servo = RobotMap.limelightServo;
+	public static final Servo servo = RobotMap.limelightServo;
 
 	private double x, y, area;
 	private int limelightProfile;
@@ -93,12 +93,14 @@ public class Limelight implements Runnable {
 
 	// Updates servo's position based on limelightProfile.
 	private void updateServoPosition() {
+		/*
 		if (limelightProfile == 2) {
-			//FINAL SERVO ANGLES, THESE WORK
+			//REPLACE THESE SERVO VALUES FOR NEW SERVO
 			servo.setAngle(180); 
 		} else {
 			servo.setAngle(0);
-		}
+		} */
+		SmartDashboard.putNumber("limelight servo", servo.getAngle());
 	}
 
 	// Updates feild based on network table data.
