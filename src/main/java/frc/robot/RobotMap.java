@@ -86,7 +86,7 @@ public class RobotMap {
     public static void initIntake() {
         try {
             intakeMotor = new CANSparkMax(5, MotorType.kBrushless);
-            intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);   
+            intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);
         } catch (Exception e) {
             SmartDashboard.putString("Error Readouts", "Error in RobotMap: Intake");
             SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
@@ -159,8 +159,7 @@ public class RobotMap {
 
     public static Servo limelightServo;
     public static Limelight limelight;
-	public static ScheduledExecutorService limelightService = Executors.newSingleThreadScheduledExecutor();
-
+    
     public static void initLimelight() {
         try {
             limelightServo = new Servo(0);
