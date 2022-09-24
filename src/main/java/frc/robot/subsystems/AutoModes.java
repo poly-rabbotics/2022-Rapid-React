@@ -25,7 +25,11 @@ public class AutoModes {
 
 	public AutoModes() { }
 
-    private void setAutoMode() {
+	/**
+	 * Sets the current autonomous mode based on the value of the
+	 * driver station's binary switches.
+	 */
+    public void setAutoMode() {
 		// Must reset to zero in case this method is
 		// called more than once.
 		selectedMode = 0;
