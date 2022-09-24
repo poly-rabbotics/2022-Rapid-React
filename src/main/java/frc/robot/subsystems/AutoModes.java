@@ -5,18 +5,10 @@ import frc.robot.Controls.MechanismsJoystick;
 import frc.robot.subsystems.autoModes.*;
 
 public class AutoModes {
-    static Shooter autoShooter;
-    static Conveyor autoConveyor;
-    static Intake autoIntake; 
-    static Drive autoDrive; 
-    private static int selectedMode = 0;
+   	private Thread autoThread; 
+	private static int selectedMode = 0;
 
-	public AutoModes() {
-        autoShooter = Robot.shooter;
-        autoConveyor = Robot.conveyor;
-        autoIntake = Robot.intake;
-        autoDrive = Robot.drive;
-    }
+	public AutoModes() { }
 
     public void setAutoMode() {
 		// gets numbers from the three auto switches, 
@@ -28,16 +20,15 @@ public class AutoModes {
     } 
 
     public void runAuto() {
-        
         switch (selectedMode) {
             case 0: 
-                autoModeZero(); 
-                break;
+                autoThread = new modeZero();
+				break;
             case 1: 
-                autoModeOne(); 
-                break;
+                autoThread = new modeOne();
+				break;
             case 2:
-                autoModeTwo();
+                autoThread = new modeTwo();
                 break;
             case 3:
                 autoModeThree();
@@ -59,42 +50,18 @@ public class AutoModes {
         }
     }
 
-	private modeZero modeZeroThread; 
-	private modeOne modeOneThread;
-
 	/** 
-	 * Start Autonomous mode zero.
+	 * Start Autonomous thread.
 	 */
-    public void autoModeZero() { //DO NOTHING
+    public void runAutoThread() { 
 		// prevent this method from producing too many threads
 		// in case it is run in a loop, which it shouldn't, but still.
-		if (modeZeroThread != null)
+		if (autoThread != null)
 			return;
 
-		modeZeroThread = new modeZero();
-		modeZeroThread.start();
+		autoThread = new modeZero();
+		autoThread.start();
 	}
-
-
-	/** 
-	 * Start Autonomous mode one.
-	 */
-    public void autoModeOne() { //TWO BALL AUTO
-    	if (modeOneThread != null)
-			return;
-
-		modeOneThread = new modeOne();
-		modeOneThread.start();
-	}
-
-    public static void autoModeTwo() { //shoot 1 ball and leave tarmac
-		autoIntake.deployIntake(0, 1, true);
-        autoIntake.autoRun(0, 10, -0.85);
-        autoShooter.autoRun(0, 3, -4600);
-        autoConveyor.autoRun(1.5, 3, 1);
-        autoConveyor.autoRun(3, 3.1, 0);
-        autoDrive.goToEncCounts(3, 5, 100000);
-    }
 
     public static void autoModeThree() { //3 ball auto from right position WORKING
         //USE THIS
