@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import java.io.*;  
+import frc.robot.*;
 
 /**
  * Utilizes the proc file system found on POSIX compliant
@@ -29,7 +30,8 @@ public class ProcStat implements Runnable {
 			// Open cpu stat file found on POSIX compliant systems.
 			cpuStatFile = new FileInputStream(statFile);
 		} catch (FileNotFoundException e) {
-			// TODO: Log error.
+			RobotMap.dashboardLog.logError(POSIX_PROC_STAT + " was not found.");
+			RobotMap.dashboardLog.logError(e);
 			return;
 		}
 		
@@ -54,7 +56,8 @@ public class ProcStat implements Runnable {
 		try {
 			cpuStatFile.close();
 		} catch (IOException e) {
-			//TODO: Log error.
+			RobotMap.dashboardLog.logError("Could not close " + POSIX_PROC_STAT);
+			RobotMap.dashboardLog.logError(e);
 			return;
 		}
 
