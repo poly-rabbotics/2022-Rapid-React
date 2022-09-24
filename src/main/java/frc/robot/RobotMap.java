@@ -19,7 +19,10 @@ import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AnalogInput;
 
 public class RobotMap {
-    
+	// NOTE: this should be the only instance of this class, ever.
+	// It only works if you use the same one everywhere.
+	public static DashboardLog dashboardLog = new DashboardLog();
+
     public static XboxController driveJoystick;
     public static Joystick mechanismsJoystick;
     public static Joystick climbJoystick;
