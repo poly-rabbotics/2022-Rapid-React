@@ -1,8 +1,10 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Controls.MechanismsJoystick;
+
+import frc.robot.*;
 import frc.robot.subsystems.autoModes.*;
+import frc.robot.Controls.MechanismsJoystick;
 
 public class AutoModes {
 	private Thread autoThread; 
@@ -48,7 +50,8 @@ public class AutoModes {
 		try {
 			autoThread = availableModes[selectedMode];
 		} catch (NullPointerException e) {
-			// TODO: log error
+			RobotMap.dashboardLog.logError("You selected mode " + selectedMode + " which is not yet implemented.");
+			RobotMap.dashboardLog.logError(e);
 			return;
 		}
 
