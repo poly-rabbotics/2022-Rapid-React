@@ -1,8 +1,6 @@
 package frc.robot.subsystems;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import frc.robot.RobotMap;
 import frc.robot.Controls.MechanismsJoystick;
 import frc.robot.subsystems.autoModes.*;
 
@@ -11,10 +9,9 @@ public class AutoModes {
     static Conveyor autoConveyor;
     static Intake autoIntake; 
     static Drive autoDrive; 
-    static int selectedMode;
-    static int autoSwitchOne, autoSwitchTwo, autoSwitchThree;
-    public AutoModes() {
+    private static int selectedMode = 0;
 
+	public AutoModes() {
         autoShooter = Robot.shooter;
         autoConveyor = Robot.conveyor;
         autoIntake = Robot.intake;
@@ -22,14 +19,11 @@ public class AutoModes {
     }
 
     public void setAutoMode() {
-        if (MechanismsJoystick.autoSwitchOne()) autoSwitchOne = 1; //0 or 1
-        else autoSwitchOne = 0;
-        if (MechanismsJoystick.autoSwitchTwo()) autoSwitchTwo = 2; //0 or 2
-        else autoSwitchTwo = 0;
-        if (MechanismsJoystick.autoSwitchThree()) autoSwitchThree = 4; // 0 or 4
-        else autoSwitchThree = 0;
-        //gets numbers from the three auto switches, set selected mode to their sum in binary
-        selectedMode = autoSwitchOne + autoSwitchTwo + autoSwitchThree;
+		// gets numbers from the three auto switches, 
+		// set selected mode to their sum in binary
+		selectedMode += MechanismsJoystick.autoSwitchOne() ? 1 : 0;
+       	selectedMode += MechanismsJoystick.autoSwitchTwo() ? 2 : 0;
+		selectedMode += MechanismsJoystick.autoSwitchThree() ? 4 : 0;
         SmartDashboard.putNumber("Selected Auto", selectedMode);
     } 
 
