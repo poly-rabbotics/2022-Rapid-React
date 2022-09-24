@@ -155,7 +155,6 @@ public class Robot extends TimedRobot {
       DriveJoystick.rumble(0);
     } 
 
-    auto.setAutoMode();
     SmartDashboard.putBoolean("Auto movement completed?", drive.movementCompleted);
     SmartDashboard.putBoolean("Auto turn completed?", drive.turnCompleted);
 
