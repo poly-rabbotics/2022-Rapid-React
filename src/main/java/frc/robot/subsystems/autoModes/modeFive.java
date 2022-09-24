@@ -3,7 +3,7 @@ package frc.robot.subsystems.autoModes;
 import edu.wpi.first.wpilibj.*;
 import frc.robot.*;
 
-public class modeThree extends Thread {
+public class modeFive extends Thread {
 	private Timer timer;
 	private boolean terminationRequested;
 	private boolean terminated = false;
