@@ -129,7 +129,7 @@ public class RobotMap {
     //public static final DoubleSolenoid testSolenoidOne = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
     //public static final DoubleSolenoid testSolenoidTwo = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
     //public static final DoubleSolenoid testSolenoidThree = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);
-    
+    //I MADE THIS FOER THE PROGRAMMING MEETING
     public static DigitalInput limitSwitchDA;
     public static DigitalInput limitSwitchSA;
     
