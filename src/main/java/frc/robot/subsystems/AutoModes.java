@@ -66,27 +66,35 @@ public class AutoModes {
     }
 
 	private modeZero modeZeroThread; 
+	private modeOne modeOneThread;
 
+	/** 
+	 * Start Autonomous mode zero.
+	 */
     public void autoModeZero() { //DO NOTHING
+		// prevent this method from producing too many threads
+		// in case it is run in a loop, which it shouldn't, but still.
+		if (modeZeroThread != null)
+			return;
+
 		modeZeroThread = new modeZero();
 		modeZeroThread.start();
 	}
-    
-    public static void autoModeOne() { //TWO BALL AUTO
-        autoIntake.deployIntake(0, 1, true);
-        autoIntake.autoRun(0, 10, -0.85);
-        autoShooter.autoRun(0, 3, -4600);
-        autoConveyor.autoRun(1.5, 3, 1);
-        autoConveyor.autoRun(3, 3.1, 0);
-        autoDrive.goToEncCounts(3, 5, 100000);
-        autoDrive.resetEncodersCall(5, 5.1);
-        autoDrive.goToEncCounts(5.1, 7, -100000);
-        autoConveyor.autoRun(7, 9, 1);
-        autoShooter.autoRun(5.5, 10, -4600);
-    }
+
+
+	/** 
+	 * Start Autonomous mode one.
+	 */
+    public void autoModeOne() { //TWO BALL AUTO
+    	if (modeOneThread != null)
+			return;
+
+		modeOneThread = new modeOne();
+		modeOneThread.start();
+	}
 
     public static void autoModeTwo() { //shoot 1 ball and leave tarmac
-        autoIntake.deployIntake(0, 1, true);
+		autoIntake.deployIntake(0, 1, true);
         autoIntake.autoRun(0, 10, -0.85);
         autoShooter.autoRun(0, 3, -4600);
         autoConveyor.autoRun(1.5, 3, 1);
