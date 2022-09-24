@@ -2,16 +2,25 @@ package frc.robot.subsystems;
 
 import java.io.*;  
 
+/**
+ * Utilizes the proc file system found on POSIX compliant
+ * systems (like linux found on the RoboRio) to calculate
+ * CPU usage.
+ */
 public class ProcStat implements Runnable {
 	private static final String POSIX_PROC_STAT = "/proc/stat";	
 	private int previousSum = 0;
 	private int previousIdle = 0;
 	private double cpuUsage = 0.0;
 
+	/**
+	 * Gets the current CPU usage.
+	 */
 	public double getCPUUsage() {
 		return cpuUsage;
 	}
-
+	
+	@Override
 	public void run() {
 		File statFile = new File(POSIX_PROC_STAT);
 		FileInputStream cpuStatFile; 
