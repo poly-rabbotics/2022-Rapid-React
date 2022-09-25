@@ -45,10 +45,19 @@ public class AutoModes {
 	/**
 	 * Gets the current status of the autonomous mode binary
 	 * switches then uses an autonomous mode based on their value.
+	 *
+	 * The autonomous mode cannot be switched after calling this
+	 * method. To do so you would need to create a new instance
+	 * of this class.
 	 */
     public void runAuto() {
 		// get the most up to date status of the auto mode binary switches.
 		setAutoMode();
+
+		// prevent this method from producing too many threads
+		// in case it is run in a loop, which it shouldn't, but still.
+		if (autoThread != null)
+			return;
 
 		// set mode
 		try {
@@ -59,12 +68,6 @@ public class AutoModes {
 			return;
 		}
 
-		// prevent this method from producing too many threads
-		// in case it is run in a loop, which it shouldn't, but still.
-		if (autoThread != null)
-			return;
-
-		autoThread = new modeZero();
 		autoThread.start();
     }
 }
