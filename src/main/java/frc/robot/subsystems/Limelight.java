@@ -93,13 +93,13 @@ public class Limelight implements Runnable {
 
 	// Updates servo's position based on limelightProfile.
 	private void updateServoPosition() {
-		/*
+		
 		if (limelightProfile == 2) {
 			//REPLACE THESE SERVO VALUES FOR NEW SERVO
 			servo.setAngle(180); 
 		} else {
-			servo.setAngle(0);
-		} */
+			servo.setAngle(70);
+		} 
 		SmartDashboard.putNumber("limelight servo", servo.getAngle());
 	}
 

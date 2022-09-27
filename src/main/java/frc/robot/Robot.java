@@ -48,6 +48,7 @@ public class Robot extends TimedRobot {
   Compressor comp;
   PneumaticHub hub;
   AutoModes auto;
+  DashboardLog dashboardLog;
 
   private double prevPressure = 0.0;
   
@@ -93,6 +94,8 @@ public class Robot extends TimedRobot {
     
     // Starts the limelight service and calls the limelights run() methods at a fixed rate of once every 10 ms or at 100hz.
     RobotMap.limelightService.scheduleAtFixedRate(RobotMap.limelight, 0, 10, TimeUnit.MILLISECONDS);
+
+    dashboardLog = new DashboardLog();
   }
   
   /**
@@ -224,11 +227,36 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    shooter.run(); 
-    conveyor.run();
-    intake.run();
-    climb.run();
-    drive.run();
+    try {
+      shooter.run(); 
+    } 
+    catch (Exception e) {
+      dashboardLog.logError(e);
+    }
+    try {
+      conveyor.run(); 
+    } 
+    catch (Exception e) {
+      dashboardLog.logError(e);
+    }
+    try {
+      intake.run(); 
+    } 
+    catch (Exception e) {
+      dashboardLog.logError(e);
+    }
+    try {
+      climb.run();    
+    } 
+    catch (Exception e) {
+      dashboardLog.logError(e);
+    }
+    try {
+      drive.run();    
+    } 
+    catch (Exception e) {
+      dashboardLog.logError(e);
+    }
 
     /*
     
@@ -297,14 +325,10 @@ public class Robot extends TimedRobot {
   /** This function is called once when test mode is enabled. */
   @Override
   public void testInit() {
-    
-    //gyro.reset();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    Limelight.servo.set(0);
-    drive.stopMotors(0, 5);
   }
 }
