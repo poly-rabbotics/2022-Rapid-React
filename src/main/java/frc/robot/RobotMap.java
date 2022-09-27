@@ -1,68 +1,85 @@
 package frc.robot;
 
 import frc.robot.subsystems.Limelight;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Joystick;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.*;
+import edu.wpi.first.wpilibj.*;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
-import edu.wpi.first.wpilibj.Servo;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.AddressableLED;
-import edu.wpi.first.wpilibj.AnalogInput;
 
 public class RobotMap {
-    
+	// NOTE: this should be the only instance of this class, ever.
+	// It only works if you use the same one everywhere.
+	public static DashboardLog dashboardLog = new DashboardLog();
+	public static final AddressableLED led = new AddressableLED(1);
+
+	/*
+	 * Feilds are sorted by and titled according to the method in
+	 * which they are initialized.
+	 */
+
+	/* --> Joysticks <-- */
     public static XboxController driveJoystick;
     public static Joystick mechanismsJoystick;
     public static Joystick climbJoystick;
     public static Joystick guitarJoystick;
+
+	/* --> Drive Motors <-- */
+    public static TalonSRX leftBack;
+    public static TalonSRX leftFront;
+    public static TalonSRX rightBack;
+    public static TalonSRX rightFront;
+
+	/* --> Drive Pancakes <-- */
+    public static DoubleSolenoid drivePancake;
     
-    public static void initJoysticks(){
-        /*
-        driveJoystick = new XboxController(0);
-        mechanismsJoystick = new Joystick(1);
-        climbJoystick = new Joystick(2);
-        guitarJoystick = new Joystick(3); 
-        */
+	/* --> Intake <-- */
+	public static CANSparkMax intakeMotor;
+    public static DoubleSolenoid intakeSolenoid;
+   
+	/* --> Conveyor <-- */
+	public static CANSparkMax conveyorMotor;
+    
+	/* --> Shooter <-- */
+	public static TalonSRX shooterMotor;
+
+	/* --> Climb <-- */
+    public static TalonSRX staticArmWinch;
+    public static TalonSRX dynamicArmWinch;
+    public static DoubleSolenoid dynamicArmPivot;
+    public static DoubleSolenoid dynamicArmPancake;
+    public static DoubleSolenoid staticArmPancake;
+    
+	/* --> Limit Switches <-- */
+    public static DigitalInput limitSwitchDA;
+    public static DigitalInput limitSwitchSA;
+
+	/* --> Prox Sensors <-- */
+    public static DigitalInput proxSensorLow; 
+    public static DigitalInput proxSensorHigh;
+	
+	/* --> Lime Light <-- */
+    public static Servo limelightServo;
+    public static Limelight limelight;
+	public static ScheduledExecutorService limelightService;
+	
+	/* --> Pressure Transducer <-- */
+	public static AnalogInput pressureTransducer;
+
+	public static void initJoysticks(){
         try{
             driveJoystick = new XboxController(0);
             mechanismsJoystick = new Joystick(1);
             climbJoystick = new Joystick(2);
             guitarJoystick = new Joystick(3); 
-
         } catch (Exception e) {
-            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Joysticks");
-            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
-        } 
+        	dashboardLog.logError("Error occured while initializing joysticks.");
+			dashboardLog.logError(e);
+		} 
     }
      
-    public static TalonSRX leftBack;
-    public static TalonSRX leftFront;
-    public static TalonSRX rightBack;
-    public static TalonSRX rightFront;
-    public static TalonSRX staticArmWinch;
-    public static TalonSRX dynamicArmWinch;
-
-    public static CANSparkMax intakeMotor;
-    public static CANSparkMax conveyorMotor;
-    //public static CANSparkMax shooterMotor;
-    public static TalonSRX shooterMotor;
-
-    public static DoubleSolenoid drivePancake;
-    public static DoubleSolenoid staticArmPancake;
-    public static DoubleSolenoid dynamicArmPancake;
-    public static DoubleSolenoid dynamicArmPivot;
-    public static DoubleSolenoid intakeSolenoid;
-    public static final AddressableLED led = new AddressableLED(1);
-
     public static void initDriveMotors() {
         try{
             leftBack = new TalonSRX(1);
@@ -70,17 +87,18 @@ public class RobotMap {
             rightBack = new TalonSRX(3);
             rightFront = new TalonSRX(4);
         } catch (Exception e) {
-            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Drive Motors");
-            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
-        }
+        	dashboardLog.logError("Error occured while initializing drive motors.");
+			dashboardLog.logError(e);
+		}
     }
+
     public static void initDrivePancakes() {
         try {
-        drivePancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
+	        drivePancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
         } catch (Exception e) {
-            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Drive Pancakes");
-            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
-        }
+        	dashboardLog.logError("Error occured while initializing drive pancakes.");
+			dashboardLog.logError(e);
+		}
     }
     
     public static void initIntake() {
@@ -88,29 +106,28 @@ public class RobotMap {
             intakeMotor = new CANSparkMax(5, MotorType.kBrushless);
             intakeSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);
         } catch (Exception e) {
-            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Intake");
-            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
-        }
+        	dashboardLog.logError("Error occured while initializing intake.");
+			dashboardLog.logError(e);
+		}
     }
 
     public static void initConveyor() {
         try {
             conveyorMotor = new CANSparkMax(6, MotorType.kBrushless);
         } catch (Exception e) {
-            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Conveyor");
-            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
-        }
+    		dashboardLog.logError("Error occured while initializing conveyor.");
+			dashboardLog.logError(e);
+		}
 
     }
 
     public static void initShooter() {
         try {
-            //shooterMotor = new CANSparkMax(7, MotorType.kBrushless);
             shooterMotor = new TalonSRX(7);
         } catch (Exception e) {
-            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Shooter");
-            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
-        }
+        	dashboardLog.logError("Error occured while initializing shooter.");
+			dashboardLog.logError(e);
+		}
     }
     
     public static void initClimb() {
@@ -121,45 +138,30 @@ public class RobotMap {
             dynamicArmPancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 6, 7);
             staticArmPancake = new DoubleSolenoid(PneumaticsModuleType.REVPH, 8, 9);
         } catch (Exception e) {
-            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Climb");
-            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
-        }
-    }
-    
-    //public static final DoubleSolenoid testSolenoidOne = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
-    //public static final DoubleSolenoid testSolenoidTwo = new DoubleSolenoid(PneumaticsModuleType.REVPH, 2, 3);
-    //public static final DoubleSolenoid testSolenoidThree = new DoubleSolenoid(PneumaticsModuleType.REVPH, 4, 5);
-    
-    public static DigitalInput limitSwitchDA;
-    public static DigitalInput limitSwitchSA;
-    
-    public static void initLimitSwitches() {
+        	dashboardLog.logError("Error occured while initializing climb.");
+			dashboardLog.logError(e);
+		}
+    } 
+	
+	public static void initLimitSwitches() {
         try {
             limitSwitchDA = new DigitalInput(0);
             limitSwitchSA = new DigitalInput(1);
-
         }  catch (Exception e) {
-            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Limit Switches");
-            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
-        }
+        	dashboardLog.logError("Error occured while initializing limit switched.");
+			dashboardLog.logError(e);
+		}
     }
-
-    public static DigitalInput proxSensorLow; 
-    public static DigitalInput proxSensorHigh;
 
     public static void initProxSensors() {
         try {
             proxSensorLow = new DigitalInput(2);
             proxSensorHigh = new DigitalInput(3);
         }  catch (Exception e) {
-            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Prox Sensors");
-            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
-        }
+        	dashboardLog.logError("Error occured while initializing prox sensors.");
+			dashboardLog.logError(e);
+		}
     }
-
-    public static Servo limelightServo;
-    public static Limelight limelight;
-	public static ScheduledExecutorService limelightService;
 
     public static void initLimelight() {
         try {
@@ -167,20 +169,18 @@ public class RobotMap {
             limelightServo = new Servo(0);
             limelight = new Limelight();
         }  catch (Exception e) {
-            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Limelight");
-            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
-        }
+        	dashboardLog.logError("Error occured while initializing limelight.");
+			dashboardLog.logError(e);
+		}
     }
-
-    public static AnalogInput pressureTransducer;
 
     public static void initPressureTransducer() {
         try {
             pressureTransducer = new AnalogInput(3);
         }  catch (Exception e) {
-            SmartDashboard.putString("Error Readouts", "Error in RobotMap: Pressure Transducer");
-            SmartDashboard.putString("Error Readouts Detailed", e.getMessage());
-        }
+			dashboardLog.logError("Error occured while initializing pressure transducer.");
+			dashboardLog.logError(e);
+		}
     }
-
 }
+

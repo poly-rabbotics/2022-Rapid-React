@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-
+import frc.robot.*;
 import java.util.TimerTask;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.Timer;
@@ -69,17 +69,21 @@ public class LIDAR {
 		public void run() {
 			while(true) {
 				update();
+				
 				double inches = getDistance() / 2.54;
-				SmartDashboard.putNumber("LIDAR distance Inches", inches);
 				inRange = (22 < inches && inches < 42);
+				
+				SmartDashboard.putNumber("LIDAR distance Inches", inches);
 				SmartDashboard.putBoolean("Shooter In Range", inRange);
+				
 				try {
 					Thread.sleep(10);
 				} catch (InterruptedException e) {
-					e.printStackTrace();
+					RobotMap.dashboardLog.logError("Unexpected thread interupt in LIDAR update loop.");
+					RobotMap.dashboardLog.logError(e);
 				}
 			}
 		}
 	}
-
 }
+
