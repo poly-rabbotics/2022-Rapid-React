@@ -17,22 +17,22 @@ import edu.wpi.first.wpilibj.*;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static Intake intake;
-  public static Shooter shooter;
-  public static Conveyor conveyor;
-  public static Climb climb;
-  public static Drive drive;
-  public static LEDLights LEDs;
-  public static Timer masterTimer, autoTimer;
-  public static AHRSGyro gyro;
-  public static double leftEncoderCounts, rightEncoderCounts;
-  public static LIDAR lidar;
-  boolean pressureGood;
-  boolean isGyroReset = false;
-  Compressor comp;
-  PneumaticHub hub;
-  AutoModes auto;
-  DashboardLog dashboardLog;
+	public static Intake intake;
+  	public static Shooter shooter;
+  	public static Conveyor conveyor;
+  	public static Climb climb;
+  	public static Drive drive;
+  	public static LEDLights LEDs;
+  	public static Timer masterTimer, autoTimer;
+  	public static AHRSGyro gyro;
+  	public static double leftEncoderCounts, rightEncoderCounts;
+  	public static LIDAR lidar;
+  	boolean pressureGood;
+  	boolean isGyroReset = false;
+  	Compressor comp;
+  	PneumaticHub hub;
+  	AutoModes auto;
+  	DashboardLog dashboardLog;
 
   	private double prevPressure = 0.0;
   
@@ -76,11 +76,11 @@ public class Robot extends TimedRobot {
     	RobotMap.initPressureTransducer();
     	RobotMap.initLimelight();
     
-    // Starts the limelight service and calls the limelights run() methods at a fixed rate of once every 10 ms or at 100hz.
-    RobotMap.limelightService.scheduleAtFixedRate(RobotMap.limelight, 0, 10, TimeUnit.MILLISECONDS);
+    	// Starts the limelight service and calls the limelights run() methods at a fixed rate of once every 10 ms or at 100hz.
+    	RobotMap.limelightService.scheduleAtFixedRate(RobotMap.limelight, 0, 10, TimeUnit.MILLISECONDS);
 
-    dashboardLog = new DashboardLog();
-  }
+    	dashboardLog = new DashboardLog();
+  	}
   
   	/**
 	 * This function is called every robot packet, no matter the mode. Use this for items like
@@ -199,34 +199,63 @@ public class Robot extends TimedRobot {
     	*/
 	}
 
-	/** This function is called once when teleop is enabled. */
-	@Override
-	public void teleopInit() {
+  	/** This function is called once when teleop is enabled. */
+ 	@Override
+  	public void teleopInit() {
     	//gyro.reset();
     	Climb.dynamicArmWinch.setSelectedSensorPosition(0);
     	Climb.staticArmWinch.setSelectedSensorPosition(0);
     	Climb.autoStep = 0;
     	drive.resetEncoders();
-	}
-	
-	/** This function is called periodically during operator control. */
-	@Override
-	public void teleopPeriodic() {
-    	shooter.run(); 
-    	conveyor.run();
-    	intake.run();
-    	climb.run();
-    	drive.run();
-		
-		/*
-    	if(MechanismsJoystick.dynamicArmPancakeRelease()) {
+  	}
+
+  	/** This function is called periodically during operator control. */
+  	@Override
+  	public void teleopPeriodic() {
+    	try {
+      		shooter.run(); 
+    	} 
+    	catch (Exception e) {
+      		dashboardLog.logError(e);
+    	}
+    
+		try {
+     	 	conveyor.run(); 
+    	} 
+    	catch (Exception e) {
+      		dashboardLog.logError(e);
+    	}
+    
+		try {
+      		intake.run(); 
+    	} 
+    	catch (Exception e) {
+      		dashboardLog.logError(e);
+    	}
+    
+		try {
+      		climb.run();    
+    	} 
+    	catch (Exception e) {
+      		dashboardLog.logError(e);
+    	}
+    
+		try {
+    	  	drive.run();    
+    	} 
+    	catch (Exception e) {
+      		dashboardLog.logError(e);
+    	}
+
+    	/*
+    	if(MechanismsJoystick.dynamicArmPancakeRelease()) { 
       		RobotMap.testSolenoidOne.set(Value.kOff);
       		RobotMap.testSolenoidTwo.set(Value.kOff);
       		RobotMap.testSolenoidThree.set(Value.kReverse);
-    	} else if (MechanismsJoystick.staticArmPancakeRelease()) {
-    	 	RobotMap.testSolenoidOne.set(Value.kOff);
-	     	RobotMap.testSolenoidTwo.set(Value.kOff);
-     		RobotMap.testSolenoidThree.set(Value.kForward);
+	    } else if (MechanismsJoystick.staticArmPancakeRelease()) {
+      		RobotMap.testSolenoidOne.set(Value.kOff);
+	      	RobotMap.testSolenoidTwo.set(Value.kOff);
+      		RobotMap.testSolenoidThree.set(Value.kForward);
     	}
     	*/
 
@@ -234,112 +263,31 @@ public class Robot extends TimedRobot {
     	//Master Timer (110 Seconds)
     	if(masterTimer.get() > 110 && masterTimer.get() < 112) 
 			LEDs.run(12);
-    
-    /*
-    RobotMap.drivePancake.set(Value.kForward);
-    shooter.autoRun(0, 15, -4600);
-    conveyor.autoRun(1, 4, 0.7);
-    //conveyor.autoRun(4, 5, 0);
-    intake.deployIntake(2, 5, true);
-    drive.moveByInches(3, 5, 60); //fix this distance setpoint for actual field geometry
-    intake.autoRun(3, 6, 0.5);
-    drive.moveByInches(6, 8, -5);
-    conveyor.autoRun(4, 10, 0.2);
-    conveyor.autoRun(10, 15, 0.7);
-    intake.autoRun(6, 15, 0);
-    LEDs.up(2); */
-    /*
-    drive.turnByDegrees(10, 12, 180);
-    drive.moveByInches(12, 15, -60);
-    */
-  }
-
-  /** This function is called once when teleop is enabled. */
-  @Override
-  public void teleopInit() {
-    //gyro.reset();
-    Climb.dynamicArmWinch.setSelectedSensorPosition(0);
-    Climb.staticArmWinch.setSelectedSensorPosition(0);
-    Climb.autoStep = 0;
-    drive.resetEncoders();
-  }
-
-  /** This function is called periodically during operator control. */
-  @Override
-  public void teleopPeriodic() {
-    try {
-      shooter.run(); 
-    } 
-    catch (Exception e) {
-      dashboardLog.logError(e);
-    }
-    try {
-      conveyor.run(); 
-    } 
-    catch (Exception e) {
-      dashboardLog.logError(e);
-    }
-    try {
-      intake.run(); 
-    } 
-    catch (Exception e) {
-      dashboardLog.logError(e);
-    }
-    try {
-      climb.run();    
-    } 
-    catch (Exception e) {
-      dashboardLog.logError(e);
-    }
-    try {
-      drive.run();    
-    } 
-    catch (Exception e) {
-      dashboardLog.logError(e);
-    }
-
-    /*
-    
-    if(MechanismsJoystick.dynamicArmPancakeRelease()) {
-    
-      RobotMap.testSolenoidOne.set(Value.kOff);
-      RobotMap.testSolenoidTwo.set(Value.kOff);
-      RobotMap.testSolenoidThree.set(Value.kReverse);
-
-    } else if (MechanismsJoystick.staticArmPancakeRelease()) {
-      
-      RobotMap.testSolenoidOne.set(Value.kOff);
-      RobotMap.testSolenoidTwo.set(Value.kOff);
-      RobotMap.testSolenoidThree.set(Value.kForward);
-    }
-    */
-
-    //LEDS
-    //Master Timer (110 Seconds)
-    if(masterTimer.get() > 110 && masterTimer.get() < 112) LEDs.run(12);
-    //Master Timer (All times other than 110 seconds)
-    else {
-      //Ball Count > 0
-      if (climb.enableClimb) LEDs.run(10);
-      else if(conveyor.ballCount > 0 && !climb.enableClimb) LEDs.run(4);         //If we have 2 balls                        //4
-      else if(conveyor.ballCount > 0 && climb.enableClimb) LEDs.run(10);    //IF we have 2 balls and are climbing       //10
-      else if(conveyor.ballCount == 0 && !climb.enableClimb) {              //If we are < 2 balls and arent climbing    //...
-        if(Drive.PIDDriveActive){                                           //If PID active                             //...
-          if(shooter.shooterRunning) LEDs.run(8);                           //If shooter running in PID                 //8
-          else if(!shooter.shooterRunning) {                                //If shooter is not running                 //...
-            if(drive.highTorqueModeActive) LEDs.run(6);                     //If HTM is active in PID                   //6
-            else if(!drive.highTorqueModeActive) LEDs.run(9);               //If HTM is inactive in PID                 //9
-          }
-        }
-        else if(!Drive.PIDDriveActive)                                      //If PID is inactive                        //...
-          if(drive.highTorqueModeActive) LEDs.run(7);                       //If HTM is active: no PID                  //7
-          else if(!drive.highTorqueModeActive) {                            //If HTM is inactive: no PID                //...
-            if(!shooter.shooterRunning) LEDs.run(2);                        //If shooter is not running                 //2
-            else if(shooter.shooterRunning) LEDs.run(5);                    //IF shooter is running                     //5
-          }
-        }
-      } 
-  }
+    	//Master Timer (All times other than 110 seconds)
+    	else {
+      		//Ball Count > 0
+      		if (climb.enableClimb) LEDs.run(10);
+      		else if(conveyor.ballCount > 0 && !climb.enableClimb) LEDs.run(4);         //If we have 2 balls                        //4
+      		else if(conveyor.ballCount > 0 && climb.enableClimb) LEDs.run(10);    //IF we have 2 balls and are climbing       //10
+      		else if(conveyor.ballCount == 0 && !climb.enableClimb) {              //If we are < 2 balls and arent climbing    //...
+        		if(Drive.PIDDriveActive){                                           //If PID active                             //...
+          			if(shooter.shooterRunning) LEDs.run(8);                           //If shooter running in PID                 //8
+          			else if(!shooter.shooterRunning) {                                //If shooter is not running                 //...
+            			if(drive.highTorqueModeActive) LEDs.run(6);                     //If HTM is active in PID                   //6
+            			else if(!drive.highTorqueModeActive) LEDs.run(9);               //If HTM is inactive in PID                 //9
+          			}
+        		}
+				//If PID is inactive ...
+        		else if(!Drive.PIDDriveActive) {                                      
+          			if(drive.highTorqueModeActive) LEDs.run(7);                       //If HTM is active: no PID                  //7
+          			else if(!drive.highTorqueModeActive) {                            //If HTM is inactive: no PID                //...
+            			if(!shooter.shooterRunning) LEDs.run(2);                        //If shooter is not running                 //2
+            			else if(shooter.shooterRunning) LEDs.run(5);                    //IF shooter is running                     //5
+          			}
+				}
+        	}
+    	} 
+  	}
 
     /*
     if(masterTimer.get() > 110 && masterTimer.get() < 112) LEDs.run(12);
@@ -362,13 +310,13 @@ public class Robot extends TimedRobot {
   	@Override
   	public void disabledPeriodic() { }
 
-  /** This function is called once when test mode is enabled. */
-  @Override
-  public void testInit() {
-  }
+  	/** This function is called once when test mode is enabled. */
+  	@Override
+  	public void testInit() {
+  	}
 
-  /** This function is called periodically during test mode. */
-  @Override
-  public void testPeriodic() {
-  }
+  	/** This function is called periodically during test mode. */
+  	@Override
+  	public void testPeriodic() {
+  	}
 }
