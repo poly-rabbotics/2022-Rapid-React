@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Controls.DriveJoystick;
 import frc.robot.subsystems.*;
+import frc.robot.patterns.*;
 import edu.wpi.first.wpilibj.*;
 
 /**
@@ -22,7 +23,6 @@ public class Robot extends TimedRobot {
   	public static Conveyor conveyor;
   	public static Climb climb;
   	public static Drive drive;
-  	public static LEDLights LEDs;
   	public static Timer masterTimer, autoTimer;
   	public static AHRSGyro gyro;
   	public static double leftEncoderCounts, rightEncoderCounts;
@@ -53,8 +53,6 @@ public class Robot extends TimedRobot {
     
     	RobotMap.initClimb();
     	climb = new Climb();
-    
-    	LEDs = new LEDLights();
     
     	masterTimer = new Timer();
     	//masterTimer.start();
@@ -92,7 +90,54 @@ public class Robot extends TimedRobot {
    	 */
   	@Override
  	public void robotPeriodic() {
-    	SmartDashboard.putNumber("Timer", masterTimer.get());
+		/* --> here begins ye old led lights <-- */
+		if (isDisabled()) {
+			RobotMap.lightRenderer.setPattern(new RandomPattern(50, 40.0));
+		}
+		/*
+    	//LEDS
+    	//Master Timer (110 Seconds)
+    	if(masterTimer.get() > 110 && masterTimer.get() < 112) {
+    		RobotMap.lightRenderer.setPattern(new RainbowLightPattern(50, 40.0));
+		//Master Timer (All times other than 110 seconds)
+		} else {
+      		//Ball Count > 0
+      		if (climb.enableClimb) { 
+				LEDs.run(10);
+			} else if(conveyor.ballCount > 0 && !climb.enableClimb) { 
+				LEDs.run(4); //If we have 2 balls use mode 4
+      		} else if(conveyor.ballCount > 0 && climb.enableClimb) {
+				LEDs.run(10); //If we have 2 balls and are climbing use mode 10
+			} else if(conveyor.ballCount == 0 && !climb.enableClimb) {
+				//If we are < 2 balls and arent climbing ...
+        		if(Drive.PIDDriveActive) {                                           
+					//If PID active ...
+          			if(shooter.shooterRunning) 
+						LEDs.run(8); //If shooter running in PID use mode 8
+          			else if(!shooter.shooterRunning) {
+						//If shooter is not running ...
+            			if(drive.highTorqueModeActive) 
+							LEDs.run(6); //If HTM is active in PID use mode 6
+            			else if(!drive.highTorqueModeActive) 
+							LEDs.run(9); //If HTM is inactive in PID use mode 9
+          			}
+        		}
+        		else if(!Drive.PIDDriveActive) {                                  
+          			if(drive.highTorqueModeActive) {
+						LEDs.run(7); //If HTM is active: no PID use mode 7
+					} else if(!drive.highTorqueModeActive) {
+						//If HTM is inactive: no PID ...
+            			if(!shooter.shooterRunning) 
+							LEDs.run(2); //If shooter is not running use mode 2
+            			else if(shooter.shooterRunning) 
+							LEDs.run(5); //If shooter is running use mode 5
+          			}
+				}
+        	}
+    	}*/
+		/* --> here end ye old led lights, beyond be dragons <-- */
+
+		SmartDashboard.putNumber("Timer", masterTimer.get());
     	SmartDashboard.putBoolean("DA Limit Switch", !RobotMap.limitSwitchDA.get());
     	SmartDashboard.putBoolean("SA Limit Switch", !RobotMap.limitSwitchSA.get());
 
@@ -124,9 +169,6 @@ public class Robot extends TimedRobot {
 
     	pressureGood = robotPressure > 60;
     	SmartDashboard.putBoolean("Pressure Good?", pressureGood);  
-    
-    	if(isDisabled()) 
-			LEDs.run(1);
 
     	SmartDashboard.putNumber("LIDAR Distance Inches", lidar.getDistance() / 2.54);
     	//CLIMB DATA
@@ -260,46 +302,6 @@ public class Robot extends TimedRobot {
     	}
     	*/
 
-    	//LEDS
-    	//Master Timer (110 Seconds)
-    	if(masterTimer.get() > 110 && masterTimer.get() < 112) {
-			LEDs.run(12);
-    	//Master Timer (All times other than 110 seconds)
-		} else {
-      		//Ball Count > 0
-      		if (climb.enableClimb) { 
-				LEDs.run(10);
-			} else if(conveyor.ballCount > 0 && !climb.enableClimb) { 
-				LEDs.run(4); //If we have 2 balls use mode 4
-      		} else if(conveyor.ballCount > 0 && climb.enableClimb) {
-				LEDs.run(10); //If we have 2 balls and are climbing use mode 10
-			} else if(conveyor.ballCount == 0 && !climb.enableClimb) {
-				//If we are < 2 balls and arent climbing ...
-        		if(Drive.PIDDriveActive) {                                           
-					//If PID active ...
-          			if(shooter.shooterRunning) 
-						LEDs.run(8); //If shooter running in PID use mode 8
-          			else if(!shooter.shooterRunning) {
-						//If shooter is not running ...
-            			if(drive.highTorqueModeActive) 
-							LEDs.run(6); //If HTM is active in PID use mode 6
-            			else if(!drive.highTorqueModeActive) 
-							LEDs.run(9); //If HTM is inactive in PID use mode 9
-          			}
-        		}
-        		else if(!Drive.PIDDriveActive) {                                  
-          			if(drive.highTorqueModeActive) {
-						LEDs.run(7); //If HTM is active: no PID use mode 7
-					} else if(!drive.highTorqueModeActive) {
-						//If HTM is inactive: no PID ...
-            			if(!shooter.shooterRunning) 
-							LEDs.run(2); //If shooter is not running use mode 2
-            			else if(shooter.shooterRunning) 
-							LEDs.run(5); //If shooter is running use mode 5
-          			}
-				}
-        	}
-    	}
   	}
 
     /*
