@@ -7,10 +7,10 @@ import frc.robot.subsystems.helperClasses.*;
 /**
  * Green and Gold to please our jackrabbit overlords.
  */
-public class PolyThemedLightPattern implements LightPattern {
+public class TwoColorGradiant implements LightPattern {
 	// The light strip takes (255, 255, 255) to be the same as (1, 1, 1).
-	private static final Color GREEN = new Color(0, 0.58, 0); 
-	private static final Color GOLD = new Color(0.58, 0.27, 0);
+	private Color a = new Color(0, 0.58, 0); 
+	private Color b = new Color(0.58, 0.27, 0);
 
 	private boolean requestingReset = false;
 	private double time = 0.0;
@@ -48,8 +48,8 @@ public class PolyThemedLightPattern implements LightPattern {
 	private void updatePattern() {
 		// Get a gradiant from the starting end to the middle, and from the middle to the other end. Subtraction is performed
 		// rather than using the same length value to account for on lengths.
-		final Color[] gradiantPartOne = ColorUtils.makeGradiant(GREEN, GOLD, pattern.length / 2);
-		final Color[] gradiantPartTwo = ColorUtils.makeGradiant(GOLD, GREEN, pattern.length - (pattern.length / 2));
+		final Color[] gradiantPartOne = ColorUtils.makeGradiant(a, b, pattern.length / 2);
+		final Color[] gradiantPartTwo = ColorUtils.makeGradiant(b, a, pattern.length - (pattern.length / 2));
 
 		int shift = (int)(speed * time) % pattern.length;
 
@@ -72,14 +72,31 @@ public class PolyThemedLightPattern implements LightPattern {
 	 * Creates a new {@link RainbowLightPattern}.
 	 * 
 	 * @param length
-	 * The number of colors to calculate a rainbow for.
+	 * The length of the pattern.
 	 * 
 	 * @param speed
 	 * The speed at which to change over time with using a {@link LightRenderer}.
 	 */
-	public PolyThemedLightPattern(int length, double speed) {
+	public TwoColorGradiant(int length, double speed) {
 		this.speed = speed;
 		pattern = new Color[length];
+		updatePattern();
+	}
+	
+	/**
+	 * Creates a new {@link RainbowLightPattern}.
+	 * 
+	 * @param length
+	 * The length of the pattern.
+	 * 
+	 * @param speed
+	 * The speed at which to change over time with using a {@link LightRenderer}.
+	 */
+	public TwoColorGradiant(int length, double speed, Color a, Color b) {
+		this.speed = speed;
+		pattern = new Color[length];
+		this.a = a;
+		this.b = b;
 		updatePattern();
 	}
 }
