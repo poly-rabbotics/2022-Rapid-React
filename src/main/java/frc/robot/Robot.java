@@ -79,7 +79,8 @@ public class Robot extends TimedRobot {
     	// Starts the limelight service and calls the limelights run() methods at a fixed rate of once every 10 ms or at 100hz.
     	RobotMap.limelightService.scheduleAtFixedRate(RobotMap.limelight, 0, 10, TimeUnit.MILLISECONDS);
 
-    	dashboardLog = new DashboardLog();
+    	// Similarily starts the LED light service at 25 hz or every 40 ms. 
+		RobotMap.limelightService.scheduleAtFixedRate(RobotMap.limelight, 0, 40, TimeUnit.MILLISECONDS);
   	}
   
   	/**

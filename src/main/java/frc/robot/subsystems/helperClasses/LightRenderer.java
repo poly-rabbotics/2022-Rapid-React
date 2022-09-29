@@ -10,7 +10,7 @@ import frc.robot.patterns.RainbowLightPattern;
 /**
  * A class for rendering {@link LightPattern}s to lights strips on the robot.
  */
-public class LightRenderer {
+public class LightRenderer implements Runnable {
 	private static final double DEFAULT_RAINBOW_SPEED = 50.0;
 	//public static final DigitalInput ledSwitch = new DigitalInput(0);
 

@@ -1,6 +1,7 @@
 package frc.robot;
 
 import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.helperClasses.LightRenderer;
 
 import java.util.concurrent.*;
 import edu.wpi.first.wpilibj.*;
@@ -13,13 +14,19 @@ public class RobotMap {
 	// NOTE: this should be the only instance of this class, ever.
 	// It only works if you use the same one everywhere.
 	public static DashboardLog dashboardLog = new DashboardLog();
-	public static final AddressableLED led = new AddressableLED(1);
+
 
 	/*
 	 * Feilds are sorted by and titled according to the method in
 	 * which they are initialized.
 	 */
 
+	/* --> LED Lights <-- */
+	// Using 100 for buffer length, could easily be changed, was chosen arbatrarily.
+	public static LightRenderer lightRenderer = new LightRenderer(1, 100);	
+	public static ScheduledExecutorService lightRendererService;
+	public static final AddressableLED led = new AddressableLED(1);
+	
 	/* --> Joysticks <-- */
     public static XboxController driveJoystick;
     public static Joystick mechanismsJoystick;
@@ -64,9 +71,18 @@ public class RobotMap {
     public static Servo limelightServo;
     public static Limelight limelight;
 	public static ScheduledExecutorService limelightService;
-	
+
 	/* --> Pressure Transducer <-- */
 	public static AnalogInput pressureTransducer;
+
+	public static void initLEDLights() {
+		try {
+			lightRendererService = Executors.newSingleThreadScheduledExecutor();
+		} catch (Exception e) {
+			dashboardLog.logError("Error occured while initializing LED lights");
+			dashboardLog.logError(e);
+		}
+	}
 
 	public static void initJoysticks(){
         try{
