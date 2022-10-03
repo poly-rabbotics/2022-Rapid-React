@@ -54,6 +54,7 @@ public class Robot extends TimedRobot {
   
   @Override
   public void robotInit() {
+    //always ensure that RobotMap.init[Thing]() is called before [thing] = new [Thing]();
     RobotMap.initJoysticks();
 
     comp = new Compressor(1, PneumaticsModuleType.REVPH);
@@ -158,13 +159,15 @@ public class Robot extends TimedRobot {
       DriveJoystick.rumble(0);
     } 
 
-	auto.setAutoMode();
+	  auto.setAutoMode();
     SmartDashboard.putBoolean("Auto movement completed?", drive.movementCompleted);
     SmartDashboard.putBoolean("Auto turn completed?", drive.turnCompleted);
 
     SmartDashboard.putBoolean("Climb Enabled?", climb.enableClimb);
 
     if (DriveJoystick.resetGyroButton()) gyro.reset();
+
+    
   }
 
   /**
@@ -285,8 +288,8 @@ public class Robot extends TimedRobot {
       else if(conveyor.ballCount > 0 && climb.enableClimb) LEDs.run(10);    //IF we have 2 balls and are climbing       //10
       else if(conveyor.ballCount == 0 && !climb.enableClimb) {              //If we are < 2 balls and arent climbing    //...
         if(Drive.PIDDriveActive){                                           //If PID active                             //...
-          if(shooter.shooterRunning) LEDs.run(8);                           //If shooter running in PID                 //8
-          else if(!shooter.shooterRunning) {                                //If shooter is not running                 //...
+          if(shooter.shooterUpToSpeed) LEDs.run(8);                           //If shooter running in PID                 //8
+          else if(!shooter.shooterUpToSpeed) {                                //If shooter is not running                 //...
             if(drive.highTorqueModeActive) LEDs.run(6);                     //If HTM is active in PID                   //6
             else if(!drive.highTorqueModeActive) LEDs.run(9);               //If HTM is inactive in PID                 //9
           }
@@ -294,8 +297,8 @@ public class Robot extends TimedRobot {
         else if(!Drive.PIDDriveActive)                                      //If PID is inactive                        //...
           if(drive.highTorqueModeActive) LEDs.run(7);                       //If HTM is active: no PID                  //7
           else if(!drive.highTorqueModeActive) {                            //If HTM is inactive: no PID                //...
-            if(!shooter.shooterRunning) LEDs.run(2);                        //If shooter is not running                 //2
-            else if(shooter.shooterRunning) LEDs.run(5);                    //IF shooter is running                     //5
+            if(!shooter.shooterUpToSpeed) LEDs.run(2);                        //If shooter is not running                 //2
+            else if(shooter.shooterUpToSpeed) LEDs.run(5);                    //IF shooter is running                     //5
           }
         }
       } 

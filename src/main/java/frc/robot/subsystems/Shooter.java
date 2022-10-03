@@ -22,7 +22,7 @@ public class Shooter {
     static double kP, kI, kD;
     public static LEDLights LEDLights;
     public boolean shooterRunning;
-    public static boolean shooterUpToSpeed;
+    public boolean shooterUpToSpeed;
     Timer conveyorDelay = new Timer();
 
     
@@ -90,8 +90,8 @@ public class Shooter {
        shooterMotor.set(ControlMode.PercentOutput, shooterSpeedSetpoint);
 
        shooterRunning = shooterMotor.getSelectedSensorVelocity() != 0;
-       shooterUpToSpeed = shooterMotor.getSelectedSensorVelocity() < -4400; 
-       SmartDashboard.putBoolean("shooter up to speed?", shooterRunning);
+       shooterUpToSpeed = shooterMotor.getSelectedSensorVelocity() < -3000; 
+       SmartDashboard.putBoolean("shooter up to speed?", shooterUpToSpeed);
        /*
        if(MechanismsJoystick.shooterActive()) {
         shooterSpeedSetpoint=-5000;
