@@ -36,10 +36,11 @@ public class Up implements LightPattern {
 
     private void updatePattern() {
         position = (time * speed) % pattern.length;
-        for(int i = 0; i < pattern.length; i++) {
-            pattern[i] = Color.fromHSV(hue, 255, 255);
-            for(int j = 0; j < trailLength; i++) {
-                pattern[i-j] = Color.fromHSV(hue, 255, 255 - ((trailLength/255)*j));
+        pattern[(int)position] = Color.fromHSV(hue, 255, 255);
+        for(int j = 0; j < trailLength; i++) {
+            if((int)position-j >= 0) pattern[(int)position-j] = Color.fromHSV(hue, 255, 255 - ((trailLength/255)*j));
+            else {
+                pattern[(int)position-j] = Color.fromHSV(hue, 255, 255 - ((trailLength/255)*j));
             }
         }
     }
