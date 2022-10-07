@@ -92,7 +92,38 @@ public class Robot extends TimedRobot {
  	public void robotPeriodic() {
 		/* --> here begins ye old led lights <-- */
 		if (isDisabled()) {
+			// Run rainbow lights when disabled.
 			RobotMap.lightRenderer.setPattern(new RandomPattern(50, 40.0));
+		} else if (isTeleop()) {
+			// For baseline teleop mode use green and gold gradiant.
+			RobotMap.lightRenderer.setPattern(new TwoColorGradiant(100, 2.0));
+
+			if (masterTimer.get() > 110 && masterTimer.get() < 112) {
+				// Solid red in game's last ten seconds.
+				RobotMap.lightRenderer.setPattern(new SolidColor(255, 0, 0));
+			} else if (climb.enableClimb) {
+				// Use up pattern for climbing
+				RobotMap.lightRenderer.setPattern(new Up(4.0, 50, 128, 8));
+			} else if (conveyor.ballCount > 0) {
+				// Solid green for two balls or more.
+				RobotMap.lightRenderer.setPattern(new SolidColor(0, 255, 0));
+			} else if (Drive.PIDDriveActive && shooter.shooterRunning) {
+				// Use Red to Blue blink for PID drive and shooter active.
+				// TODO: Implement a blink pattern.
+			} else if (Drive.PIDDriveActive && drive.highTorqueModeActive) {
+				// Use solid red for high torque mode. This was flashing red originally.
+				// TODO: implement flashing red pattern.
+				RobotMap.lightRenderer.setPattern(new SolidColor(255, 0, 0));
+			} else if (Drive.PIDDriveActive) {
+				// Use blink Red and Orange for PID drive only.
+				// TODO: implement blink pattern.
+			} else if (drive.highTorqueModeActive) {
+				// Solid orange for high torque and no PID drive.
+				RobotMap.lightRenderer.setPattern(new SolidColor(255, 100, 0));
+			} else if (shooter.shooterRunning) {
+				// Solid blue for running shooter and no PID drive.
+				RobotMap.lightRenderer.setPattern(new SolidColor(0, 0, 255));
+			}
 		}
 		/*
     	//LEDS
