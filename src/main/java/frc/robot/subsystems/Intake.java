@@ -23,25 +23,26 @@ import frc.robot.Controls.GuitarJoystick;
 public class Intake {
     static PWMVictorSPX intakeWinch;
     static CANSparkMax intake;
-    static double intakeSpeed;
+    static double INTAKE_SPEED;
     static boolean intakeDown;
-    static double intakeWinchPower = 0;
     static DoubleSolenoid intakeSolenoid;
     static boolean pneumaticsTransitioning;
+	static boolean intakeExtended;
 
   	public Intake() {
     	intakeSolenoid = RobotMap.intakeSolenoid;
     	intake = RobotMap.intakeMotor;
-    	intakeSpeed = -1;
+    	INTAKE_SPEED = -0.9;
     	intake.setIdleMode(IdleMode.kBrake);
 		pneumaticsTransitioning = false;
+		intakeExtended = false;
   	}
 
   	public void run() {
-    	if ((DriveJoystick.runIntake() || GuitarJoystick.intake()) && intakeSolenoid.get() == Value.kForward) {
-      		intake.set(intakeSpeed);
-    	} else if (DriveJoystick.runIntakeReverse() && intakeSolenoid.get() == Value.kForward) {
-			intake.set(-intakeSpeed);
+    	if ((DriveJoystick.runIntake() || GuitarJoystick.intake()) /* && intakeExtended */) { //the && part was causing inconveniences and running intake with intake retracted should not be a problem, so Rohan removed it
+      		intake.set(INTAKE_SPEED);
+    	} else if (DriveJoystick.runIntakeReverse() /* && intakeExtended */) {
+			intake.set(-INTAKE_SPEED);
 		} else {
 			intake.set(0);
 		}
@@ -75,12 +76,16 @@ public class Intake {
 
         	if (RobotMap.intakeSolenoid.get() == Value.kForward) {
           		RobotMap.intakeSolenoid.set(Value.kReverse);
+				intakeExtended = false;
         	} else { 
 				RobotMap.intakeSolenoid.set(Value.kForward);
+				intakeExtended = true;
 			}
     	} 
-    	if (!DriveJoystick.toggleIntakePiston()) 
-			pneumaticsTransitioning = false;
+    	if (!DriveJoystick.toggleIntakePiston()) pneumaticsTransitioning = false;
+
 	}
+
+	
 }
 

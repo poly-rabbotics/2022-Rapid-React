@@ -52,13 +52,13 @@ public class Drive {
   double turnError;
   double targetAngle;
   double gyroAngle;
-  public static double encoderCountsPer360, encoderCountsPerInch;
+  public static double ENCODER_COUNTS_PER_360, ENCODER_COUNTS_PER_INCH;
   double moveSetpoint;
   double currPositionL,currPositionR;
 
   public Drive() {
-    encoderCountsPer360 = 108200;  //300 per degree
-    encoderCountsPerInch = 1450;
+    ENCODER_COUNTS_PER_360 = 108200;  //300 per degree
+    ENCODER_COUNTS_PER_INCH = 1450;
     calibrateJoy = new Joystick(2);
     currPositionL=0;
     currPositionR=0;
@@ -239,10 +239,10 @@ public class Drive {
       rightBack.set(ControlMode.Velocity, targetVRight);
     } else {
       if (DriveJoystick.aim()) {
-        /*
+        
         leftBack.set(ControlMode.PercentOutput, move - x * 0.01667);
         rightBack.set(ControlMode.PercentOutput, -move - x * 0.01667);
-        */
+        
 
         leftBack.set(ControlMode.PercentOutput, move - power_LL);
         rightBack.set(ControlMode.PercentOutput, -move - power_LL);
@@ -390,7 +390,7 @@ public class Drive {
     if (!movementInitialized) {
       movementInitialized = true;
       movementCompleted = false;
-      moveSetpoint = inches * encoderCountsPerInch;
+      moveSetpoint = inches * ENCODER_COUNTS_PER_INCH;
       initPIDDrive();
       resetEncoders();
     }
@@ -398,7 +398,6 @@ public class Drive {
       leftBack.set(ControlMode.Position, moveSetpoint);
       rightBack.set(ControlMode.Position, -moveSetpoint);
       if ((leftBack.getSelectedSensorPosition() < moveSetpoint + 1000) && (leftBack.getSelectedSensorPosition() > moveSetpoint - 1000) && !movementCompleted) {
-        System.out.println("EEEEEEEEEEEEE");
         movementCompleted = true;
         resetEncoders();
       } else movementCompleted = false;
@@ -409,8 +408,8 @@ public class Drive {
 
   public boolean moveByInchesBasic(double startTime, double endTime, double inches) { //AUTONOMOUS DRIVE METHOD
     double time = Robot.autoTimer.get();
-    double moveSetpointL = inches*encoderCountsPerInch+currPositionL;
-    double moveSetpointR = inches*encoderCountsPerInch-currPositionR;
+    double moveSetpointL = inches*ENCODER_COUNTS_PER_INCH+currPositionL;
+    double moveSetpointR = inches*ENCODER_COUNTS_PER_INCH-currPositionR;
     
     if (time < endTime && time > startTime && !movementCompleted) {
       //initPIDDrive();
@@ -429,8 +428,8 @@ public class Drive {
 
     public boolean turnByDegreesBasic2(double startTime, double endTime, double inches) { //AUTONOMOUS DRIVE METHOD
       double time = Robot.autoTimer.get();
-      double moveSetpointL = inches*encoderCountsPer360/360.0+currPositionL;
-      double moveSetpointR = inches*encoderCountsPer360/360.0-currPositionR;
+      double moveSetpointL = inches*ENCODER_COUNTS_PER_360/360.0+currPositionL;
+      double moveSetpointR = inches*ENCODER_COUNTS_PER_360/360.0-currPositionR;
       
       if (time < endTime && time > startTime && !movementCompleted) {
         //initPIDDrive();
@@ -478,9 +477,9 @@ public class Drive {
     if (time < endTime && time > startTime) {
       if (!rotateInitialized) {
         rotateInitialized = true;
-        positionSetpoint =  encoderCountsPer360/360 * finalAngle;
-        leftBack.set(ControlMode.Position, positionSetpoint * encoderCountsPer360/360);
-        rightBack.set(ControlMode.Position, positionSetpoint * encoderCountsPer360/360);
+        positionSetpoint =  ENCODER_COUNTS_PER_360/360 * finalAngle;
+        leftBack.set(ControlMode.Position, positionSetpoint * ENCODER_COUNTS_PER_360/360);
+        rightBack.set(ControlMode.Position, positionSetpoint * ENCODER_COUNTS_PER_360/360);
       }
 
       if ((leftBack.getSelectedSensorPosition() > positionSetpoint - 100 
@@ -505,7 +504,7 @@ public class Drive {
     if (!rotateInitialized) {
       rotateInitialized = true;
       targetAngle = finalAngle;
-      positionSetpoint = initialPosition + encoderCountsPer360/360 * finalAngle;
+      positionSetpoint = initialPosition + ENCODER_COUNTS_PER_360/360 * finalAngle;
       //resetEncoders();
       gyro.reset();
     }
@@ -524,8 +523,8 @@ public class Drive {
         return false;
       }
     } else { // Encoder target not yet reached
-      leftBack.set(ControlMode.Position, targetAngle * encoderCountsPer360/360);
-      rightBack.set(ControlMode.Position, targetAngle * encoderCountsPer360/360);
+      leftBack.set(ControlMode.Position, targetAngle * ENCODER_COUNTS_PER_360/360);
+      rightBack.set(ControlMode.Position, targetAngle * ENCODER_COUNTS_PER_360/360);
       return false;
     }
 

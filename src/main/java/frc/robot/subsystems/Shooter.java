@@ -15,7 +15,7 @@ import frc.robot.Controls.MechanismsJoystick;
 
 public class Shooter {
     
-    static double shooterSpeedSetpoint, highHubSetpoint, lowHubSetpoint;
+    static double shooterSpeedSetpoint, HIGH_SPEED_SETPOINT, LOW_SPEED_SETPOINT;
     //static CANSparkMax shooterMotor;
     static TalonSRX shooterMotor;
     //static SparkMaxPIDController shooterPIDController;
@@ -31,8 +31,8 @@ public class Shooter {
         shooterSpeedSetpoint = 0;
         //highHubSetpoint = -4650;
         //lowHubSetpoint = -2500;
-        highHubSetpoint = -0.8;
-        lowHubSetpoint = -0.0;
+        HIGH_SPEED_SETPOINT = -0.8;
+        LOW_SPEED_SETPOINT = -0.0;
         shooterMotor = RobotMap.shooterMotor;
         
         kP = 0.001; //NEW PIDS NEEDED FOR FALCON
@@ -76,11 +76,11 @@ public class Shooter {
         
        if (MechanismsJoystick.farShot()) {
         
-        shooterSpeedSetpoint = highHubSetpoint;
+        shooterSpeedSetpoint = HIGH_SPEED_SETPOINT;
         //if(conveyorDelay.get()>1.5) Conveyor.conveyorSpeed=0.8;
         LEDLights.up(2);
         } else if (MechanismsJoystick.closeShot()) {
-            shooterSpeedSetpoint = lowHubSetpoint;
+            shooterSpeedSetpoint = LOW_SPEED_SETPOINT;
         }
          else {
            shooterSpeedSetpoint = 0;
@@ -102,7 +102,7 @@ public class Shooter {
         shooterSpeedSetpoint=0;
         shooterMotor.set(0);
     } */
-        SmartDashboard.putNumber("Shooter speed setpoint", highHubSetpoint);
+        SmartDashboard.putNumber("Shooter speed setpoint", HIGH_SPEED_SETPOINT);
         SmartDashboard.putNumber("Shooter RPM", shooterMotor.getSelectedSensorVelocity());
     }
     
@@ -115,9 +115,9 @@ public class Shooter {
 
     public void adjustShooterSpeed() {
         if (MechanismsJoystick.axis1() > 0.5) {
-            highHubSetpoint += 2;
+            HIGH_SPEED_SETPOINT += 2;
         } else if (MechanismsJoystick.axis1() < -0.5) {
-            highHubSetpoint -= 2;
+            HIGH_SPEED_SETPOINT -= 2;
         }
     }
 }

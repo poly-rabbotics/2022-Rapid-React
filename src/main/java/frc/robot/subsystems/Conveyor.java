@@ -22,7 +22,7 @@ public class Conveyor {
     static boolean reversed;
     static CANSparkMax conveyorMotor;
     static double conveyorSpeed;
-    double setpoint = 0.6;
+    double CONVEYOR_SPEED_SETPOINT = 0.6;
     boolean ballDetect;
     Timer ballSpacer = new Timer();
     boolean ballDetectedLow, ballDetectedHigh;
@@ -47,18 +47,18 @@ public class Conveyor {
       }
       else if ((GuitarJoystick.conveyorIn() || MechanismsJoystick.conveyor()) && !ballDetectedHigh) {
         //Normal conveyance, stop at prox switch
-        conveyorSpeed = setpoint;
+        conveyorSpeed = CONVEYOR_SPEED_SETPOINT;
       }
       else if ((GuitarJoystick.conveyorIn() || MechanismsJoystick.conveyor()) && ((GuitarJoystick.farShot() || MechanismsJoystick.farShot()) || (GuitarJoystick.closeShot()) || MechanismsJoystick.closeShot())) {
         //Allow conveyor to run when shooter is also activated regardless of prox switch
         //Does not run conveyor if shooter is not up to speed
-        conveyorSpeed = setpoint;
+        conveyorSpeed = CONVEYOR_SPEED_SETPOINT;
       }
       else if (GuitarJoystick.conveyorOut() || MechanismsJoystick.conveyor2()){ 
         // Run conveyor backwards
-        conveyorSpeed = -1*setpoint;
+        conveyorSpeed = -1*CONVEYOR_SPEED_SETPOINT;
       } else if (ballDetectedLow && !ballDetectedHigh) {
-      conveyorSpeed = setpoint;
+      conveyorSpeed = CONVEYOR_SPEED_SETPOINT;
       ballDetect = true;
       ballSpacer.reset();
       ballSpacer.start();
@@ -66,7 +66,7 @@ public class Conveyor {
     } else if (!ballDetectedLow && ballDetect) {
         // Executed for indexing purposes
       SmartDashboard.putNumber("Ball Spacer", ballSpacer.get());
-      conveyorSpeed = setpoint;
+      conveyorSpeed = CONVEYOR_SPEED_SETPOINT;
       if (ballSpacer.get() > 0.2) {
         ballDetect = false;
         conveyorSpeed = 0;

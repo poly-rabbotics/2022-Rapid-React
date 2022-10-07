@@ -33,7 +33,6 @@ public class Robot extends TimedRobot {
   	PneumaticHub hub;
   	AutoModes auto;
   	DashboardLog dashboardLog;
-
   	private double prevPressure = 0.0;
   
   	@Override
@@ -106,8 +105,8 @@ public class Robot extends TimedRobot {
     	SmartDashboard.putNumber("right Encoder Feet", rightEncoderCounts / 13445);
     	SmartDashboard.putNumber("left Encoder Counts", leftEncoderCounts);
     	SmartDashboard.putNumber("right Encoder Counts", rightEncoderCounts);
-    	SmartDashboard.putNumber("left Encoder Degrees", leftEncoderCounts / Drive.encoderCountsPer360 / 360);
-    	SmartDashboard.putNumber("right Encoder Degrees", rightEncoderCounts / Drive.encoderCountsPer360 / 360);
+    	SmartDashboard.putNumber("left Encoder Degrees", leftEncoderCounts / Drive.ENCODER_COUNTS_PER_360 / 360);
+    	SmartDashboard.putNumber("right Encoder Degrees", rightEncoderCounts / Drive.ENCODER_COUNTS_PER_360 / 360);
     	SmartDashboard.putBoolean("prox 1", RobotMap.proxSensorLow.get());
     	SmartDashboard.putBoolean("prox 2", RobotMap.proxSensorHigh.get());
 
@@ -119,6 +118,7 @@ public class Robot extends TimedRobot {
     	// in the case that a cycle takes longer than 20 millisecond, or is run faster than
     	// 50 hz for whatever reason, this value will be innacurate.
 		SmartDashboard.putNumber("Pressure per Iteration Lost", prevPressure - robotPressure);
+    
     	prevPressure = robotPressure;
 
     	pressureGood = robotPressure > 60;
@@ -207,6 +207,7 @@ public class Robot extends TimedRobot {
     	Climb.staticArmWinch.setSelectedSensorPosition(0);
     	Climb.autoStep = 0;
     	drive.resetEncoders();
+		
   	}
 
   	/** This function is called periodically during operator control. */
