@@ -1,7 +1,9 @@
 package frc.robot.patterns;
 
 import edu.wpi.first.wpilibj.util.Color;
+import frc.robot.*;
 import frc.robot.subsystems.helperClasses.LightPattern;
+
 /**
  * A class for making a blinking color pattern, either cycling through an
  * array of colors, or using just one color and blinking on and off.
@@ -95,6 +97,10 @@ public class Blink implements LightPattern {
 	 * in the given arrray to the next by order of element index. 
 	 */
 	public Blink(Color[] colors) {
+		if (colors.length < 2) {
+			RobotMap.dashboardLog.logWarning("You passed an array with only one element into Blink(Color[] colors). This will create a solid color!");
+		}
+
 		this.colors = colors;
 		updatePattern(0.0);
 	}
@@ -106,6 +112,10 @@ public class Blink implements LightPattern {
 	 * color per second.
 	 */
 	public Blink(Color[] colors, double speed) {
+		if (colors.length < 2) {
+			RobotMap.dashboardLog.logWarning("You passed an array with only one element into Blink(Color[] colors, double speed). This will create a solid color!");
+		}
+
 		this.colors = colors;
 		this.speed = speed;
 		updatePattern(0.0);
