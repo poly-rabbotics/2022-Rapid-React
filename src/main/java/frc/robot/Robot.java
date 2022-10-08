@@ -10,6 +10,7 @@ import frc.robot.Controls.DriveJoystick;
 import frc.robot.subsystems.*;
 import frc.robot.patterns.*;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.util.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -109,14 +110,19 @@ public class Robot extends TimedRobot {
 				RobotMap.lightRenderer.setPattern(new SolidColor(0, 255, 0));
 			} else if (Drive.PIDDriveActive && shooter.shooterRunning) {
 				// Use Red to Blue blink for PID drive and shooter active.
-				// TODO: Implement a blink pattern.
+				RobotMap.lightRenderer.setPattern(new Blink(new Color[] {
+					new Color(1.0, 0.0, 0.0),
+					new Color(0.0, 0.0, 1.0)
+				}));
 			} else if (Drive.PIDDriveActive && drive.highTorqueModeActive) {
 				// Use solid red for high torque mode. This was flashing red originally.
-				// TODO: implement flashing red pattern.
-				RobotMap.lightRenderer.setPattern(new SolidColor(255, 0, 0));
+				RobotMap.lightRenderer.setPattern(new Blink(new Color(1.0, 0.0, 0.0)));
 			} else if (Drive.PIDDriveActive) {
 				// Use blink Red and Orange for PID drive only.
-				// TODO: implement blink pattern.
+				RobotMap.lightRenderer.setPattern(new Blink(new Color[] {
+					new Color(1.0, 0.0, 0.0),
+					new Color(1.0, 0.4, 0.0)
+				}))
 			} else if (drive.highTorqueModeActive) {
 				// Solid orange for high torque and no PID drive.
 				RobotMap.lightRenderer.setPattern(new SolidColor(255, 100, 0));
