@@ -122,7 +122,7 @@ public class Robot extends TimedRobot {
 				RobotMap.lightRenderer.setPattern(new Blink(new Color[] {
 					new Color(1.0, 0.0, 0.0),
 					new Color(1.0, 0.4, 0.0)
-				}))
+				}));
 			} else if (drive.highTorqueModeActive) {
 				// Solid orange for high torque and no PID drive.
 				RobotMap.lightRenderer.setPattern(new SolidColor(255, 100, 0));
