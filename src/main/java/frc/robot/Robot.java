@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import java.util.concurrent.*;
 import java.util.concurrent.TimeUnit;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Controls.DriveJoystick;
@@ -11,6 +12,7 @@ import frc.robot.subsystems.*;
 import frc.robot.patterns.*;
 import edu.wpi.first.wpilibj.*;
 import edu.wpi.first.wpilibj.util.*;
+import frc.robot.subsystems.helperClasses.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -36,6 +38,9 @@ public class Robot extends TimedRobot {
   	DashboardLog dashboardLog;
 
   	private double prevPressure = 0.0;
+
+	private LightRenderer lightRenderer = new LightRenderer(1, 100);	
+	private ScheduledExecutorService lightRendererService;
   
   	@Override
   	public void robotInit() {
@@ -79,9 +84,11 @@ public class Robot extends TimedRobot {
     	RobotMap.limelightService.scheduleAtFixedRate(RobotMap.limelight, 0, 10, TimeUnit.MILLISECONDS);
 
     	// Similarily starts the LED light service at 25 hz or every 40 ms. 
-		RobotMap.limelightService.scheduleAtFixedRate(RobotMap.limelight, 0, 40, TimeUnit.MILLISECONDS);
-  	}
-  
+		lightRendererService = Executors.newSingleThreadScheduledExecutor();
+		lightRendererService.scheduleAtFixedRate(lightRenderer, 0, 40, TimeUnit.MILLISECONDS);
+		lightRenderer.setPattern(new RainbowLightPattern(50, 40.0));
+	}
+
   	/**
 	 * This function is called every robot packet, no matter the mode. Use this for items like
 	 * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
@@ -92,43 +99,44 @@ public class Robot extends TimedRobot {
   	@Override
  	public void robotPeriodic() {
 		/* --> here begins ye old led lights <-- */
+
 		if (isDisabled()) {
 			// Run rainbow lights when disabled.
-			RobotMap.lightRenderer.setPattern(new RandomPattern(50, 40.0));
+			lightRenderer.setPatternIfNotSameType(new RainbowLightPattern(50, 40.0));
 		} else if (isTeleop()) {
 			// For baseline teleop mode use green and gold gradiant.
-			RobotMap.lightRenderer.setPattern(new TwoColorGradiant(100, 2.0));
+			lightRenderer.setPatternIfNotSameType(new TwoColorGradiant(100, 20.0));
 
 			if (masterTimer.get() > 110 && masterTimer.get() < 112) {
 				// Solid red in game's last ten seconds.
-				RobotMap.lightRenderer.setPattern(new SolidColor(255, 0, 0));
+				lightRenderer.setPatternIfNotSameType(new SolidColor(255, 0, 0));
 			} else if (climb.enableClimb) {
 				// Use up pattern for climbing
-				RobotMap.lightRenderer.setPattern(new Up(4.0, 50, 128, 8));
+				lightRenderer.setPatternIfNotSameType(new Up(4.0, 50, 128, 8));
 			} else if (conveyor.ballCount > 0) {
 				// Solid green for two balls or more.
-				RobotMap.lightRenderer.setPattern(new SolidColor(0, 255, 0));
+				lightRenderer.setPatternIfNotSameType(new SolidColor(0, 255, 0));
 			} else if (Drive.PIDDriveActive && shooter.shooterRunning) {
 				// Use Red to Blue blink for PID drive and shooter active.
-				RobotMap.lightRenderer.setPattern(new Blink(new Color[] {
+				lightRenderer.setPatternIfNotSameType(new Blink(new Color[] {
 					new Color(1.0, 0.0, 0.0),
 					new Color(0.0, 0.0, 1.0)
 				}));
 			} else if (Drive.PIDDriveActive && drive.highTorqueModeActive) {
 				// Use solid red for high torque mode. This was flashing red originally.
-				RobotMap.lightRenderer.setPattern(new Blink(new Color(1.0, 0.0, 0.0)));
+				lightRenderer.setPatternIfNotSameType(new Blink(new Color(1.0, 0.0, 0.0)));
 			} else if (Drive.PIDDriveActive) {
 				// Use blink Red and Orange for PID drive only.
-				RobotMap.lightRenderer.setPattern(new Blink(new Color[] {
+				lightRenderer.setPatternIfNotSameType(new Blink(new Color[] {
 					new Color(1.0, 0.0, 0.0),
 					new Color(1.0, 0.4, 0.0)
 				}));
 			} else if (drive.highTorqueModeActive) {
 				// Solid orange for high torque and no PID drive.
-				RobotMap.lightRenderer.setPattern(new SolidColor(255, 100, 0));
+				lightRenderer.setPatternIfNotSameType(new SolidColor(255, 100, 0));
 			} else if (shooter.shooterRunning) {
 				// Solid blue for running shooter and no PID drive.
-				RobotMap.lightRenderer.setPattern(new SolidColor(0, 0, 255));
+				lightRenderer.setPatternIfNotSameType(new SolidColor(0, 0, 255));
 			}
 		}
 		/*

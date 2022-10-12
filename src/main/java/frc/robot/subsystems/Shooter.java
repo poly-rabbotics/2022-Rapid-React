@@ -20,14 +20,12 @@ public class Shooter {
     static TalonSRX shooterMotor;
     //static SparkMaxPIDController shooterPIDController;
     static double kP, kI, kD;
-    public static LEDLights LEDLights;
     public boolean shooterRunning;
     public static boolean shooterUpToSpeed;
     Timer conveyorDelay = new Timer();
 
     
     public Shooter() {
-        LEDLights = new LEDLights();
         shooterSpeedSetpoint = 0;
         //highHubSetpoint = -4650;
         //lowHubSetpoint = -2500;
@@ -78,7 +76,6 @@ public class Shooter {
         
         shooterSpeedSetpoint = highHubSetpoint;
         //if(conveyorDelay.get()>1.5) Conveyor.conveyorSpeed=0.8;
-        LEDLights.up(2);
         } else if (MechanismsJoystick.closeShot()) {
             shooterSpeedSetpoint = lowHubSetpoint;
         }

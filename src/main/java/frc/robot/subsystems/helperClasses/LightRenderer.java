@@ -28,6 +28,17 @@ public class LightRenderer implements Runnable {
 		timer.reset();
 		this.pattern = pattern;
 	}
+	
+	/**
+	 * Sets the current light pattern and resets the internal timer.
+	 */
+	public void setPatternIfNotSameType(LightPattern pattern) {
+		if (this.pattern.getClass() == pattern.getClass())
+			return;
+		
+		timer.reset();
+		this.pattern = pattern;
+	}
 
 	/**
 	 * Stops this {@link LightRenderer}'s internal {@link StatusedTimer}.

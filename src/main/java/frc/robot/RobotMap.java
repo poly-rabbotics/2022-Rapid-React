@@ -23,9 +23,8 @@ public class RobotMap {
 
 	/* --> LED Lights <-- */
 	// Using 100 for buffer length, could easily be changed, was chosen arbatrarily.
-	public static LightRenderer lightRenderer = new LightRenderer(1, 100);	
-	public static ScheduledExecutorService lightRendererService;
-	public static final AddressableLED led = new AddressableLED(1);
+	
+	//public static final AddressableLED led = new AddressableLED(1);
 	
 	/* --> Joysticks <-- */
     public static XboxController driveJoystick;
@@ -77,7 +76,7 @@ public class RobotMap {
 
 	public static void initLEDLights() {
 		try {
-			lightRendererService = Executors.newSingleThreadScheduledExecutor();
+			//lightRendererService = Executors.newSingleThreadScheduledExecutor();
 		} catch (Exception e) {
 			dashboardLog.logError("Error occured while initializing LED lights");
 			dashboardLog.logError(e);
