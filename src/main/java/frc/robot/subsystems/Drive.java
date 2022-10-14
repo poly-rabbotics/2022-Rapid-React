@@ -161,8 +161,8 @@ public class Drive {
     left = -DriveJoystick.getMove();
     right = -DriveJoystick.axisFive();
 
-    if (DriveJoystick.driveMode())
-      driveSelection = !driveSelection;
+    if (DriveJoystick.driveMode()) //keep for potential future use
+      driveSelection = !driveSelection; //unused, previously switched between arcade drive and tank drive styles
 
     move = Math.signum(move) * Math.pow(move, 2); // DRIVE CURVES
     turn = Math.pow(turn, 1) * 0.5;
