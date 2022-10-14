@@ -28,21 +28,28 @@ public class modeSix extends Thread {
 			
 			// Halt intake until next ball:
 			Robot.intake.autoRun(4, 18, 0.0);
-
+			Robot.conveyor.autoRun(4, 6, 0.4);
+			Robot.conveyor.autoRun(6, 7, 0.0);
 			Robot.drive.moveByInches(4, 6, 55.5);
 			Robot.drive.turnByDegrees(6, 7, 21);
 			Robot.drive.moveByInches(7, 9, 12);
+			Robot.conveyor.autoRun(7, 12, 0.4);
 			Robot.shooter.autoRun(9, 12, -4600);
+			Robot.conveyor.autoRun(12, 13, 0.0);
 			Robot.drive.moveByInches(12, 13, -8.54);
 			Robot.drive.turnByDegrees(13, 15, 88.4);
 			Robot.drive.moveByInches(15, 18, -81.3);
 			Robot.intake.autoRun(18, 20, -0.8);
+			Robot.conveyor.autoRun(20, 22, 0.4);
+			Robot.conveyor.autoRun(22, 23, 0.0);
 			
 			// halt intake until next pickup
 			Robot.intake.autoRun(20, 28, 0.0);
 			
 			Robot.drive.moveByInches(20, 26, -159.9);
 			Robot.intake.autoRun(26, 28, -0.8);
+			Robot.conveyor.autoRun(28, 30, 0.4);
+			Robot.conveyor.autoRun(30, 31, 0.0);
 
 			//halt intake:
 			Robot.intake.autoRun(28, 50, 0.0);
@@ -50,7 +57,9 @@ public class modeSix extends Thread {
 			Robot.drive.moveByInches(28, 38, 159.9 + 81.3);
 			Robot.drive.turnByDegrees(38, 40, -88.4);
 			Robot.drive.moveByInches(40, 41, 8.54);
+			Robot.conveyor.autoRun(41, 44, 0.4);
 			Robot.shooter.autoRun(41, 44, -4600);
+			Robot.conveyor.autoRun(44, 45, 0.0);
 		}
 
 		terminated = true;
