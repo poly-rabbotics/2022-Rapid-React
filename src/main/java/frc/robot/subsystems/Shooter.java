@@ -35,7 +35,7 @@ public class Shooter {
         LOW_SPEED_SETPOINT = -0.0;
         shooterMotor = RobotMap.shooterMotor;
         
-        kP = 0.001; //NEW PIDS NEEDED FOR FALCON
+        kP = 0.001; //NEW PIDS NEEDED FOR FALCON, BUT WE DON'T USE PIDS AT THE MOMENT
         kI = 0.000000;
         kD = 0.000000;
         //shooterPIDController =  shooterMotor.getPIDController();
@@ -115,9 +115,9 @@ public class Shooter {
 
     public void adjustShooterSpeed() {
         if (MechanismsJoystick.axis1() > 0.5) {
-            HIGH_SPEED_SETPOINT += 2;
+            HIGH_SPEED_SETPOINT -= 0.001;
         } else if (MechanismsJoystick.axis1() < -0.5) {
-            HIGH_SPEED_SETPOINT -= 2;
+            HIGH_SPEED_SETPOINT += 0.001;
         }
     }
 
