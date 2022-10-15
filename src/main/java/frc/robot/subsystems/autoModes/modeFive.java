@@ -47,7 +47,7 @@ public class modeFive extends Thread {
         	Robot.drive.moveByInches(7, 8.5, -103);
         	Robot.drive.turnByDegrees(8.5, 9.5, -51);
         	Robot.drive.moveByInches(9.5, 10.5, -23);
-        	Robot.shooter.autoRun(9.5, 11, -4600);
+        	Robot.shooter.autoRun(9.5, 11, -0.8);
         	Robot.conveyor.autoRun(10.5, 12.5, 0.8);
         	Robot.drive.moveByInches(12.5, 13, 23);
         	Robot.drive.turnByDegrees(13, 14, 60);
@@ -63,7 +63,7 @@ public class modeFive extends Thread {
        	 	Robot.drive.moveByInches(22, 24, -232);
         	Robot.drive.turnByDegrees(24, 25, -50);
         	Robot.drive.moveByInches(25, 26, -26);
-        	Robot.shooter.autoRun(25, 28, -4600);
+        	Robot.shooter.autoRun(25, 28, -0.8);
         	Robot.conveyor.autoRun(26, 28, 0.8);
 		}
 

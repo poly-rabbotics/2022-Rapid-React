@@ -37,14 +37,14 @@ public class modeOne extends Thread {
 		while (timer.get() < 15.0 && !terminationRequested) {
 			Robot.intake.deployIntake(0, 1, true);
 			Robot.intake.autoRun(0, 10, -0.85);
-			Robot.shooter.autoRun(0, 3, -4600);
+			Robot.shooter.autoRun(0, 3, -0.8);
 			Robot.conveyor.autoRun(1.5, 3, 1);
 			Robot.conveyor.autoRun(3, 5, 100000);
 			Robot.drive.goToEncCounts(3, 5, 100000);
 			Robot.drive.resetEncodersCall(5, 5.1);
 			Robot.drive.goToEncCounts(5.1, 7, -100000);
 			Robot.conveyor.autoRun(7, 9, 1);
-			Robot.shooter.autoRun(5.5, 10, -4600);
+			Robot.shooter.autoRun(5.5, 10, -0.8);
 		}
 
 		terminated = true;

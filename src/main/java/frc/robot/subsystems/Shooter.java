@@ -109,7 +109,7 @@ public class Shooter {
     public void autoRun(double startTime, double endTime, double shooterSpeed) {
         double time = Robot.autoTimer.get();
         if (time > startTime && time < endTime) {
-          shooterMotor.set(ControlMode.Velocity, shooterSpeed);
+          shooterMotor.set(ControlMode.PercentOutput, shooterSpeed);
         }
     }
 
@@ -120,4 +120,5 @@ public class Shooter {
             HIGH_SPEED_SETPOINT -= 2;
         }
     }
+
 }
