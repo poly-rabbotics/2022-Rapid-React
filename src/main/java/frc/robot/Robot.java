@@ -39,7 +39,7 @@ public class Robot extends TimedRobot {
 
   	private double prevPressure = 0.0;
 
-	private LightRenderer lightRenderer = new LightRenderer(1, 100);	
+	private LightRenderer lightRenderer = new LightRenderer(1, 64);	
 	private ScheduledExecutorService lightRendererService;
   
   	@Override
@@ -98,89 +98,7 @@ public class Robot extends TimedRobot {
    	 */
   	@Override
  	public void robotPeriodic() {
-		/* --> here begins ye old led lights <-- */
-
-		if (isDisabled()) {
-			// Run rainbow lights when disabled.
-			lightRenderer.setPatternIfNotSameType(new RainbowLightPattern(50, 40.0));
-		} else if (isTeleop()) {
-			// For baseline teleop mode use green and gold gradiant.
-			lightRenderer.setPatternIfNotSameType(new TwoColorGradiant(100, 20.0));
-
-			if (masterTimer.get() > 110 && masterTimer.get() < 112) {
-				// Solid red in game's last ten seconds.
-				lightRenderer.setPatternIfNotSameType(new SolidColor(255, 0, 0));
-			} else if (climb.enableClimb) {
-				// Use up pattern for climbing
-				lightRenderer.setPatternIfNotSameType(new Up(4.0, 50, 128, 8));
-			} else if (conveyor.ballCount > 0) {
-				// Solid green for two balls or more.
-				lightRenderer.setPatternIfNotSameType(new SolidColor(0, 255, 0));
-			} else if (Drive.PIDDriveActive && shooter.shooterRunning) {
-				// Use Red to Blue blink for PID drive and shooter active.
-				lightRenderer.setPatternIfNotSameType(new Blink(new Color[] {
-					new Color(1.0, 0.0, 0.0),
-					new Color(0.0, 0.0, 1.0)
-				}));
-			} else if (Drive.PIDDriveActive && drive.highTorqueModeActive) {
-				// Use solid red for high torque mode. This was flashing red originally.
-				lightRenderer.setPatternIfNotSameType(new Blink(new Color(1.0, 0.0, 0.0)));
-			} else if (Drive.PIDDriveActive) {
-				// Use blink Red and Orange for PID drive only.
-				lightRenderer.setPatternIfNotSameType(new Blink(new Color[] {
-					new Color(1.0, 0.0, 0.0),
-					new Color(1.0, 0.4, 0.0)
-				}));
-			} else if (drive.highTorqueModeActive) {
-				// Solid orange for high torque and no PID drive.
-				lightRenderer.setPatternIfNotSameType(new SolidColor(255, 100, 0));
-			} else if (shooter.shooterRunning) {
-				// Solid blue for running shooter and no PID drive.
-				lightRenderer.setPatternIfNotSameType(new SolidColor(0, 0, 255));
-			}
-		}
-		/*
-    	//LEDS
-    	//Master Timer (110 Seconds)
-    	if(masterTimer.get() > 110 && masterTimer.get() < 112) {
-    		RobotMap.lightRenderer.setPattern(new RainbowLightPattern(50, 40.0));
-		//Master Timer (All times other than 110 seconds)
-		} else {
-      		//Ball Count > 0
-      		if (climb.enableClimb) { 
-				LEDs.run(10);
-			} else if(conveyor.ballCount > 0 && !climb.enableClimb) { 
-				LEDs.run(4); //If we have 2 balls use mode 4
-      		} else if(conveyor.ballCount > 0 && climb.enableClimb) {
-				LEDs.run(10); //If we have 2 balls and are climbing use mode 10
-			} else if(conveyor.ballCount == 0 && !climb.enableClimb) {
-				//If we are < 2 balls and arent climbing ...
-        		if(Drive.PIDDriveActive) {                                           
-					//If PID active ...
-          			if(shooter.shooterRunning) 
-						LEDs.run(8); //If shooter running in PID use mode 8
-          			else if(!shooter.shooterRunning) {
-						//If shooter is not running ...
-            			if(drive.highTorqueModeActive) 
-							LEDs.run(6); //If HTM is active in PID use mode 6
-            			else if(!drive.highTorqueModeActive) 
-							LEDs.run(9); //If HTM is inactive in PID use mode 9
-          			}
-        		}
-        		else if(!Drive.PIDDriveActive) {                                  
-          			if(drive.highTorqueModeActive) {
-						LEDs.run(7); //If HTM is active: no PID use mode 7
-					} else if(!drive.highTorqueModeActive) {
-						//If HTM is inactive: no PID ...
-            			if(!shooter.shooterRunning) 
-							LEDs.run(2); //If shooter is not running use mode 2
-            			else if(shooter.shooterRunning) 
-							LEDs.run(5); //If shooter is running use mode 5
-          			}
-				}
-        	}
-    	}*/
-		/* --> here end ye old led lights, beyond be dragons <-- */
+		updateLEDPattern();
 
 		SmartDashboard.putNumber("Timer", masterTimer.get());
     	SmartDashboard.putBoolean("DA Limit Switch", !RobotMap.limitSwitchDA.get());
@@ -348,6 +266,50 @@ public class Robot extends TimedRobot {
     	*/
 
   	}
+
+	private void updateLEDPattern() {
+				/* --> here begins ye old led lights <-- */
+
+				if (isDisabled()) {
+					// Run rainbow lights when disabled.
+					lightRenderer.setPatternIfNotSameType(new RainbowLightPattern(50, 40.0));
+				} else if (isTeleop()) {
+					// For baseline teleop mode use green and gold gradiant.
+					lightRenderer.setPatternIfNotSameType(new TwoColorGradiant(100, 20.0));
+		
+					if (masterTimer.get() > 110 && masterTimer.get() < 112) {
+						// Solid red in game's last ten seconds.
+						lightRenderer.setPatternIfNotSameType(new SolidColor(255, 0, 0));
+					} else if (climb.enableClimb) {
+						// Use up pattern for climbing
+						lightRenderer.setPatternIfNotSameType(new Up(4.0, 50, 128, 8));
+					} else if (conveyor.ballCount > 0) {
+						// Solid green for two balls or more.
+						lightRenderer.setPatternIfNotSameType(new SolidColor(0, 255, 0));
+					} else if (Drive.PIDDriveActive && shooter.shooterRunning) {
+						// Use Red to Blue blink for PID drive and shooter active.
+						lightRenderer.setPatternIfNotSameType(new Blink(new Color[] {
+							new Color(1.0, 0.0, 0.0),
+							new Color(0.0, 0.0, 1.0)
+						})); 
+					} else if (shooter.shooterRunning) {
+						// Solid blue for running shooter and no PID drive.
+						lightRenderer.setPatternIfNotSameType(new SolidColor(0, 0, 255));
+					} else if (Drive.PIDDriveActive && drive.highTorqueModeActive) {
+						// Use blink Red and Orange for High torque and PID drive.
+						lightRenderer.setPatternIfNotSameType(new Blink(new Color[] {
+							new Color(1.0, 0.0, 0.0),
+							new Color(1.0, 0.4, 0.0)
+						}));
+					} else if (Drive.PIDDriveActive) {
+						// Use solid red for PID Drive. This was flashing red originally.
+						lightRenderer.setPatternIfNotSameType(new Blink(new Color(1.0, 0.0, 0.0)));
+					} else if (drive.highTorqueModeActive) {
+						// Solid orange for high torque and no PID drive.
+						lightRenderer.setPatternIfNotSameType(new SolidColor(255, 100, 0));
+					} 
+				}
+	}
 
     /*
     if(masterTimer.get() > 110 && masterTimer.get() < 112) LEDs.run(12);

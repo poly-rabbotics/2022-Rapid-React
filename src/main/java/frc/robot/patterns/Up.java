@@ -1,18 +1,19 @@
 package frc.robot.patterns;
 
-import frc.robot.subsystems.helperClasses.*;
+import frc.robot.subsystems.helperClasses.LightPattern;
 import edu.wpi.first.wpilibj.util.Color;
 
 /**
  * A class for producing a solid color on light strips.
  */
 public class Up implements LightPattern {
-    private Color[] pattern;
-    private double time;
-    private double speed;
-    private int hue;
-    private int trailLength;
-    private boolean requestingReset = false;
+    Color[] pattern;
+    int length;
+    double time;
+    double speed;
+    int hue;
+    int trailLength;
+    boolean requestingReset = false;
 
     /**
      * Creates a new {@link Up} pattern.
@@ -28,8 +29,8 @@ public class Up implements LightPattern {
      */
     public Up(double speed, int length, int hue, int trailLength) {
         pattern = new Color[length];
-
-		this.speed = speed;
+        this.speed = speed;
+        this.length = length;
         this.hue = hue;
         this.trailLength = trailLength;
     }
@@ -52,12 +53,19 @@ public class Up implements LightPattern {
                 pattern[i % pattern.length] = new Color(0.0, 0.0, 0.0);
             }
         }
+
+        /*pattern[(int)position] = Color.fromHSV(hue, 255, 255);
+        for(int i = 0; i < trailLength; i++){
+            pattern[(int)position-i-1] = Color.fromHSV(hue, 255, (int)(255 - (255-(255/trailLength)*(i+1))));
+            pattern[10] = Color.fromHSV(hue, 255, 255);
+        }*/
     }
 
     @Override
     public Color[] getPattern(double time) {
         this.time = time;
         updatePattern();
+        //requestingReset = position >= pattern.length + trailLength;
         return pattern;
     }
 
