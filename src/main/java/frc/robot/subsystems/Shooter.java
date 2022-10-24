@@ -31,8 +31,8 @@ public class Shooter {
         shooterSpeedSetpoint = 0;
         //highHubSetpoint = -4650;
         //lowHubSetpoint = -2500;
-        HIGH_SPEED_SETPOINT = -0.8;
-        LOW_SPEED_SETPOINT = -0.0;
+        HIGH_SPEED_SETPOINT = -0.82;
+        LOW_SPEED_SETPOINT = -0.25;
         shooterMotor = RobotMap.shooterMotor;
         
         kP = 0.001; //NEW PIDS NEEDED FOR FALCON
