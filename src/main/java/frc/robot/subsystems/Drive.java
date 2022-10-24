@@ -165,7 +165,7 @@ public class Drive {
       driveSelection = !driveSelection; //unused, previously switched between arcade drive and tank drive styles
 
     move = Math.signum(move) * Math.pow(move, 2); // DRIVE CURVES
-    turn = Math.pow(turn, 1) * 0.5;
+    turn = Math.pow(turn, 1) * 0.4;
 
     if ((move < 0.1) && (move > -0.1)) { // JOYSTICK DEADZONE
       move = 0;
