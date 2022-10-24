@@ -31,11 +31,11 @@ public class Shooter {
         shooterSpeedSetpoint = 0;
         //highHubSetpoint = -4650;
         //lowHubSetpoint = -2500;
-        HIGH_SPEED_SETPOINT = -0.8;
-        LOW_SPEED_SETPOINT = -0.0;
+        HIGH_SPEED_SETPOINT = -0.82;
+        LOW_SPEED_SETPOINT = -0.4;
         shooterMotor = RobotMap.shooterMotor;
         
-        kP = 0.001; //NEW PIDS NEEDED FOR FALCON
+        kP = 0.001; //NEW PIDS NEEDED FOR FALCON, BUT WE DON'T USE PIDS AT THE MOMENT
         kI = 0.000000;
         kD = 0.000000;
         //shooterPIDController =  shooterMotor.getPIDController();
@@ -109,15 +109,16 @@ public class Shooter {
     public void autoRun(double startTime, double endTime, double shooterSpeed) {
         double time = Robot.autoTimer.get();
         if (time > startTime && time < endTime) {
-          shooterMotor.set(ControlMode.Velocity, shooterSpeed);
+          shooterMotor.set(ControlMode.PercentOutput, shooterSpeed);
         }
     }
 
     public void adjustShooterSpeed() {
         if (MechanismsJoystick.axis1() > 0.5) {
-            HIGH_SPEED_SETPOINT += 2;
+            HIGH_SPEED_SETPOINT -= 0.001;
         } else if (MechanismsJoystick.axis1() < -0.5) {
-            HIGH_SPEED_SETPOINT -= 2;
+            HIGH_SPEED_SETPOINT += 0.001;
         }
     }
+
 }

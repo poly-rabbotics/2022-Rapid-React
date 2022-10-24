@@ -149,8 +149,11 @@ public class Robot extends TimedRobot {
 
     	SmartDashboard.putBoolean("Climb Enabled?", climb.enableClimb);
 
+		SmartDashboard.putNumber("Selected Auto", AutoModes.selectedMode);
+
     	if (DriveJoystick.resetGyroButton()) 
 			gyro.reset();
+
   	}
 
   	/**
@@ -173,6 +176,7 @@ public class Robot extends TimedRobot {
     	drive.initAutoDrive();
    		// drive.initPercentOutputDrive();
     	drive.resetEncoders(); 
+		auto.setAutoMode();
   	}
 
   	/** This function is called periodically during autonomous. */
@@ -180,23 +184,6 @@ public class Robot extends TimedRobot {
   	public void autonomousPeriodic() {
     	auto.runAuto();
     
-    	/*
-    	RobotMap.drivePancake.set(Value.kForward);
-    	shooter.autoRun(0, 15, -4600);
-   		conveyor.autoRun(1, 4, 0.7);
-    	//conveyor.autoRun(4, 5, 0);
-    	intake.deployIntake(2, 5, true);
-    	drive.moveByInches(3, 5, 60); //fix this distance setpoint for actual field geometry
-    	intake.autoRun(3, 6, 0.5);
-    	drive.moveByInches(6, 8, -5);
-    	conveyor.autoRun(4, 10, 0.2);
-    	conveyor.autoRun(10, 15, 0.7);
-    	intake.autoRun(6, 15, 0);
-    	LEDs.up(2); */
-    	/*
-    	drive.turnByDegrees(10, 12, 180);
-    	drive.moveByInches(12, 15, -60);
-    	*/
 	}
 
   	/** This function is called once when teleop is enabled. */
