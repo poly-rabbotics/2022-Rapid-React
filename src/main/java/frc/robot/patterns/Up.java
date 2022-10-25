@@ -1,6 +1,7 @@
 package frc.robot.patterns;
 
 import frc.robot.subsystems.helperClasses.LightPattern;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 
 /**
@@ -36,7 +37,7 @@ public class Up implements LightPattern {
     }
 
     private void updatePattern() {
-        int position = (int)(time * speed);
+        int position = (int)((time * speed) % pattern.length);
         int increment = 255 / trailLength;
 
         if (position >= pattern.length)
@@ -44,15 +45,23 @@ public class Up implements LightPattern {
         else
             requestingReset = false;
 
-        for (int i = 0; i < pattern.length + trailLength; i++) {
-            if (i == position && increment <= 255) {
-                pattern[i % pattern.length] = Color.fromHSV(hue, 255, increment);
-                increment += 255 / trailLength;
-                position++;
-            } else {
-                pattern[i % pattern.length] = new Color(0.0, 0.0, 0.0);
+        for(int i = 0; i < pattern.length; i++) {
+            pattern[i] = Color.fromHSV(0, 0, 0);
+        }
+
+        for (int i = 0; i < pattern.length; i++) {
+
+            if (i == position) {
+                for(int j = 0; j < trailLength; j++) {
+                    if(i - j >= 0)
+                        pattern[i-j] = Color.fromHSV(hue, 255, 255 - (increment*j));
+                    else 
+                        pattern[pattern.length + (i-j)] = Color.fromHSV(hue, 255, 255 - (increment*j));
+                }
+                //increment += 255 / trailLength;
             }
         }
+            
 
         /*pattern[(int)position] = Color.fromHSV(hue, 255, 255);
         for(int i = 0; i < trailLength; i++){

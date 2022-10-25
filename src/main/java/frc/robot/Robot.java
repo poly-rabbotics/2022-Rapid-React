@@ -32,6 +32,7 @@ public class Robot extends TimedRobot {
   	public static LIDAR lidar;
   	boolean pressureGood;
   	boolean isGyroReset = false;
+	int bufferLength = 64;
   	Compressor comp;
   	PneumaticHub hub;
   	AutoModes auto;
@@ -39,7 +40,7 @@ public class Robot extends TimedRobot {
 
   	private double prevPressure = 0.0;
 
-	private LightRenderer lightRenderer = new LightRenderer(1, 64);	
+	private LightRenderer lightRenderer = new LightRenderer(1, bufferLength);	
 	private ScheduledExecutorService lightRendererService;
   
   	@Override
@@ -275,14 +276,14 @@ public class Robot extends TimedRobot {
 					lightRenderer.setPatternIfNotSameType(new RainbowLightPattern(50, 40.0));
 				} else if (isTeleop()) {
 					// For baseline teleop mode use green and gold gradiant.
-					lightRenderer.setPatternIfNotSameType(new TwoColorGradiant(100, 20.0));
+					lightRenderer.setPatternIfNotSameType(new TwoColorGradiant(bufferLength, 20.0));
 		
 					if (masterTimer.get() > 110 && masterTimer.get() < 112) {
 						// Solid red in game's last ten seconds.
 						lightRenderer.setPatternIfNotSameType(new SolidColor(255, 0, 0));
 					} else if (climb.enableClimb) {
 						// Use up pattern for climbing
-						lightRenderer.setPatternIfNotSameType(new Up(4.0, 50, 128, 8));
+						lightRenderer.setPatternIfNotSameType(new Up(4.0, bufferLength, 152, 8));
 					} else if (conveyor.ballCount > 0) {
 						// Solid green for two balls or more.
 						lightRenderer.setPatternIfNotSameType(new SolidColor(0, 255, 0));
