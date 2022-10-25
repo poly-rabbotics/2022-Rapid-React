@@ -273,7 +273,8 @@ public class Robot extends TimedRobot {
 
 				if (isDisabled()) {
 					// Run rainbow lights when disabled.
-					lightRenderer.setPatternIfNotSameType(new RainbowLightPattern(50, 40.0));
+					//lightRenderer.setPatternIfNotSameType(new RainbowLightPattern(50, 40.0));
+					lightRenderer.setPattern(new Up(25, bufferLength, 68, 15));
 				} else if (isTeleop()) {
 					// For baseline teleop mode use green and gold gradiant.
 					lightRenderer.setPatternIfNotSameType(new TwoColorGradiant(bufferLength, 20.0));
@@ -283,7 +284,7 @@ public class Robot extends TimedRobot {
 						lightRenderer.setPatternIfNotSameType(new SolidColor(255, 0, 0));
 					} else if (climb.enableClimb) {
 						// Use up pattern for climbing
-						lightRenderer.setPatternIfNotSameType(new Up(4.0, bufferLength, 152, 8));
+						lightRenderer.setPatternIfNotSameType(new Up(25, bufferLength, 68, 15));
 					} else if (conveyor.ballCount > 0) {
 						// Solid green for two balls or more.
 						lightRenderer.setPatternIfNotSameType(new SolidColor(0, 255, 0));
