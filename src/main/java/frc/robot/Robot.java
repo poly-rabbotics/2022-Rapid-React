@@ -32,7 +32,7 @@ public class Robot extends TimedRobot {
   	public static LIDAR lidar;
   	boolean pressureGood;
   	boolean isGyroReset = false;
-	int bufferLength = 64;
+	private static final int BUFFER_LENGTH = 64;
   	Compressor comp;
   	PneumaticHub hub;
   	AutoModes auto;
@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
 
   	private double prevPressure = 0.0;
 
-	private LightRenderer lightRenderer = new LightRenderer(1, bufferLength);	
+	private LightRenderer lightRenderer = new LightRenderer(1, BUFFER_LENGTH); 
 	private ScheduledExecutorService lightRendererService;
   
   	@Override
@@ -274,17 +274,17 @@ public class Robot extends TimedRobot {
 				if (isDisabled()) {
 					// Run rainbow lights when disabled.
 					//lightRenderer.setPatternIfNotSameType(new RainbowLightPattern(50, 40.0));
-					lightRenderer.setPattern(new Up(25, bufferLength, 68, 15));
+					lightRenderer.setPattern(new Up(25, BUFFER_LENGTH, 68, 15));
 				} else if (isTeleop()) {
 					// For baseline teleop mode use green and gold gradiant.
-					lightRenderer.setPatternIfNotSameType(new TwoColorGradiant(bufferLength, 20.0));
+					lightRenderer.setPatternIfNotSameType(new TwoColorGradiant(BUFFER_LENGTH, 20.0));
 		
 					if (masterTimer.get() > 110 && masterTimer.get() < 112) {
 						// Solid red in game's last ten seconds.
 						lightRenderer.setPatternIfNotSameType(new SolidColor(255, 0, 0));
 					} else if (climb.enableClimb) {
 						// Use up pattern for climbing
-						lightRenderer.setPatternIfNotSameType(new Up(25, bufferLength, 68, 15));
+						lightRenderer.setPatternIfNotSameType(new Up(25, BUFFER_LENGTH, 68, 15));
 					} else if (conveyor.ballCount > 0) {
 						// Solid green for two balls or more.
 						lightRenderer.setPatternIfNotSameType(new SolidColor(0, 255, 0));
