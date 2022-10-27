@@ -273,13 +273,12 @@ public class Robot extends TimedRobot {
 
 		if (isDisabled()) {
 			// Run rainbow lights when disabled.
-			//lightRenderer.setPatternIfNotSameType(new RainbowLightPattern(50, 40.0));
-			lightRenderer.setPattern(new Up(25, BUFFER_LENGTH, 68, 15));
+			lightRenderer.setPatternIfNotSameType(new RainbowLightPattern(50, 40.0));
 		} else if (isTeleop()) {
 			// For baseline teleop mode use green and gold gradiant.
 			lightRenderer.setPatternIfNotSameType(new TwoColorGradiant(BUFFER_LENGTH, 20.0));
 		
-			if (masterTimer.get() > 110 && masterTimer.get() < 112) {
+			if (masterTimer.get() > 110 && masterTimer.get() < 120) {
 				// Solid red in game's last ten seconds.
 				lightRenderer.setPatternIfNotSameType(new SolidColor(255, 0, 0));
 			} else if (climb.enableClimb) {
