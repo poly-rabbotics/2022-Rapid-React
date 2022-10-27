@@ -12,9 +12,11 @@ public class UpMeetInMiddle implements LightPattern {
     int length;
     double time;
     double speed;
+    double rainbowSpeed;
     int hue;
     int trailLength;
     boolean requestingReset = false;
+    boolean rainbowMode = false;
 
     /**
      * Creates a new {@link Up} pattern.
@@ -28,6 +30,17 @@ public class UpMeetInMiddle implements LightPattern {
      * @param b
      * This {@link Up}'s blue component.
      */
+    public UpMeetInMiddle(double speed, int length, double rainbowSpeed, int trailLength) {
+        pattern = new Color[length];
+        this.speed = speed;
+        this.length = length;
+        this.trailLength = trailLength;
+        this.rainbowSpeed = rainbowSpeed;
+
+        //Rainbow mode is only turned on if speed is given
+        if(rainbowSpeed > 0) rainbowMode = true;
+    }
+
     public UpMeetInMiddle(double speed, int length, int hue, int trailLength) {
         pattern = new Color[length];
         this.speed = speed;
@@ -38,8 +51,10 @@ public class UpMeetInMiddle implements LightPattern {
 
     private void updatePattern() {
         int position = (int)((time * speed) % pattern.length);
-        int oppositePosition = pattern.length - position;
         int increment = 255 / trailLength;
+
+        if(rainbowMode)
+            hue = (int)((time * rainbowSpeed) % 180);
 
         //resetting pattern
         if (position >= pattern.length)

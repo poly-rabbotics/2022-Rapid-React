@@ -283,7 +283,7 @@ public class Robot extends TimedRobot {
 				lightRenderer.setPatternIfNotSameType(new SolidColor(255, 0, 0));
 			} else if (climb.enableClimb) {
 				// Use up pattern for climbing
-				lightRenderer.setPatternIfNotSameType(new UpMeetInMiddle(25, BUFFER_LENGTH, 68, 12));
+				lightRenderer.setPatternIfNotSameType(new UpMeetInMiddle(25, BUFFER_LENGTH, 50.0, 12));
 			} else if (conveyor.ballCount > 0) {
 				// Solid green for two balls or more.
 				lightRenderer.setPatternIfNotSameType(new SolidColor(0, 255, 0));
