@@ -278,12 +278,15 @@ public class Robot extends TimedRobot {
 			// For baseline teleop mode use green and gold gradiant.
 			lightRenderer.setPatternIfNotSameType(new TwoColorGradiant(BUFFER_LENGTH, 20.0));
 		
-			if (masterTimer.get() > 110 && masterTimer.get() < 120) {
+			if(masterTimer.get() > 110 && masterTimer.get() < 120 && climb.enableClimb) {
+				// Rainbow up command while climbing in last 10 seconds
+				lightRenderer.setPatternIfNotSameType(new UpMeetInMiddle(25, BUFFER_LENGTH, 60.0, 12));
+			} else if (masterTimer.get() > 110 && masterTimer.get() < 120) {
 				// Solid red in game's last ten seconds.
 				lightRenderer.setPatternIfNotSameType(new SolidColor(255, 0, 0));
 			} else if (climb.enableClimb) {
 				// Use up pattern for climbing
-				lightRenderer.setPatternIfNotSameType(new UpMeetInMiddle(25, BUFFER_LENGTH, 50.0, 12));
+				lightRenderer.setPatternIfNotSameType(new UpMeetInMiddle(25, BUFFER_LENGTH, 60, 12));
 			} else if (conveyor.ballCount > 0) {
 				// Solid green for two balls or more.
 				lightRenderer.setPatternIfNotSameType(new SolidColor(0, 255, 0));
