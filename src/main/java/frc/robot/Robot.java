@@ -269,48 +269,48 @@ public class Robot extends TimedRobot {
   	}
 
 	private void updateLEDPattern() {
-				/* --> here begins ye old led lights <-- */
+		/* --> here begins ye old led lights <-- */
 
-				if (isDisabled()) {
-					// Run rainbow lights when disabled.
-					//lightRenderer.setPatternIfNotSameType(new RainbowLightPattern(50, 40.0));
-					lightRenderer.setPattern(new Up(25, BUFFER_LENGTH, 68, 15));
-				} else if (isTeleop()) {
-					// For baseline teleop mode use green and gold gradiant.
-					lightRenderer.setPatternIfNotSameType(new TwoColorGradiant(BUFFER_LENGTH, 20.0));
+		if (isDisabled()) {
+			// Run rainbow lights when disabled.
+			//lightRenderer.setPatternIfNotSameType(new RainbowLightPattern(50, 40.0));
+			lightRenderer.setPattern(new Up(25, BUFFER_LENGTH, 68, 15));
+		} else if (isTeleop()) {
+			// For baseline teleop mode use green and gold gradiant.
+			lightRenderer.setPatternIfNotSameType(new TwoColorGradiant(BUFFER_LENGTH, 20.0));
 		
-					if (masterTimer.get() > 110 && masterTimer.get() < 112) {
-						// Solid red in game's last ten seconds.
-						lightRenderer.setPatternIfNotSameType(new SolidColor(255, 0, 0));
-					} else if (climb.enableClimb) {
-						// Use up pattern for climbing
-						lightRenderer.setPatternIfNotSameType(new Up(25, BUFFER_LENGTH, 68, 15));
-					} else if (conveyor.ballCount > 0) {
-						// Solid green for two balls or more.
-						lightRenderer.setPatternIfNotSameType(new SolidColor(0, 255, 0));
-					} else if (Drive.PIDDriveActive && shooter.shooterRunning) {
-						// Use Red to Blue blink for PID drive and shooter active.
-						lightRenderer.setPatternIfNotSameType(new Blink(new Color[] {
-							new Color(1.0, 0.0, 0.0),
-							new Color(0.0, 0.0, 1.0)
-						})); 
-					} else if (shooter.shooterRunning) {
-						// Solid blue for running shooter and no PID drive.
-						lightRenderer.setPatternIfNotSameType(new SolidColor(0, 0, 255));
-					} else if (Drive.PIDDriveActive && drive.highTorqueModeActive) {
-						// Use blink Red and Orange for High torque and PID drive.
-						lightRenderer.setPatternIfNotSameType(new Blink(new Color[] {
-							new Color(1.0, 0.0, 0.0),
-							new Color(1.0, 0.4, 0.0)
-						}));
-					} else if (Drive.PIDDriveActive) {
-						// Use solid red for PID Drive. This was flashing red originally.
-						lightRenderer.setPatternIfNotSameType(new Blink(new Color(1.0, 0.0, 0.0)));
-					} else if (drive.highTorqueModeActive) {
-						// Solid orange for high torque and no PID drive.
-						lightRenderer.setPatternIfNotSameType(new SolidColor(255, 100, 0));
-					} 
-				}
+			if (masterTimer.get() > 110 && masterTimer.get() < 112) {
+				// Solid red in game's last ten seconds.
+				lightRenderer.setPatternIfNotSameType(new SolidColor(255, 0, 0));
+			} else if (climb.enableClimb) {
+				// Use up pattern for climbing
+				lightRenderer.setPatternIfNotSameType(new Up(25, BUFFER_LENGTH, 68, 15));
+			} else if (conveyor.ballCount > 0) {
+				// Solid green for two balls or more.
+				lightRenderer.setPatternIfNotSameType(new SolidColor(0, 255, 0));
+			} else if (Drive.PIDDriveActive && shooter.shooterRunning) {
+				// Use Red to Blue blink for PID drive and shooter active.
+				lightRenderer.setPatternIfNotSameType(new Blink(new Color[] {
+					new Color(1.0, 0.0, 0.0),
+					new Color(0.0, 0.0, 1.0)
+				})); 
+			} else if (shooter.shooterRunning) {
+				// Solid blue for running shooter and no PID drive.
+				lightRenderer.setPatternIfNotSameType(new SolidColor(0, 0, 255));
+			} else if (Drive.PIDDriveActive && drive.highTorqueModeActive) {
+				// Use blink Red and Orange for High torque and PID drive.
+				lightRenderer.setPatternIfNotSameType(new Blink(new Color[] {
+					new Color(1.0, 0.0, 0.0),
+					new Color(1.0, 0.4, 0.0)
+				}));
+			} else if (Drive.PIDDriveActive) {
+				// Use solid red for PID Drive. This was flashing red originally.
+				lightRenderer.setPatternIfNotSameType(new Blink(new Color(1.0, 0.0, 0.0)));
+			} else if (drive.highTorqueModeActive) {
+				// Solid orange for high torque and no PID drive.
+				lightRenderer.setPatternIfNotSameType(new SolidColor(255, 100, 0));
+			} 
+		}
 	}
 
     /*
