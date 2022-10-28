@@ -70,12 +70,16 @@ public class Up implements LightPattern {
 
             if (i == position) {
                 for(int j = 0; j < trailLength; j++) {
-                    hue = rainbowHueArr[i-j];
 
-                    if(i - j >= 0)
+                    if(i - j >= 0){
+                        if(rainbowMode)
+                            hue = rainbowHueArr[i-j];
                         pattern[i-j] = Color.fromHSV(hue, 255, 255 - (increment*j));
-                    else 
+                    } else 
+                        if(rainbowMode)
+                            hue = rainbowHueArr[pattern.length + (i-j)];
                         pattern[pattern.length + (i-j)] = Color.fromHSV(hue, 255, 255 - (increment*j));
+                    }
                 }
                 //increment += 255 / trailLength;
             }

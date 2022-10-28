@@ -72,19 +72,23 @@ public class UpMeetInMiddle implements LightPattern {
                 for(int j = 0; j < trailLength; j++) {
                     //SET RIGHT TRAIL
                     if(i - j >= 0) {
-                        hue = rainbowHueArr[position - j];
+                        if(rainbowMode) 
+                            hue = rainbowHueArr[position - j];
                         pattern[position - j] = Color.fromHSV(hue, 255, 255 - (increment * j));
                     } else {
-                        hue = rainbowHueArr[(pattern.length/2) + (position - j)];
+                        if(rainbowMode)
+                            hue = rainbowHueArr[(pattern.length/2) + (position - j)];
                         pattern[(pattern.length/2) + (position - j)] = Color.fromHSV(hue, 255, 255 - (increment * j));
                     }
 
                     //SET LEFT TRAIL
                     if(oppositePosition + j <= pattern.length) {
-                        hue = rainbowHueArr[oppositePosition + j];
+                        if(rainbowMode)
+                            hue = rainbowHueArr[oppositePosition + j];
                         pattern[oppositePosition + j] = Color.fromHSV(hue, 255, 255 - (increment * j));
                     } else {
-                        hue = rainbowHueArr[(pattern.length/2) + ((oppositePosition - pattern.length) + j)];
+                        if(rainbowMode)
+                            hue = rainbowHueArr[(pattern.length/2) + ((oppositePosition - pattern.length) + j)];
                         pattern[(pattern.length/2) + ((oppositePosition - pattern.length) + j)] = Color.fromHSV(hue, 255, 255 - (increment * j));
                     }
                 }
