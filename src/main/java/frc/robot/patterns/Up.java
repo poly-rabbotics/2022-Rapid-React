@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.util.Color;
  */
 public class Up implements LightPattern {
     Color[] pattern;
+    int[] rainbowHueArr;
     int length;
     double time;
     double speed;
@@ -30,15 +31,13 @@ public class Up implements LightPattern {
      * @param b
      * This {@link Up}'s blue component.
      */
-    public Up(double speed, int length, double rainbowSpeed, int trailLength) {
+    public Up(double speed, int length, int trailLength, boolean rainbowMode) {
         pattern = new Color[length];
+        rainbowHueArr = new int[length];
         this.speed = speed;
         this.length = length;
         this.trailLength = trailLength;
-        this.rainbowSpeed = rainbowSpeed;
-
-        //Rainbow mode is only turned on if speed is given
-        if(rainbowSpeed > 0) rainbowMode = true;
+        this.rainbowMode = rainbowMode;
     }
 
     public Up(double speed, int length, int hue, int trailLength) {
@@ -71,6 +70,8 @@ public class Up implements LightPattern {
 
             if (i == position) {
                 for(int j = 0; j < trailLength; j++) {
+                    hue = rainbowHueArr[i-j];
+
                     if(i - j >= 0)
                         pattern[i-j] = Color.fromHSV(hue, 255, 255 - (increment*j));
                     else 

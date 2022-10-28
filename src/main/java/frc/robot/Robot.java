@@ -280,7 +280,7 @@ public class Robot extends TimedRobot {
 		
 			if(masterTimer.get() > 110 && masterTimer.get() < 120 && climb.enableClimb) {
 				// Rainbow up command while climbing in last 10 seconds
-				lightRenderer.setPatternIfNotSameType(new UpMeetInMiddle(25, BUFFER_LENGTH, 60.0, 12));
+				lightRenderer.setPatternIfNotSameType(new UpMeetInMiddle(25, BUFFER_LENGTH, 12, true));
 			} else if (masterTimer.get() > 110 && masterTimer.get() < 120) {
 				// Solid red in game's last ten seconds.
 				lightRenderer.setPatternIfNotSameType(new SolidColor(255, 0, 0));

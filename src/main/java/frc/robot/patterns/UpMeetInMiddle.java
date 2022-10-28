@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.util.Color;
  */
 public class UpMeetInMiddle implements LightPattern {
     Color[] pattern;
+    int[] rainbowHueArr;
     int length;
     double time;
     double speed;
@@ -30,15 +31,13 @@ public class UpMeetInMiddle implements LightPattern {
      * @param b
      * This {@link Up}'s blue component.
      */
-    public UpMeetInMiddle(double speed, int length, double rainbowSpeed, int trailLength) {
+    public UpMeetInMiddle(double speed, int length, int trailLength, boolean rainbowMode) {
         pattern = new Color[length];
+        rainbowHueArr = new int[length];
         this.speed = speed;
         this.length = length;
         this.trailLength = trailLength;
-        this.rainbowSpeed = rainbowSpeed;
-
-        //Rainbow mode is only turned on if speed is given
-        if(rainbowSpeed > 0) rainbowMode = true;
+        this.rainbowMode = rainbowMode;
     }
 
     public UpMeetInMiddle(double speed, int length, int hue, int trailLength) {
@@ -51,10 +50,8 @@ public class UpMeetInMiddle implements LightPattern {
 
     private void updatePattern() {
         int position = (int)((time * speed) % pattern.length);
+        int oppositePosition = pattern.length - position;
         int increment = 255 / trailLength;
-
-        if(rainbowMode)
-            hue = (int)((time * rainbowSpeed) % 180);
 
         //resetting pattern
         if (position >= pattern.length)
@@ -65,6 +62,7 @@ public class UpMeetInMiddle implements LightPattern {
         //Set all leds to blank
         for(int i = 0; i < pattern.length; i++) {
             pattern[i] = Color.fromHSV(0, 0, 0);
+            rainbowHueArr[i] = (int)((180/pattern.length) * i);
         }
 
         //Set trails
@@ -73,17 +71,22 @@ public class UpMeetInMiddle implements LightPattern {
             if (i == position) {
                 for(int j = 0; j < trailLength; j++) {
                     //SET RIGHT TRAIL
-                    if(i - j >= 0)
+                    if(i - j >= 0) {
+                        hue = rainbowHueArr[position - j];
                         pattern[position - j] = Color.fromHSV(hue, 255, 255 - (increment * j));
-                    else 
+                    } else {
+                        hue = rainbowHueArr[(pattern.length/2) + (position - j)];
                         pattern[(pattern.length/2) + (position - j)] = Color.fromHSV(hue, 255, 255 - (increment * j));
+                    }
 
                     //SET LEFT TRAIL
-                    if(oppositePosition + j <= pattern.length)
+                    if(oppositePosition + j <= pattern.length) {
+                        hue = rainbowHueArr[oppositePosition + j];
                         pattern[oppositePosition + j] = Color.fromHSV(hue, 255, 255 - (increment * j));
-                    else
+                    } else {
+                        hue = rainbowHueArr[(pattern.length/2) + ((oppositePosition - pattern.length) + j)];
                         pattern[(pattern.length/2) + ((oppositePosition - pattern.length) + j)] = Color.fromHSV(hue, 255, 255 - (increment * j));
-
+                    }
                 }
             }
         }
