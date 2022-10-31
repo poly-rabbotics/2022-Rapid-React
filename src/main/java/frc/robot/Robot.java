@@ -273,7 +273,8 @@ public class Robot extends TimedRobot {
 
 		if (isDisabled()) {
 			// Run rainbow lights when disabled.
-			lightRenderer.setPatternIfNotSameType(new RainbowLightPattern(50, 40.0));
+			//lightRenderer.setPatternIfNotSameType(new RainbowLightPattern(50, 40.0));
+			lightRenderer.setPatternIfNotSameType(new Up(40, BUFFER_LENGTH, 8, true));
 		} else if (isTeleop()) {
 			// For baseline teleop mode use green and gold gradiant.
 			lightRenderer.setPatternIfNotSameType(new TwoColorGradiant(BUFFER_LENGTH, 20.0));

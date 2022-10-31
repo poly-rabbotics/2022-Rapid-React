@@ -52,9 +52,6 @@ public class Up implements LightPattern {
         int position = (int)((time * speed) % pattern.length);
         int increment = 255 / trailLength;
 
-        if(rainbowMode)
-            hue = (int)((time * rainbowSpeed) % 180);
-
         if (position >= pattern.length)
             requestingReset = true;
         else
@@ -64,9 +61,12 @@ public class Up implements LightPattern {
 
         for(int i = 0; i < pattern.length; i++) {
             pattern[i] = Color.fromHSV(0, 0, 0);
+            rainbowHueArr[i] = (int)((180/pattern.length) * i);
         }
 
         for (int i = 0; i < pattern.length; i++) {
+            if(i + 1 < pattern.length) rainbowHueArr[i] = rainbowHueArr[i + 1];
+            else rainbowHueArr[i] = rainbowHueArr[0];
 
             if (i == position) {
                 for(int j = 0; j < trailLength; j++) {
@@ -75,7 +75,7 @@ public class Up implements LightPattern {
                         if(rainbowMode)
                             hue = rainbowHueArr[i-j];
                         pattern[i-j] = Color.fromHSV(hue, 255, 255 - (increment*j));
-                    } else 
+                    } else {
                         if(rainbowMode)
                             hue = rainbowHueArr[pattern.length + (i-j)];
                         pattern[pattern.length + (i-j)] = Color.fromHSV(hue, 255, 255 - (increment*j));
@@ -84,7 +84,8 @@ public class Up implements LightPattern {
                 //increment += 255 / trailLength;
             }
         }
-            
+          
+        SmartDashboard.putNumber("THING23", hue);
 
         /*pattern[(int)position] = Color.fromHSV(hue, 255, 255);
         for(int i = 0; i < trailLength; i++){
