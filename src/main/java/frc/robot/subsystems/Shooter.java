@@ -105,7 +105,7 @@ public class Shooter {
         shooterSpeedSetpoint=0;
         shooterMotor.set(0);
     } */
-        SmartDashboard.putNumber("Shooter speed setpoint", HIGH_SPEED_SETPOINT);
+        SmartDashboard.putNumber("Shooter speed setpoint", HIGH_SPEED_SETPOINT_PID);
         SmartDashboard.putNumber("Shooter RPM", shooterMotor.getSelectedSensorVelocity() * ENC_PER_MS_TO_RPM);
         SmartDashboard.putNumber("Shooter Encoder Counts", shooterMotor.getSelectedSensorPosition());
 
@@ -120,9 +120,9 @@ public class Shooter {
 
     public void adjustShooterSpeed() {
         if (MechanismsJoystick.axis1() > 0.5) {
-            HIGH_SPEED_SETPOINT += 2;
+            HIGH_SPEED_SETPOINT_PID += 2;
         } else if (MechanismsJoystick.axis1() < -0.5) {
-            HIGH_SPEED_SETPOINT -= 2;
+            HIGH_SPEED_SETPOINT_PID -= 2;
         }
     }
 }
