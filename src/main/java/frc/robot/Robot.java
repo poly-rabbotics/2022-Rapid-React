@@ -277,9 +277,9 @@ public class Robot extends TimedRobot {
 				//If we are < 2 balls and arent climbing ...
         		if(Drive.PIDDriveActive) {                                           
 					//If PID active ...
-          			if(shooter.shooterRunning) 
+          			if(shooter.shooterUpToSpeed) 
 						LEDs.run(8); //If shooter running in PID use mode 8
-          			else if(!shooter.shooterRunning) {
+          			else if(!shooter.shooterUpToSpeed) {
 						//If shooter is not running ...
             			if(drive.highTorqueModeActive) 
 							LEDs.run(6); //If HTM is active in PID use mode 6
@@ -292,9 +292,9 @@ public class Robot extends TimedRobot {
 						LEDs.run(7); //If HTM is active: no PID use mode 7
 					} else if(!drive.highTorqueModeActive) {
 						//If HTM is inactive: no PID ...
-            			if(!shooter.shooterRunning) 
+            			if(!shooter.shooterUpToSpeed) 
 							LEDs.run(2); //If shooter is not running use mode 2
-            			else if(shooter.shooterRunning) 
+            			else if(shooter.shooterUpToSpeed) 
 							LEDs.run(5); //If shooter is running use mode 5
           			}
 				}
