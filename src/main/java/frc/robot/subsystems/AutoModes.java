@@ -21,14 +21,15 @@ public class AutoModes {
     }
 
     public void setAutoMode() {
-        if (MechanismsJoystick.autoSwitchOne()) autoSwitchOne = 1; //0 or 1
-        else autoSwitchOne = 0;
-        if (MechanismsJoystick.autoSwitchTwo()) autoSwitchTwo = 2; //0 or 2
-        else autoSwitchTwo = 0;
-        if (MechanismsJoystick.autoSwitchThree()) autoSwitchThree = 4; // 0 or 4
-        else autoSwitchThree = 0;
-        //gets numbers from the three auto switches, set selected mode to their sum in binary
-        selectedMode = autoSwitchOne + autoSwitchTwo + autoSwitchThree;
+        // Must reset to zero in case this method is
+		// called more than once.
+		selectedMode = 0;
+
+		// gets numbers from the three auto switches, 
+		// set selected mode to their sum in binary
+		selectedMode += MechanismsJoystick.autoSwitchOne() ? 1 : 0;
+       	selectedMode += MechanismsJoystick.autoSwitchTwo() ? 2 : 0;
+		selectedMode += MechanismsJoystick.autoSwitchThree() ? 4 : 0;
         SmartDashboard.putNumber("Selected Auto", selectedMode);
     } 
 
@@ -69,8 +70,17 @@ public class AutoModes {
         autoConveyor.autoRun(0, 15, 0);
         autoIntake.autoRun(0, 15, 0);
     }
-    
-    public static void autoModeOne() { //TWO BALL AUTO
+
+    public static void autoModeOne() { //shoot 1 ball and leave tarmac
+        autoIntake.deployIntake(0, 1, true);
+        autoIntake.autoRun(0, 10, -0.85);
+        autoShooter.autoRun(0, 3, -0.85);
+        autoConveyor.autoRun(1.5, 3, 1);
+        autoConveyor.autoRun(3, 3.1, 0);
+        autoDrive.goToEncCounts(3, 5, 100000);
+    }
+
+    public static void autoModeTwo() { //TWO BALL AUTO
         autoIntake.deployIntake(0, 1, true);
         autoIntake.autoRun(0, 10, -0.85);
         autoShooter.autoRun(0, 3, -0.85);
@@ -81,15 +91,6 @@ public class AutoModes {
         autoDrive.goToEncCounts(5.1, 7, -100000);
         autoConveyor.autoRun(7, 9, 1);
         autoShooter.autoRun(5.5, 10, -0.85);
-    }
-
-    public static void autoModeTwo() { //shoot 1 ball and leave tarmac
-        autoIntake.deployIntake(0, 1, true);
-        autoIntake.autoRun(0, 10, -0.85);
-        autoShooter.autoRun(0, 3, -0.85);
-        autoConveyor.autoRun(1.5, 3, 1);
-        autoConveyor.autoRun(3, 3.1, 0);
-        autoDrive.goToEncCounts(3, 5, 100000);
     }
 
     public static void autoModeThree() { //3 ball auto from right position WORKING
