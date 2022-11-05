@@ -74,7 +74,7 @@ public class AutoModes {
     public static void autoModeOne() { //shoot 1 ball and leave tarmac
         autoIntake.deployIntake(0, 1, true);
         autoIntake.autoRun(0, 10, -0.85);
-        autoShooter.autoRun(0, 3, -0.85);
+        autoShooter.autoRun(0, 3, Shooter.AUTONOMOUS_SHOOTER_SETPOINT - 50);
         autoConveyor.autoRun(1.5, 3, 1);
         autoConveyor.autoRun(3, 3.1, 0);
         autoDrive.goToEncCounts(3, 5, 100000);
@@ -83,14 +83,14 @@ public class AutoModes {
     public static void autoModeTwo() { //TWO BALL AUTO
         autoIntake.deployIntake(0, 1, true);
         autoIntake.autoRun(0, 10, -0.85);
-        autoShooter.autoRun(0, 3, -0.85);
+        autoShooter.autoRun(0, 3, Shooter.AUTONOMOUS_SHOOTER_SETPOINT - 50);
         autoConveyor.autoRun(1.5, 3, 1);
         autoConveyor.autoRun(3, 3.1, 0);
         autoDrive.goToEncCounts(3, 5, 100000);
         autoDrive.resetEncodersCall(5, 5.1);
         autoDrive.goToEncCounts(5.1, 7, -100000);
         autoConveyor.autoRun(7, 9, 1);
-        autoShooter.autoRun(5.5, 10, -0.85);
+        autoShooter.autoRun(5.5, 10, Shooter.AUTONOMOUS_SHOOTER_SETPOINT - 50);
     }
  
     public static void autoModeThree() { //3 ball auto from right position WORKING
@@ -98,7 +98,7 @@ public class AutoModes {
         autoIntake.deployIntake(0, 1, true);
         autoDrive.resetEncodersCall(0, 0.05);
         autoIntake.autoRun(0, 15, -0.85);
-        autoShooter.autoRun(0, 3, -0.85);
+        autoShooter.autoRun(0, 3, Shooter.AUTONOMOUS_SHOOTER_SETPOINT - 50);
         autoConveyor.autoRun(2, 3, 1);
         autoShooter.autoRun(3, 3.1, 0);
         autoConveyor.autoRun(3, 3.1, 0);
@@ -117,7 +117,7 @@ public class AutoModes {
         autoDrive.goToEncCounts(7.51+1.5, 9.5+1.5, -120000);
         autoDrive.resetEncodersCall(9.5+1.5, 9.51+1.5);
         autoDrive.goToEncCountsTurn(9.51+1.5 ,10.5+1.5, 20000);
-        autoShooter.autoRun(10.5+1.5, 15+1.5, -0.85);
+        autoShooter.autoRun(10.5+1.5, 15+1.5, Shooter.AUTONOMOUS_SHOOTER_SETPOINT - 50);
         autoConveyor.autoRun(12.2+1.5, 15+1.5, 0.8);
         autoDrive.resetEncodersCall(10.5+1.5, 10.51+1.5);
         autoDrive.goToEncCounts(10.51+1.5, 12.5+1.5, -30000);
@@ -125,12 +125,13 @@ public class AutoModes {
     }
  
     public static void autoModeFour() {
-       autoShooter.autoRun(0, 15, -0.8);
+       //autoShooter.autoRun(0, 15, -0.8);
     }
  
     public static void autoModeFive() { //failed four ball auto (NEEDS TESTING BEFORE RUNNING)
  
         //DO NOT USE!!!
+        /*
         autoIntake.deployIntake(0, 1, true);
         autoDrive.moveByInches(0, 1.5, 21);
         autoDrive.turnByDegrees(1.5, 3, 47);
@@ -161,7 +162,7 @@ public class AutoModes {
         autoDrive.moveByInches(25, 26, -26);
         autoShooter.autoRun(25, 28, -4600);
         autoConveyor.autoRun(26, 28, 0.8);
- 
+        */
     }
  
     public static void autoModeSix() {

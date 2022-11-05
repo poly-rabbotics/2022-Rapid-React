@@ -15,7 +15,7 @@ import frc.robot.Controls.MechanismsJoystick;
 
 public class Shooter {
     
-    static double shooterSpeedSetpoint, HIGH_SPEED_SETPOINT, LOW_SPEED_SETPOINT;
+    static double shooterSpeedSetpoint, HIGH_SPEED_SETPOINT, LOW_SPEED_SETPOINT, AUTONOMOUS_SHOOTER_SETPOINT;
     static double HIGH_SPEED_SETPOINT_PID, LOW_SPEED_SETPOINT_PID;
     static double ENCODER_COUNTS_PER_REVOLUTION, ENC_PER_MS_TO_RPM, RPM_TO_ENC_PER_MS;
     //static CANSparkMax shooterMotor;
@@ -31,8 +31,9 @@ public class Shooter {
     public Shooter() {
         LEDLights = new LEDLights();
         shooterSpeedSetpoint = 0;
-        HIGH_SPEED_SETPOINT_PID = -4650; //rpm
+        HIGH_SPEED_SETPOINT_PID = -4630; //rpm
         LOW_SPEED_SETPOINT_PID = -2500; //rpm
+        
         HIGH_SPEED_SETPOINT = -0.82;
         LOW_SPEED_SETPOINT = -0.35;
         shooterMotor = RobotMap.shooterMotor;
@@ -43,6 +44,8 @@ public class Shooter {
         kP = 0.14; //NEW PIDS NEEDED FOR FALCON
         kI = 0.0000;
         kD = 0.1;
+
+        AUTONOMOUS_SHOOTER_SETPOINT = HIGH_SPEED_SETPOINT_PID * RPM_TO_ENC_PER_MS;
         //shooterPIDController =  shooterMotor.getPIDController();
 
         //typical falcon config, copied and adapted from drive
