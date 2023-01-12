@@ -89,6 +89,8 @@ public class Robot extends TimedRobot {
    	 */
   	@Override
  	public void robotPeriodic() {
+		Pigeon.putDegrees();
+
     	SmartDashboard.putNumber("Timer", masterTimer.get());
     	SmartDashboard.putBoolean("DA Limit Switch", !RobotMap.limitSwitchDA.get());
     	SmartDashboard.putBoolean("SA Limit Switch", !RobotMap.limitSwitchSA.get());
