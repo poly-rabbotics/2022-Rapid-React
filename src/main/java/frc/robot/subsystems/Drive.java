@@ -9,7 +9,6 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.Joystick;
@@ -119,7 +118,7 @@ public class Drive {
      * AHRSGyro.getDegrees(), new Pose2d(5.0, 13.5, new Rotation2d()));
      */
     gyroToRadians = Rotation2d.fromDegrees(gyro.getDegrees());
-    odometry = new DifferentialDriveOdometry(gyroToRadians, new Pose2d(0, 0, new Rotation2d()));
+    odometry = new DifferentialDriveOdometry(gyroToRadians, 0, 0);
     RobotMap.drivePancake.set(Value.kForward); //speed mode
     initAutoDrive();
   }
@@ -470,7 +469,6 @@ public class Drive {
   public boolean turnByDegreesBasic(double startTime, double endTime, double finalAngle) {
     // NO GYRO TURN CORRECTION
     double time = Robot.autoTimer.get();
-    double initialPosition = leftBack.getSelectedSensorPosition();
     SmartDashboard.putNumber("position setpoint turn", positionSetpoint);
     SmartDashboard.putBoolean("rotate initialized?", rotateInitialized);
 

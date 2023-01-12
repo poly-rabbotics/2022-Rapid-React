@@ -1,6 +1,5 @@
 package frc.robot.Controls;
 
-import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.RobotMap;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

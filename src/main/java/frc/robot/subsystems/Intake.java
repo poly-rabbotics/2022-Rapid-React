@@ -83,9 +83,5 @@ public class Intake {
 			}
     	} 
     	if (!DriveJoystick.toggleIntakePiston()) pneumaticsTransitioning = false;
-
 	}
-
-	
 }
-

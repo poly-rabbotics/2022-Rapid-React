@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.Controls.MechanismsJoystick;
 import frc.robot.Controls.ClimbJoystick;
-import frc.robot.Robot;
 
 public class Climb {
 		static DoubleSolenoid staticArmPancake, dynamicArmPancake, dynamicArmPivot;

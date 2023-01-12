@@ -1,7 +1,6 @@
 package frc.robot.Controls;
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 
 //This is a class O_O woahhhhh. We named it ClimbJoystick because you CLIMB with the JOYSTICK *Mind explodes*.
