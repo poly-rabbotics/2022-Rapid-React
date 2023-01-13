@@ -5,7 +5,7 @@ import com.ctre.phoenix.sensors.Pigeon2;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Pigeon {
-    static final int PIGEON_CAN_ID = 0;
+    static final int PIGEON_CAN_ID = 20;
 
     /**
      * The pigeons single instance.
@@ -18,7 +18,7 @@ public class Pigeon {
         pigeonController = new Pigeon2(PIGEON_CAN_ID);
 
         // Zero all positions on initialization.
-        pigeonController.configMountPose(0, 0, 0);
+        //pigeonController.configMountPose(0, 0, 0);
     }
 
 

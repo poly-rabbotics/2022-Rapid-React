@@ -45,8 +45,8 @@ public class Drive {
   boolean rotateInitialized, movementInitialized;
   public boolean movementCompleted, turnCompleted;
   Rotation2d gyroToRadians;
-  DifferentialDriveOdometry odometry;
-  static AHRSGyro gyro;
+  //DifferentialDriveOdometry odometry;
+  //static AHRSGyro gyro;
   double positionSetpoint;
   double turnError;
   double targetAngle;
@@ -76,7 +76,7 @@ public class Drive {
     x = 0;
     driveMode = "";
 
-    gyro = new AHRSGyro();
+    //gyro = new AHRSGyro();
 
     leftEncoderCounts = 0;
     rightEncoderCounts = 0;
@@ -117,8 +117,8 @@ public class Drive {
      * DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(
      * AHRSGyro.getDegrees(), new Pose2d(5.0, 13.5, new Rotation2d()));
      */
-    gyroToRadians = Rotation2d.fromDegrees(gyro.getDegrees());
-    odometry = new DifferentialDriveOdometry(gyroToRadians, 0, 0);
+    //gyroToRadians = Rotation2d.fromDegrees(gyro.getDegrees());
+    //odometry = new DifferentialDriveOdometry(gyroToRadians, 0, 0);
     RobotMap.drivePancake.set(Value.kForward); //speed mode
     initAutoDrive();
   }
@@ -138,9 +138,9 @@ public class Drive {
   }
 
   public DifferentialDriveOdometry updateOdometry() {
-    gyroToRadians = Rotation2d.fromDegrees(gyro.getDegrees());
-    odometry.update(gyroToRadians, leftEncoderCounts * 2597, rightEncoderCounts * 2597);
-    return odometry;
+    //gyroToRadians = Rotation2d.fromDegrees(gyro.getDegrees());
+    //odometry.update(gyroToRadians, leftEncoderCounts * 2597, rightEncoderCounts * 2597);
+    return new DifferentialDriveOdometry(new Rotation2d(), 0, 0);
   }
 
   void joystickDrive() {
@@ -504,12 +504,12 @@ public class Drive {
       targetAngle = finalAngle;
       positionSetpoint = initialPosition + ENCODER_COUNTS_PER_360/360 * finalAngle;
       //resetEncoders();
-      gyro.reset();
+      //gyro.reset();
     }
 
     if (leftBack.getSelectedSensorPosition() > positionSetpoint - 100
         && leftBack.getSelectedSensorPosition() < positionSetpoint + 100) {
-      gyroAngle = gyro.getDegrees();
+      //gyroAngle = gyro.getDegrees();
       if ((gyroAngle < (finalAngle - 1)) && (gyroAngle > (finalAngle + 1))) {
         rotateInitialized = false;
         resetEncoders();
@@ -517,7 +517,7 @@ public class Drive {
       } else {
         targetAngle = finalAngle - gyroAngle;
         resetEncoders();
-        gyro.reset();
+        //gyro.reset();
         return false;
       }
     } else { // Encoder target not yet reached
@@ -532,7 +532,7 @@ public class Drive {
   }
 
   public boolean goToHeading(double startTime, double endTime, double finalAngle) {
-    double difference = finalAngle - gyro.getDegrees();
+    /* double difference = finalAngle - gyro.getDegrees();
     boolean targetReached = Math.abs(difference) < 2;
     double kP = 1.0/60.0;
     SmartDashboard.putBoolean("target reached?", targetReached);
@@ -553,7 +553,7 @@ public class Drive {
      // currPositionR=rightBack.getSelectedSensorPosition();
     }
 
-    }
+    } */
     return false;
   }
   

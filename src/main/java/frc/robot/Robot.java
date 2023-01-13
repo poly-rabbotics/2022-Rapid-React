@@ -23,7 +23,7 @@ public class Robot extends TimedRobot {
   	public static Drive drive;
   	public static LEDLights LEDs;
   	public static Timer masterTimer, autoTimer;
-  	public static AHRSGyro gyro;
+  	//public static AHRSGyro gyro;
   	public static double leftEncoderCounts, rightEncoderCounts;
   	public static LIDAR lidar;
   	boolean pressureGood;
@@ -59,7 +59,7 @@ public class Robot extends TimedRobot {
     	autoTimer = new Timer();
     
     
-    	gyro = new AHRSGyro();
+    	//gyro = new AHRSGyro();
     
     	RobotMap.initConveyor();
     	conveyor = new Conveyor();
@@ -95,7 +95,7 @@ public class Robot extends TimedRobot {
     	SmartDashboard.putBoolean("DA Limit Switch", !RobotMap.limitSwitchDA.get());
     	SmartDashboard.putBoolean("SA Limit Switch", !RobotMap.limitSwitchSA.get());
 
-    	SmartDashboard.putNumber("Gyro Degrees", gyro.getDegrees());
+    	//SmartDashboard.putNumber("Gyro Degrees", gyro.getDegrees());
 
     	SmartDashboard.putNumber("limelight servo", Limelight.servo.get());
 
@@ -151,8 +151,8 @@ public class Robot extends TimedRobot {
 
     	SmartDashboard.putBoolean("Climb Enabled?", climb.enableClimb);
 
-    	if (DriveJoystick.resetGyroButton()) 
-			gyro.reset();
+    	//if (DriveJoystick.resetGyroButton()) 
+			//gyro.reset();
   	}
 
   	/**
