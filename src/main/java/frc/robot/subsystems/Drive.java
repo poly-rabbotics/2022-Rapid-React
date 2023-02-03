@@ -8,6 +8,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.sensors.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -55,6 +56,9 @@ public class Drive {
   public static double ENCODER_COUNTS_PER_360, ENCODER_COUNTS_PER_INCH;
   double moveSetpoint;
   double currPositionL,currPositionR;
+  static Pigeon2 pigeon;
+
+  private static final double PID_DEADZONE = 10;
 
   public Drive() {
     ENCODER_COUNTS_PER_360 = 108200;  //300 per degree
@@ -113,6 +117,8 @@ public class Drive {
     // ENCODER COUNTS PER FOOT: 13445
     // Counts per inch: 1120
 
+    pigeon = new Pigeon2(9);
+
     rotateInitialized = false;
     /*
      * DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(
@@ -153,7 +159,7 @@ public class Drive {
       RobotMap.drivePancake.set(Value.kReverse); //REVERSE IS TORQUE MODE
     } else
       RobotMap.drivePancake.set(Value.kForward); //FORWARD IS SPEED MODE
-       
+
     SmartDashboard.putBoolean("High Torque Mode?", highTorqueModeActive);
 
     move = DriveJoystick.getMove();
@@ -217,6 +223,9 @@ public class Drive {
     SmartDashboard.putNumber("cP_LL", cP_LL);
     SmartDashboard.putNumber("x", x);
 
+    if(PIDDriveActive) {
+      autoBalance();
+    }
   }
 
   public static void move() {
@@ -235,8 +244,9 @@ public class Drive {
     }
 
     if (PIDDriveActive) {
+      /* COMMENTED OUT TO REPLACE WITH AUTO BALANCING CODE
       leftBack.set(ControlMode.Velocity, targetVLeft);
-      rightBack.set(ControlMode.Velocity, targetVRight);
+      rightBack.set(ControlMode.Velocity, targetVRight);*/
     } else {
       if (DriveJoystick.aim()) {
         
@@ -655,6 +665,28 @@ public class Drive {
  * * fts_to_RPM, ControlType.kVelocity);
  * }
  */
+
+  private void autoBalance() {
+    
+    if (getGlobalRotation() <= -PID_DEADZONE) { //if robot is tilted forwards
+      targetVLeft = 30;
+      targetVRight = 30;
+    } else if (getGlobalRotation() >= PID_DEADZONE) { //if robot is tilted backwards
+      targetVLeft = -30;
+      targetVRight = -30;
+    } else { //if robot is not tilted
+      targetVLeft = 0;
+      targetVRight = 0;
+    }
+    
+
+    leftBack.set(ControlMode.Velocity, targetVLeft);
+    rightBack.set(ControlMode.Velocity, targetVRight);
+  }
+
+  private double getGlobalRotation() {
+    return pigeon.getPitch() % 360.0;
+  }
 
 
 public void adjustPIDS() {
