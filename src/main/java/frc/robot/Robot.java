@@ -4,6 +4,9 @@
 package frc.robot;
 
 import java.util.concurrent.TimeUnit;
+
+import com.ctre.phoenix.sensors.Pigeon2;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Controls.DriveJoystick;
 import frc.robot.subsystems.*;
@@ -26,6 +29,7 @@ public class Robot extends TimedRobot {
   	public static AHRSGyro gyro;
   	public static double leftEncoderCounts, rightEncoderCounts;
   	public static LIDAR lidar;
+	public static Pigeon2 pigeon;
   	boolean pressureGood;
   	boolean isGyroReset = false;
   	Compressor comp;
@@ -213,6 +217,9 @@ public class Robot extends TimedRobot {
   	/** This function is called periodically during operator control. */
   	@Override
   	public void teleopPeriodic() {
+
+		SmartDashboard.putNumber("Pitch", pigeon.getPitch());
+
     	try {
       		shooter.run(); 
     	} 
@@ -318,11 +325,17 @@ public class Robot extends TimedRobot {
 
   	/** This function is called once when the robot is disabled. */
   	@Override
-  	public void disabledInit() {}
+  	public void disabledInit() {
+		pigeon = new Pigeon2(20);
+	}
 
   	/** This function is called periodically when disabled. */
   	@Override
-  	public void disabledPeriodic() { }
+  	public void disabledPeriodic() {
+
+		SmartDashboard.putNumber("Yaw", pigeon.getYaw());
+		SmartDashboard.putNumber("Roll", pigeon.getRoll());
+	 }
 
   	/** This function is called once when test mode is enabled. */
   	@Override

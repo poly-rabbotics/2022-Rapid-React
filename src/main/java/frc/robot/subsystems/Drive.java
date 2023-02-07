@@ -8,7 +8,9 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.InvertType;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.sensors.Pigeon2;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.Joystick;
@@ -54,6 +56,9 @@ public class Drive {
   public static double ENCODER_COUNTS_PER_360, ENCODER_COUNTS_PER_INCH;
   double moveSetpoint;
   double currPositionL,currPositionR;
+  static Pigeon2 pigeon;
+
+  private static final double PID_DEADZONE = 10;
 
   public Drive() {
     ENCODER_COUNTS_PER_360 = 108200;  //300 per degree
@@ -112,13 +117,15 @@ public class Drive {
     // ENCODER COUNTS PER FOOT: 13445
     // Counts per inch: 1120
 
+    pigeon = new Pigeon2(20);
+
     rotateInitialized = false;
     /*
      * DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(
      * AHRSGyro.getDegrees(), new Pose2d(5.0, 13.5, new Rotation2d()));
      */
     gyroToRadians = Rotation2d.fromDegrees(gyro.getDegrees());
-    odometry = new DifferentialDriveOdometry(gyroToRadians, 0, 0);
+    //odometry = new DifferentialDriveOdometry(gyroToRadians, new Pose2d(0, 0, new Rotation2d()));
     RobotMap.drivePancake.set(Value.kForward); //speed mode
     initAutoDrive();
   }
@@ -152,7 +159,7 @@ public class Drive {
       RobotMap.drivePancake.set(Value.kReverse); //REVERSE IS TORQUE MODE
     } else
       RobotMap.drivePancake.set(Value.kForward); //FORWARD IS SPEED MODE
-       
+
     SmartDashboard.putBoolean("High Torque Mode?", highTorqueModeActive);
 
     move = DriveJoystick.getMove();
@@ -216,6 +223,9 @@ public class Drive {
     SmartDashboard.putNumber("cP_LL", cP_LL);
     SmartDashboard.putNumber("x", x);
 
+    if(PIDDriveActive) {
+      autoBalance();
+    }
   }
 
   public static void move() {
@@ -234,8 +244,9 @@ public class Drive {
     }
 
     if (PIDDriveActive) {
+      /* COMMENTED OUT TO REPLACE WITH AUTO BALANCING CODE
       leftBack.set(ControlMode.Velocity, targetVLeft);
-      rightBack.set(ControlMode.Velocity, targetVRight);
+      rightBack.set(ControlMode.Velocity, targetVRight);*/
     } else {
       if (DriveJoystick.aim()) {
         
@@ -320,7 +331,7 @@ public class Drive {
     leftBack.configPeakOutputForward(1);
     leftBack.configPeakOutputReverse(-1);
     leftBack.setSensorPhase(false);
-    leftBack.config_kP(0, .1);
+    leftBack.config_kP(0, .8);
     leftBack.config_kI(0, 0.0005);
     leftBack.config_kD(0, .0001);
     leftBack.config_kF(0, 0);
@@ -334,7 +345,7 @@ public class Drive {
     rightBack.configPeakOutputReverse(-1);
     rightBack.setSensorPhase(false);
     // THESE PIDS WORK WELL
-    rightBack.config_kP(0, .1);
+    rightBack.config_kP(0, .8);
     rightBack.config_kI(0, .0005);
     rightBack.config_kD(0, .0001);
     rightBack.config_kF(0, 0);
@@ -469,6 +480,7 @@ public class Drive {
   public boolean turnByDegreesBasic(double startTime, double endTime, double finalAngle) {
     // NO GYRO TURN CORRECTION
     double time = Robot.autoTimer.get();
+    double initialPosition = leftBack.getSelectedSensorPosition();
     SmartDashboard.putNumber("position setpoint turn", positionSetpoint);
     SmartDashboard.putBoolean("rotate initialized?", rotateInitialized);
 
@@ -534,7 +546,7 @@ public class Drive {
   public boolean goToHeading(double startTime, double endTime, double finalAngle) {
     double difference = finalAngle - gyro.getDegrees();
     boolean targetReached = Math.abs(difference) < 2;
-    double kP = 1.0/60.0;
+    double kP = 2.0/60.0;
     SmartDashboard.putBoolean("target reached?", targetReached);
     SmartDashboard.putNumber("difference", difference);
     double time = Robot.autoTimer.get();
@@ -593,7 +605,7 @@ public class Drive {
   public boolean goToEncCountsTurn(double startTime, double endTime, double count) {
     double difference = count - leftBack.getSelectedSensorPosition();
     boolean targetReached = Math.abs(difference) < 1000;
-    double kP = 1.0/20000.0;
+    double kP = 30.0/20000.0;
     double power = difference*kP;
     if(power>.5)
       power=0.5;
@@ -653,6 +665,28 @@ public class Drive {
  * * fts_to_RPM, ControlType.kVelocity);
  * }
  */
+
+  private void autoBalance() {
+    
+    if (getGlobalRotation() <= -PID_DEADZONE) { //if robot is tilted forwards
+      targetVLeft = 300;
+      targetVRight = -300;
+    } else if (getGlobalRotation() >= PID_DEADZONE) { //if robot is tilted backwards
+      targetVLeft = -300;
+      targetVRight = 300;
+    } else { //if robot is not tilted
+      targetVLeft = 0;
+      targetVRight = 0;
+    }
+    
+
+    leftBack.set(ControlMode.Velocity, targetVLeft);
+    rightBack.set(ControlMode.Velocity, targetVRight);
+  }
+
+  private double getGlobalRotation() {
+    return pigeon.getPitch() % 360.0;
+  }
 
 
 public void adjustPIDS() {
